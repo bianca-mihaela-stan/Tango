@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-//conflict of interest
+//comment on line
+//another comment
 namespace Tango.Controllers
 {
     public class HomeController : Controller
@@ -22,7 +23,7 @@ namespace Tango.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page. XOXO - Mira";
+            ViewBag.Message = "Your contact page.";
 
             return View();
         }
