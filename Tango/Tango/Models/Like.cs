@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using Tango.Models;
+using System.Data.Entity;
 
 namespace Tango.Models
 {
