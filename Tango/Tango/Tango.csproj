@@ -124,6 +124,8 @@
     </Compile>
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Like.cs" />
+    <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
