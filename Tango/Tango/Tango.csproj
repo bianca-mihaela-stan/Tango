@@ -179,6 +179,8 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Posts\Index.cshtml" />
+    <Content Include="Views\Posts\Show.cshtml" />
+    <Content Include="Views\Posts\ShowPost.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
