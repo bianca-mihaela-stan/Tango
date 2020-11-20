@@ -6,6 +6,8 @@ Web.config
 
 #Tango.csproj
 Tango.csproj
+Tango/Tango/Tango.csproject
+Tango/Tango/Web.config
 
 # User-specific files
 *.suo
