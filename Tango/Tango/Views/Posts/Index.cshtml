@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@foreach (var post in ViewBag.Posts)
+{
+    <p>@post.date</p>
+    if (post.lastEditDate!=null)
+    {
+        <p>@post.lastEditDate</p>
+    }
+    <h3>@post.text</h3>
+}

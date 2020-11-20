@@ -4,6 +4,9 @@
 #Web.config
 Web.config
 
+#Tango.csproj
+Tango.csproj
+
 # User-specific files
 *.suo
 *.user
