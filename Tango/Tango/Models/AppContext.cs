@@ -8,7 +8,9 @@ namespace Tango.Models
 {
     public class AppContext : DbContext
     {
-        public AppContext() : base("DBConnectionString") { }
+        public AppContext() : base("DBConnectionString") {
+
+        }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Like> Likes { get; set; }
