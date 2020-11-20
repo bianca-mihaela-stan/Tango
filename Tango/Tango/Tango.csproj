@@ -139,9 +139,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\DatabaseTangoMira.mdf" />
-    <Content Include="App_Data\DatabaseTangoMira_log.ldf">
-      <DependentUpon>DatabaseTangoMira.mdf</DependentUpon>
+    <Content Include="App_Data\Database1.mdf" />
+    <Content Include="App_Data\Database1_log.ldf">
+      <DependentUpon>Database1.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -178,10 +178,11 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Posts\Index.cshtml" />
+    <Content Include="Views\Posts\Show.cshtml" />
+    <Content Include="Views\Posts\ShowPost.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Posts\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
