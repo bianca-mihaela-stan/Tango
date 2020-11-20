@@ -45,6 +45,61 @@ namespace Tango.Controllers
                 return View();
             }
         }
+        public ActionResult Edit(int id)
+        {
+            var post = db.Posts.Find(id);
+            return View(post);
+        }
+        [HttpPut]
+        public ActionResult Edit(int id, Post requestpost)
+        {
+
+            try
+            {
+
+                if(ModelState.IsValid)
+                {
+                    var post = db.Posts.Find(id);
+                    if(TryValidateModel(post))
+                    {
+
+                        post.Text = requestpost.Text;
+                        post.LastEditDate = DateTime.Now;
+                        db.SaveChanges();
+                        TempData["message"] = "Postarea a fost editata!";
+                        return Redirect("/Show/" + id);
+
+                    }
+                    else
+                    {
+                        return View(requestpost);
+
+                    }
+
+
+                }
+                else
+                {
+                    return View(requestpost);
+                }
+
+
+
+            }catch(Exception e)
+            {
+                ViewBag.Error = e;
+                return View(requestpost);
+            }
+        }
+        [HttpDelete]
+        public ActionResult Delete(int id)
+        {
+            var post = db.Posts.Find(id);
+            db.Posts.Remove(post);
+            TempData["message"] = "Postarea a fost stearsa!";
+            return RedirectToAction("Index");
+
+        }
 
 
 
