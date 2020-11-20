@@ -130,6 +130,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202011201931135_Initial.cs" />
+    <Compile Include="Migrations\202011201931135_Initial.designer.cs">
+      <DependentUpon>202011201931135_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AppContext.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -180,7 +184,11 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Posts\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202011201931135_Initial.resx">
+      <DependentUpon>202011201931135_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

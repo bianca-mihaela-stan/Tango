@@ -10,7 +10,9 @@ namespace Tango.Models
     {
         [Key]
         public int PostId { get; set; }
+        [Required]
         public string Text { get; set; }
+        [Required]
         public DateTime Date {get; set;}
         public DateTime LastEditDate { get; set; }
 
