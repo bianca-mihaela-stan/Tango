@@ -33,6 +33,7 @@ namespace Tango.Controllers
         [HttpPost]
         public ActionResult New(Post post)
         {
+            post.Date = DateTime.Now;
             try
             {
                 db.Posts.Add(post);

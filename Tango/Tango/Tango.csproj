@@ -130,6 +130,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202011201844270_Initial.cs" />
+    <Compile Include="Migrations\202011201844270_Initial.designer.cs">
+      <DependentUpon>202011201844270_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AppContext.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -139,9 +143,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Database1.mdf" />
-    <Content Include="App_Data\Database1_log.ldf">
-      <DependentUpon>Database1.mdf</DependentUpon>
+    <Content Include="App_Data\DatabaseTangoMira.mdf" />
+    <Content Include="App_Data\DatabaseTangoMira_log.ldf">
+      <DependentUpon>DatabaseTangoMira.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -181,8 +185,13 @@
     <Content Include="Views\Posts\Index.cshtml" />
     <Content Include="Views\Posts\Show.cshtml" />
     <Content Include="Views\Posts\ShowPost.cshtml" />
+    <Content Include="Views\Posts\New.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202011201844270_Initial.resx">
+      <DependentUpon>202011201844270_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
