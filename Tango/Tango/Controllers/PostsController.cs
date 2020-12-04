@@ -33,12 +33,19 @@ namespace Tango.Controllers
         [HttpPost]
         public ActionResult New(Post post)
         {
-            post.Date = DateTime.Now;
             try
             {
-                db.Posts.Add(post);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    post.Date = DateTime.Now;
+                    db.Posts.Add(post);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View();
+                }
             }
             catch(Exception e)
             {
