@@ -9,6 +9,8 @@ namespace Tango.Models
     public class AppContext : DbContext
     {
         public AppContext() : base("DBConnectionString") {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<AppContext,
+        Tango.Migrations.Configuration>("DBConnectionString"));
 
         }
         public DbSet<Post> Posts { get; set; }

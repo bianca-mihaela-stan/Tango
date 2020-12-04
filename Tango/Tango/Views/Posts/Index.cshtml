@@ -1,16 +1,23 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+                /**/
+
+                ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
 
-@foreach (var post in ViewBag.Posts)
+
+<br />
+<br />
+
+@foreach (Tango.Models.Post post in ViewBag.Posts)
 {
-    <p>@post.date</p>
-    if (post.lastEditDate!=null)
-    {
-        <p>@post.lastEditDate</p>
-    }
-    <h3>@post.text</h3>
+    @Html.Partial("ShowPost", post);
+
+    <a href="/Posts/Show/@post.PostId" class="btn btn-success">Vizualizare postare</a>
 }
+
+
+
+<a href="/Posts/New" class="btn btn-success">Adauga postare</a>

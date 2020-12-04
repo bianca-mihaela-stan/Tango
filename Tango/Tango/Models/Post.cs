@@ -10,9 +10,8 @@ namespace Tango.Models
     {
         [Key]
         public int PostId { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Continutul postarii nu poate sa fie gol.")]
         public string Text { get; set; }
-        [Required]
         public DateTime Date {get; set;}
         public DateTime LastEditDate { get; set; }
 
