@@ -168,17 +168,22 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\PostsController.cs"/>
+    <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Post.cs"/>
-    <Compile Include="Models\Like.cs"/>
-    <Compile Include ="Models\Comment.cs"/>
-    <Compile Include="Models\Notification.cs"/>
+    <Compile Include="Migrations\202012091630417_Initial.cs" />
+    <Compile Include="Migrations\202012091630417_Initial.designer.cs">
+      <DependentUpon>202012091630417_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Post.cs" />
+    <Compile Include="Models\Like.cs" />
+    <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -221,10 +226,10 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Posts\Index.cshtml"/>
-    <Content Include="Views\Posts\New.cshtml"/>
-    <Content Include="Views\Posts\Show.cshtml"/>
-    <Content Include="Views\Posts\ShowPost.cshtml"/>
+    <Content Include="Views\Posts\Index.cshtml" />
+    <Content Include="Views\Posts\New.cshtml" />
+    <Content Include="Views\Posts\Show.cshtml" />
+    <Content Include="Views\Posts\ShowPost.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -261,6 +266,11 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202012091630417_Initial.resx">
+      <DependentUpon>202012091630417_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -306,5 +316,4 @@
   <Target Name="AfterBuild">
   </Target> -->
 </Project>
-
 <!-- hai ho hai ho - noi suntem pitici misto -->
