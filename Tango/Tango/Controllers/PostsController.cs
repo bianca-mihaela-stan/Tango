@@ -15,13 +15,20 @@ namespace Tango.Controllers
         {
             var posts = db.Posts;
             ViewBag.Posts = posts;
+            if(TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"];
+            }
             return View();
         }
 
         public ActionResult Show(int id)
         {
             Post post = db.Posts.Find(id);
-
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"];
+            }
             return View(post);
         }
 
@@ -29,23 +36,49 @@ namespace Tango.Controllers
         {
             return View();
         }
-
         [HttpPost]
-        public ActionResult New(Post post)
+        public ActionResult NewComment(int id,Comment com)
         {
+
+
             try
             {
-                if (ModelState.IsValid)
+                if(ModelState.IsValid)
                 {
-                    post.Date = DateTime.Now;
-                    db.Posts.Add(post);
+                    com.Date = DateTime.Now;
+                    db.Comments.Add(com);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    TempData["message"] = "Comentariul a fost adaugat!";
+                    return Redirect("/Posts/Show/" + com.PostId);
                 }
                 else
                 {
-                    return View();
+                    Post post = db.Posts.Find(id);
+                    ViewBag.Comment = com;
+                    return View("Show", post);
+
                 }
+
+            }
+            catch (Exception e)
+            {
+
+                    Post post = db.Posts.Find(id);
+                    return View("Show", post);
+            }
+
+
+        }
+        [HttpPost]
+        public ActionResult New(Post post)
+        {
+            post.Date = DateTime.Now;
+            //post.LastEditDate = null;
+            try
+            {
+                db.Posts.Add(post);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
             catch(Exception e)
             {
@@ -67,7 +100,7 @@ namespace Tango.Controllers
 
                 if(ModelState.IsValid)
                 {
-                    var post = db.Posts.Find(id);
+                    Post post = db.Posts.Find(id);
                     if(TryValidateModel(post))
                     {
 
@@ -75,7 +108,7 @@ namespace Tango.Controllers
                         post.LastEditDate = DateTime.Now;
                         db.SaveChanges();
                         TempData["message"] = "Postarea a fost editata!";
-                        return Redirect("/Show/" + id);
+                        return Redirect("/Posts/Show/" + id);
 
                     }
                     else
@@ -104,6 +137,7 @@ namespace Tango.Controllers
         {
             var post = db.Posts.Find(id);
             db.Posts.Remove(post);
+            db.SaveChanges();
             TempData["message"] = "Postarea a fost stearsa!";
             return RedirectToAction("Index");
 

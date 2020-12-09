@@ -125,27 +125,30 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MediaController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202011201931135_Initial.cs" />
-    <Compile Include="Migrations\202011201931135_Initial.designer.cs">
-      <DependentUpon>202011201931135_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\202011201844270_Initial.cs" />
+    <Compile Include="Migrations\202011201844270_Initial.designer.cs">
+      <DependentUpon>202011201844270_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AppContext.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Like.cs" />
+    <Compile Include="Models\Media.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Database1.mdf" />
-    <Content Include="App_Data\Database1_log.ldf">
-      <DependentUpon>Database1.mdf</DependentUpon>
+    <Content Include="App_Data\DatabaseTangoMira.mdf" />
+    <Content Include="App_Data\DatabaseTangoMira_log.ldf">
+      <DependentUpon>DatabaseTangoMira.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -183,13 +186,15 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Posts\Index.cshtml" />
-    <Content Include="Views\Posts\New.cshtml" />
     <Content Include="Views\Posts\Show.cshtml" />
     <Content Include="Views\Posts\ShowPost.cshtml" />
+    <Content Include="Views\Posts\New.cshtml" />
+    <Content Include="Views\Posts\Edit.cshtml" />
+    <Content Include="Views\Comments\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202011201931135_Initial.resx">
-      <DependentUpon>202011201931135_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202011201844270_Initial.resx">
+      <DependentUpon>202011201844270_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +209,10 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Files\" />
+    <Folder Include="Views\Media\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -7,7 +7,7 @@
 <h3>@ViewBag.Error</h3>
 @using (Html.BeginForm(actionName: "New", controllerName: "Posts", method: FormMethod.Post))
 {
-    @Html.Label("Text","Continutul textului")
+    @Html.Label("Text","Continutul postarii")
     <br/>
     @Html.TextArea("Text",null,new { @class ="form-control"})
     @Html.ValidationMessage("Text",null,new { @class="text-danger"})

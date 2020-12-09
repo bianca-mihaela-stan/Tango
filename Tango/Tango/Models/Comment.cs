@@ -10,8 +10,10 @@ namespace Tango.Models
     public class Comment
     {
         [Key]
-        public int Commentid { get; set; }
+        public int CommentId { get; set; }
         [Required]
+        [StringLength(200,ErrorMessage = "Comentariul nu poate sa fie mai lung de 200 de caractere")]
+        [DataType(DataType.MultilineText)]
         public string Text { get; set; }
         public DateTime Date { get; set; }
      
