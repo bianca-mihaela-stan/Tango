@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using Tango.Models;
+using TangoApp.Models;
 
-namespace Tango.Models
+namespace TangoApp.Models
 {
     public class Comment
     {

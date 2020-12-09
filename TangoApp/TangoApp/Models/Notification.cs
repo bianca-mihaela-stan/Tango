@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 
 
-namespace Tango.Models
+namespace TangoApp.Models
 {
     public class Notification
     {

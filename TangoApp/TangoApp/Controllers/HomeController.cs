@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 //comment on line
 //another comment
-namespace Tango.Controllers
+namespace TangoApp.Controllers
 {
     public class HomeController : Controller
     {

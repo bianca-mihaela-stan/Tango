@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Tango.Models;
+using TangoApp.Models;
 
-namespace Tango.Controllers
+namespace TangoApp.Controllers
 {
     public class PostsController : Controller
     {
-        private Tango.Models.AppContext db = new Tango.Models.AppContext();
+        private TangoApp.Models.ApplicationDbContext db = new TangoApp.Models.ApplicationDbContext();
         // GET: Posts
         public ActionResult Index()
         {

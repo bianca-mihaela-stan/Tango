@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using TangoApp.Models;
 
 namespace TangoApp.Models
 {
@@ -24,6 +25,8 @@ namespace TangoApp.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         public static ApplicationDbContext Create()
         {
