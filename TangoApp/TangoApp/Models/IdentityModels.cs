@@ -22,8 +22,10 @@ namespace TangoApp.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("TangoConnectionString", throwIfV1Schema: false)
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext,
+           TangoApp.Migrations.Configuration>("TangoConnectionString"));
         }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }

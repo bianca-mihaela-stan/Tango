@@ -175,9 +175,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202012091630417_Initial.cs" />
-    <Compile Include="Migrations\202012091630417_Initial.designer.cs">
-      <DependentUpon>202012091630417_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\202012092122533_Initial.cs" />
+    <Compile Include="Migrations\202012092122533_Initial.designer.cs">
+      <DependentUpon>202012092122533_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Post.cs" />
@@ -191,6 +191,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\TangoDatabase.mdf" />
+    <Content Include="App_Data\TangoDatabase_log.ldf">
+      <DependentUpon>TangoDatabase.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -252,7 +256,9 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <EmbeddedResource Include="Migrations\202012092122533_Initial.resx">
+      <DependentUpon>202012092122533_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -266,11 +272,6 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202012091630417_Initial.resx">
-      <DependentUpon>202012091630417_Initial.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
