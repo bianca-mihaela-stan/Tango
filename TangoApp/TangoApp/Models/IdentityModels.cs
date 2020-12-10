@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using TangoApp.Models;
 
 namespace TangoApp.Models
 {
@@ -22,11 +21,10 @@ namespace TangoApp.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("TangoConnectionString", throwIfV1Schema: false)
+            : base("DefaultConnection", throwIfV1Schema: false)
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext,
-           TangoApp.Migrations.Configuration>("TangoConnectionString"));
         }
+
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
@@ -34,5 +32,6 @@ namespace TangoApp.Models
         {
             return new ApplicationDbContext();
         }
+
     }
 }

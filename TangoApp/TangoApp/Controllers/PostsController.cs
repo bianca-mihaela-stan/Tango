@@ -9,7 +9,7 @@ namespace TangoApp.Controllers
 {
     public class PostsController : Controller
     {
-        private TangoApp.Models.ApplicationDbContext db = new TangoApp.Models.ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Posts
         public ActionResult Index()
         {

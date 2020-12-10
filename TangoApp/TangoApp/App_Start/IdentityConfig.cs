@@ -106,20 +106,4 @@ namespace TangoApp
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
     }
-    //we add the application role manager
-    public class ApplicationRoleManager : RoleManager<IdentityRole>
-    {
-        public ApplicationRoleManager(IRoleStore<IdentityRole, string> store) :
-        base(store)
-        {
-        }
-        public static ApplicationRoleManager
-        Create(IdentityFactoryOptions<ApplicationRoleManager> options,
-        IOwinContext context)
-        {
-            var roleStore = new
-            RoleStore<IdentityRole>(context.Get<ApplicationDbContext>());
-            return new ApplicationRoleManager(roleStore);
-        }
-    }
 }
