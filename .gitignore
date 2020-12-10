@@ -5,6 +5,8 @@ TangoApp/TangoApp/App_Data
 TangoApp/TangoApp/TangoApp.csproj
 TangoApp/TangoApp/TangoApp.csproj.user
 TangoApp/TangoApp/Web.config
+TangoApp/TangoApp/Migrations
+TangoApp/TangoApp/Models/IdentityModels.cs
 
 
 #Web.config
@@ -13,7 +15,7 @@ Web.config
 #Tango.csproj
 Tango.csproj
 Tango/Tango/Tango.csproj
-
+*.csproj
 # User-specific files
 *.suo
 *.user
