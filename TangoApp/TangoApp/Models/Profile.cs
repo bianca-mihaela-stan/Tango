@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace TangoApp.Models
 {
@@ -23,5 +24,8 @@ namespace TangoApp.Models
 
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
+
+        public IEnumerable<SelectListItem> Countries { get; set; }
+        public IEnumerable<SelectListItem> Cities { get; set; }
     }
 }

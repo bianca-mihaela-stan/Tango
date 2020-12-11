@@ -1,0 +1,35 @@
+﻿@model TangoApp.Models.Profile
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Editeaza profilul</h2>
+
+
+@using (Html.BeginForm(actionName: "Edit", controllerName: "Profile", method: FormMethod.Post, routeValues: new { id = Model.ProfileId }))
+{
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+    <p>Vizibilitatea profilului:</p>
+    <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "true") public </p>
+    <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "false") privat </p>
+
+    @Html.Hidden("ProfileId")
+    @Html.Label("Text", "Continutul descrierii")
+    <br />
+    @Html.Editor("Text")
+    <br />
+    @Html.ValidationMessageFor(m => m.Description)
+    <br />
+    <button type="submit" class="btn btn-success">Modifica comentariul</button>
+
+    <p>Vizibilitatea profilului:</p>
+    <p>@Html.RadioButtonFor(Model => Model.Gender, "true") femeie </p>
+    <p>@Html.RadioButtonFor(Model => Model.Gender, "false") barbat </p>
+
+    <label>Selectati Tara</label>
+    @Html.DropDownListFor(m => m.CountryId,
+        new SelectList(Model.Countries, "Value", "Text"),
+        "Selectati tara", new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
+    <br />
+}

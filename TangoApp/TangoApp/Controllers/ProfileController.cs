@@ -20,6 +20,43 @@ namespace TangoApp.Controllers
             return View(profile);
         }
 
+        public ActionResult Edit()
+        {
+            Profile pr = db.Profiles.Find(User.Identity.GetUserId());
+            return View(pr);
+        }
 
+        [HttpPut]
+        public ActionResult Edit(Profile NewProfile)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Profile pr = db.Profiles.Find(User.Identity.GetUserId());
+                    if (TryUpdateModel(pr))
+                    {
+                        pr.ProfileVisibility = NewProfile.ProfileVisibility;
+                        pr.Description = NewProfile.Description;
+                        pr.Gender = NewProfile.Gender;
+                        TempData["message"] = "Profilul a fost editat!";
+                        return Redirect("/Profile/Show/");
+                    }
+                    else
+                    {
+                        return View(NewProfile);
+                    }
+                }
+                else
+                {
+                    return View(NewProfile);
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.Error = e;
+                return View(NewProfile);
+            }
+        }
     }
 }
