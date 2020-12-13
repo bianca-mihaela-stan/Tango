@@ -1,7 +1,9 @@
 ﻿<p>Posted on: @Model.Date </p>
-    @if (Model.LastEditDate != null)
-    {
-        <p>Last edited on:@Model.LastEditDate</p>
-    }
+@if (Model.LastEditDate != null)
+{
+    <p>Last edited on:@Model.LastEditDate</p>
+}
+
+<h5>@Model.User.UserName</h5>
 <h3>@Model.Text</h3>
 

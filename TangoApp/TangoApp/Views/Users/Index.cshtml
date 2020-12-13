@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@if(ViewBag.Message != null)
+{
+     <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+@foreach (var user in ViewBag.Users)
+{
+    <h1>@user.Email</h1>
+    <br />
+    <form method="post" action="/Users/AddFriend">
+        <input type="hidden" name="UserId" value="@user.Id" />
+        <button type="submit">Add Friend</button>
+    </form>
+    <br/>
+    <hr />
+}

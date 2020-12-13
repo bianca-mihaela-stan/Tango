@@ -1,0 +1,19 @@
+﻿@model TangoApp.Models.Comment
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Editeaza comentariul</h2>
+@using(Html.BeginForm(actionName: "Edit",controllerName: "Comments",method: FormMethod.Post,routeValues: new {id = Model.CommentId} ))
+{
+
+   @Html.HttpMethodOverride(HttpVerbs.Put)
+   @Html.Hidden("CommentId")
+   @Html.Label("Text","Continutul comentariului")
+    <br/>
+   @Html.Editor("Text")
+    <br/>
+   @Html.ValidationMessageFor(m => m.Text)
+    <br/>
+    <button type="submit" class ="btn btn-success">Modifica comentariul</button>
+}

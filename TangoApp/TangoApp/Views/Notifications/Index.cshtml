@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@foreach (var notification in ViewBag.Notifications)
+{
+    <div class="card">
+        <a href="/Posts/Show/@notification.PostId" class="card-body text-decoration-none d-block text-dark">
+            <small class="pull-right">@notification.Time</small>
+            <br/>
+            <p class="text-dark"><span>@notification.UserSend.Email</span> a adaugat un comentariu la postarea ta.</p>
+        </a>
+    </div>
+    <hr/>
+
+}

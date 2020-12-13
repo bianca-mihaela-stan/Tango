@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -16,6 +18,18 @@ namespace TangoApp.Models
             // Add custom user claims here
             return userIdentity;
         }
+        //am adaugat o colectie cu notificariile care se creeaza in urma unei actiunii
+        //facute de userul curent
+        [InverseProperty("UserSend")]
+        public virtual ICollection<Notification> NotificationSend { get; set; }
+        [InverseProperty("UserReceive")]
+        public virtual ICollection<Notification> NotificationReceive { get; set; }
+        //adaugam colectiile corespunzatoare modelului FriendShip
+        [InverseProperty("User1")]
+        public virtual ICollection<Friendship> FriendshipSend { get; set; }
+        [InverseProperty("User2")]
+        public virtual ICollection<Friendship> FriendshipReceive { get; set; }
+
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -29,9 +43,11 @@ namespace TangoApp.Models
 
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Profile> Profiles { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
 
         public static ApplicationDbContext Create()
         {
