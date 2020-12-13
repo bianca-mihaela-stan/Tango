@@ -6,8 +6,14 @@
 <h2>Your profile</h2>
 <br />
 
-<a href="/Posts/Edit" class="btn btn-success">Editeaza profilul</a>
+@if (ViewBag.Message != null)
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+
+<a href="/Profile/Edit" class="btn btn-success">Editeaza profilul</a>
 <br />
 <p>
-        Vizibilitatea profilului: @Model.ProfileVisibility </p>
+    Vizibilitatea profilului: @Model.ProfileVisibility
+</p>
 

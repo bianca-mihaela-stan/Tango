@@ -165,12 +165,7 @@ namespace TangoApp.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    Profile profile = new Profile();
-                    profile.ProfileVisibility = true;
-                    profile.UserId = user.Id;
-                    db.Profiles.Add(profile);
-                    db.SaveChanges();
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("New", "Profile");
                 }
 
                 AddErrors(result);
