@@ -3,17 +3,25 @@
 }
 
 <h2>Index</h2>
+@if (ViewBag.Message != null)
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
 @foreach (var req in ViewBag.Friendrequests)
 {
     <div class="card w-75">
         <div class="card-body">
             <h5 class="card-title"> @req.User1.Email</h5>
             <p class="card-text">Looks like someone wants to be your friend...</p>
-            <a href="/Friendships/Accept/friendreq.FriendshipId" class="btn btn-primary">Accept</a>
-            <a href="/Friendships/Decline/friendreq.FriendshipId" class="btn btn-primary">Decline</a>
+            <a href="/Friendships/Accept/@req.FriendshipId" class="btn btn-primary">Accept</a>
+            @using (Html.BeginForm(actionName: "Decline", controllerName: "Friendships", method: FormMethod.Post, routeValues: new { id = req.FriendshipId }))
+            {
+
+                @Html.HttpMethodOverride(HttpVerbs.Put)
+                <button type="submit" class="btn btn-primary">Decline</button>
+            }
         </div>
     </div>
     <br />
 
 }
- 
