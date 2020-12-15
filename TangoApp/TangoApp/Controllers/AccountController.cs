@@ -152,11 +152,26 @@ namespace TangoApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Username, Email = model.Email};
+                var user = new ApplicationUser { UserName = model.Username, Email = model.Email, UserStatus = model.UserStatus};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    UserManager.AddToRole(user.Id, "User");
+                    if (user.UserStatus == true)
+                    {
+                        //ii creez profilul la inregistrare daca este creator
+                        Profile profile = new Profile();
+                        profile.ProfileVisibility = true;
+                        profile.UserId = user.Id;
+                        db.Profiles.Add(profile);
+                        db.SaveChanges();
+
+                        UserManager.AddToRole(user.Id, "Editor");
+                    }
+                    else
+                    {
+                        UserManager.AddToRole(user.Id, "User");
+                    }
+
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -165,11 +180,6 @@ namespace TangoApp.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    Profile profile = new Profile();
-                    profile.ProfileVisibility = true;
-                    profile.UserId = user.Id;
-                    db.Profiles.Add(profile);
-                    db.SaveChanges();
                     return Redirect("/Home/Index/");
                 }
 

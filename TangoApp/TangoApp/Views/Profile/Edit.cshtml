@@ -8,7 +8,6 @@
 @using (Html.BeginForm(actionName: "Edit", controllerName: "Profile"))
 {
     @Html.HttpMethodOverride(HttpVerbs.Put)
-    @Html.HiddenFor(m => m.ProfileVisibility)
     <p>Vizibilitatea profilului:</p>
         <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "true") public </p>
         <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "false") privat </p>

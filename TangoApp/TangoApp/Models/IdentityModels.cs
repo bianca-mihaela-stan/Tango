@@ -30,6 +30,8 @@ namespace TangoApp.Models
         [InverseProperty("User2")]
         public virtual ICollection<Friendship> FriendshipReceive { get; set; }
 
+        public bool UserStatus { get; set; }
+
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
