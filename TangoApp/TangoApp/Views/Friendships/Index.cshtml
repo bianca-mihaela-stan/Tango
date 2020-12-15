@@ -1,15 +1,13 @@
-﻿<!--
-    model TangoApp.Models.ApplicationUser
-{
+﻿@{
     ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
-foreach (TangoApp.Models.Friendship friendreq in Model.FriendshipReceive)
+@foreach (var req in ViewBag.Friendrequests)
 {
     <div class="card w-75">
         <div class="card-body">
-            <h5 class="card-title">friendreq.User1.Email</h5>
+            <h5 class="card-title"> @req.User1.Email</h5>
             <p class="card-text">Looks like someone wants to be your friend...</p>
             <a href="/Friendships/Accept/friendreq.FriendshipId" class="btn btn-primary">Accept</a>
             <a href="/Friendships/Decline/friendreq.FriendshipId" class="btn btn-primary">Decline</a>
@@ -18,4 +16,4 @@ foreach (TangoApp.Models.Friendship friendreq in Model.FriendshipReceive)
     <br />
 
 }
-    -->
+ 

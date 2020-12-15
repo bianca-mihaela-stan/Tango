@@ -188,6 +188,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\City.cs" />
     <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\Friend.cs" />
     <Compile Include="Models\Friendship.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
