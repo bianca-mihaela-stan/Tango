@@ -11,7 +11,7 @@
     <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
 }
 
-<a href="/Profile/Edit" class="btn btn-success">Editeaza profilul</a>
+<a href="/Profile/Edit/@Model.UserId" class="btn btn-success">Editeaza profilul</a>
 <br />
 <p>
     Vizibilitatea profilului: @Model.ProfileVisibility

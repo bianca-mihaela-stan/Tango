@@ -29,19 +29,17 @@ namespace TangoApp.Controllers
 
         //show logged user's profile
         [Authorize(Roles ="Editor, User, Admin")]
-        public ActionResult Show()
+        public ActionResult Show(string id)
         {
-            var id = User.Identity.GetUserId();
             Profile profile = db.Profiles.Include("User").First(a => a.UserId == id);
             return View(profile);
         }
 
 
         //show logged user's profile in edit mode
-        [Authorize(Roles = "Editor, User, Admin")]
-        public ActionResult Edit()
+        [Authorize(Roles = "Editor, Admin")]
+        public ActionResult Edit(string id)
         {
-            String id = User.Identity.GetUserId();
             Profile pr = db.Profiles.Include("User").First(a => a.UserId == id);
             pr.Countries = GetAllCountries();
             pr.Cities = GetAllCities();
@@ -50,8 +48,8 @@ namespace TangoApp.Controllers
 
         //edit logged user's profile
         [HttpPut]
-        [Authorize(Roles = "Editor, User, Admin")]
-        public ActionResult Edit(Profile requestProfile)
+        [Authorize(Roles = "Editor, Admin")]
+        public ActionResult Edit(string id, Profile requestProfile)
         {
             requestProfile.Countries = GetAllCountries();
             requestProfile.Cities = GetAllCities();
@@ -59,17 +57,19 @@ namespace TangoApp.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Profile pr = db.Profiles.Find(User.Identity.GetUserId());
+                    Profile pr = db.Profiles.Find(id);
                     if (TryUpdateModel(pr))
                     {
+                        pr.Cities = GetAllCities();
+                        pr.Countries = GetAllCountries();
                         pr.ProfileVisibility = requestProfile.ProfileVisibility;
                         pr.Description = requestProfile.Description;
                         pr.Gender = requestProfile.Gender;
                         pr.Country = requestProfile.Country;
                         pr.CountryId = requestProfile.CountryId;
-                        pr.UserId = User.Identity.GetUserId();
-                        pr.User = db.Users.Find(pr.UserId);
-                        pr.Birthday = requestProfile.Birthday;
+                        pr.UserId = id;
+                        pr.User = db.Users.Find(id);
+                        pr.Birthday = DateTime.Now;
                         pr.City = requestProfile.City;
                         pr.CityId = requestProfile.CityId;
                         db.SaveChanges();
