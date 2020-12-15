@@ -4,18 +4,40 @@
 }
 
 <h2>Index</h2>
-@if(ViewBag.Message != null)
+@if (ViewBag.Message != null)
 {
-     <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
 }
 @foreach (var user in ViewBag.Users)
 {
-    <h1>@user.Email</h1>
-    <br />
+ 
+    <h4 class="list-group-item-heading">@user.Email</h4>
+    <p class="list-group-item-text d-block">
     <form method="post" action="/Users/AddFriend">
         <input type="hidden" name="UserId" value="@user.Id" />
         <button type="submit">Add Friend</button>
     </form>
-    <br/>
+    <form method="post" action="/Users/Block">
+        <input type="hidden" name="UserId" value="@user.Id" />
+        <button type="submit">Block</button>
+    </form>
+    </p>
+    <br />
     <hr />
 }
+
+    <div class="list-group">
+        <a href="#" class="list-group-item disabled">
+            Prietenii tai
+        </a>
+        @foreach (var user in ViewBag.Friends)
+        {
+            <div class="list-group-item">
+            <a href="#">@user.Email</a>
+            <form method="post" action="/Users/Block">
+                <input type="hidden" name="UserId" value="@user.Id" />
+                <button type="submit">Block</button>
+            </form>
+            </div>
+        }
+    </div>
