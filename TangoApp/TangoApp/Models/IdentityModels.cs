@@ -31,6 +31,7 @@ namespace TangoApp.Models
         public virtual ICollection<Friendship> FriendshipReceive { get; set; }
 
         public bool UserStatus { get; set; }
+        public int ProfileId { get; set; }
 
     }
 

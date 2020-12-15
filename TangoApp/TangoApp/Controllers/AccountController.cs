@@ -165,6 +165,10 @@ namespace TangoApp.Controllers
                         db.Profiles.Add(profile);
                         db.SaveChanges();
 
+                        //fac legatura profil-user
+                        user.ProfileId = profile.ProfileId;
+                        db.SaveChanges();
+
                         UserManager.AddToRole(user.Id, "Editor");
                     }
                     else

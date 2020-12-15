@@ -3,44 +3,46 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Editeaza profilul</h2>
+<h2>Edit profile</h2>
+
+<p>@ViewBag.Err</p>
 
 @using (Html.BeginForm(actionName: "Edit", controllerName: "Profile"))
 {
     @Html.HttpMethodOverride(HttpVerbs.Put)
-    <p>Vizibilitatea profilului:</p>
-        <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "true") public </p>
-        <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "false") privat </p>
 
-        @Html.HiddenFor(m => m.ProfileId)
-        @Html.HiddenFor(m => m.UserId)
-        @Html.HiddenFor(m => m.User)
-        @Html.HiddenFor(m => m.Cities)
-        @Html.HiddenFor(m => m.Countries)
-        @Html.Label("Text", "Continutul descrierii")
-        <br />
-        @Html.EditorFor(m => m.Description)
-        <br />
-        @Html.ValidationMessageFor(m => m.Description)
-        <br />
+    @Html.HiddenFor(m => m.ProfileId)
 
-        <p>Gender:</p>
-        <p>@Html.RadioButtonFor(Model => Model.Gender, "true") femeie </p>
-        <p>@Html.RadioButtonFor(Model => Model.Gender, "false") barbat </p>
+    <p>Profile vizibility:</p>
+    <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "true") public </p>
+    <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "false") private </p>
 
-        <label>Selectati Tara</label>
-        @Html.DropDownListFor(m => m.CountryId,
-            new SelectList(Model.Countries, "Value", "Text"),
-            "Selectati tara", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
-        <br />
+    @Html.HiddenFor(m => m.UserId)
+    @Html.HiddenFor(m => m.Birthday)
+    @Html.Label("Text", "DDescription content")
+    <br />
+    @Html.EditorFor(m => m.Description)
+    <br />
+    @Html.ValidationMessageFor(m => m.Description)
+    <br />
 
-        <label>Selectati Orasul</label>
-        @Html.DropDownListFor(m => m.CityId,
-            new SelectList(Model.Cities, "Value", "Text"),
-            "Selectati orasul", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
-        <br />
+    <p>Gender:</p>
+    <p>@Html.RadioButtonFor(Model => Model.Gender, "true") female </p>
+    <p>@Html.RadioButtonFor(Model => Model.Gender, "false") male </p>
 
-    <button class="btn btn-sm btn-succes" type="submit">Editeaza profilul</button>
+    <label>Selectati Tara</label>
+    @Html.DropDownListFor(m => m.CountryId,
+        new SelectList(Model.Countries, "Value", "Text"),
+        "Select country", new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
+    <br />
+
+    <label>Selectati Orasul</label>
+    @Html.DropDownListFor(m => m.CityId,
+        new SelectList(Model.Cities, "Value", "Text"),
+        "Select city", new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
+    <br />
+
+    <button class="btn btn-sm btn-succes" type="submit">Edit profile</button>
 }

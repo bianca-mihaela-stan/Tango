@@ -31,16 +31,15 @@ namespace TangoApp.Controllers
         [Authorize(Roles ="Editor, User, Admin")]
         public ActionResult Show(string id)
         {
-            Profile profile = db.Profiles.Include("User").First(a => a.UserId == id);
+            Profile profile = db.Profiles.First(a => a.UserId == id);
             return View(profile);
         }
 
-
         //show logged user's profile in edit mode
         [Authorize(Roles = "Editor, Admin")]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(int id)
         {
-            Profile pr = db.Profiles.Include("User").First(a => a.UserId == id);
+            Profile pr = db.Profiles.Find(id);
             if (pr.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
                 pr.Countries = GetAllCountries();
@@ -57,35 +56,39 @@ namespace TangoApp.Controllers
         //edit logged user's profile
         [HttpPut]
         [Authorize(Roles = "Editor, Admin")]
-        public ActionResult Edit(string id, Profile requestProfile)
+        public ActionResult Edit(int id, Profile requestProfile)
         {
             requestProfile.Countries = GetAllCountries();
             requestProfile.Cities = GetAllCities();
             try
             {
-                if (ModelState.IsValid)
+                if ( ModelState.IsValid)
                 {
+                    //gasesc profilul cu acest id
                     Profile pr = db.Profiles.Find(id);
-                    if (TryUpdateModel(pr))
+                    if (pr.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
                     {
-                        if (pr.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                        if (TryUpdateModel(pr))
                         {
-                            pr = requestProfile;
+                            pr.ProfileVisibility = requestProfile.ProfileVisibility;
+                            pr.Description = requestProfile.Description;
+                            pr.Gender = requestProfile.Gender;
+                            pr.CityId = requestProfile.CityId;
+                            pr.CountryId = requestProfile.CountryId;
                             pr.Country = db.Countries.Find(pr.CountryId);
                             pr.City = db.Cities.Find(pr.CityId);
-                            pr.UserId = id;
-                            pr.User = db.Users.Find(id);
                             pr.Birthday = DateTime.Now;
                             db.SaveChanges();
                             TempData["message"] = "Profilul a fost editat!";
                         }
-                        else
-                        {
-                            TempData["message"] = "Nu puteti modifica un profil care nu va apartine!";
-                            return RedirectToAction("Index");
-                        }
+                        return RedirectToAction("Show", "Profile",new { id = pr.UserId });
                     }
-                    return Redirect("/Profile/Show/");
+                    else
+                    {
+                        TempData["message"] = "Nu puteti modifica un profil care nu va apartine!";
+                        return RedirectToAction("Index");
+                    }
+                  
                 }
                 else
                 {
@@ -94,6 +97,7 @@ namespace TangoApp.Controllers
             }
             catch (Exception e)
             {
+                ViewBag.Err = e;
                 return View(requestProfile);
             }
         }
