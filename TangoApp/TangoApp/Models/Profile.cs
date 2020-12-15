@@ -17,10 +17,10 @@ namespace TangoApp.Models
         public DateTime? Birthday { get; set; }
 
         public int? CityId { get; set; }
-        public City City { get; set; }
+        public virtual City City { get; set; }
 
         public int? CountryId {get; set;}
-        public Country Country { get; set; }
+        public virtual Country Country { get; set; }
 
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
