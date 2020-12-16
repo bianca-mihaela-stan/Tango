@@ -267,6 +267,7 @@
     <Content Include="Views\Notifications\Index.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Friendships\Index.cshtml" />
+    <Content Include="Views\Posts\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

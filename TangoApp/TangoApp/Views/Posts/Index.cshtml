@@ -7,6 +7,8 @@
     ViewBag.Title = "Index";
 }
 
+@Html.Partial("Search")
+
 <h2>Index</h2>
 @if (ViewBag.Message != null)
 {
@@ -22,7 +24,7 @@
     <a href="/Posts/Show/@post.PostId" class="btn btn-success">Vizualizare postare</a>
     <br />
     <hr />
-    <br/>
+    <br />
 }
 
 

@@ -12,23 +12,35 @@
 }
 
 <a href="/Profile/Edit/@Model.ProfileId" class="btn btn-success">Editeaza profilul</a>
-<br />
+<br /><br />
 <p>
     Vizibilitatea profilului: @Model.ProfileVisibility
 </p>
 
-@*<p>
-    Descriere: @Model.Description
+<p>
+    Descriere: @if (@Model.Description != null)
+    {
+        @Model.Description
+    }
 </p>
 
 <p>
-    Gender: @Model.Gender
+    Gender: @if (@Model.Gender != null)
+    {
+        @Model.Gender
+    }
 </p>
 
 <p>
-    Tara: @Model.Country.CountryName
+    Tara: @if (@Model.Country != null)
+    {
+        @Model.Country.CountryName
+    }
 </p>
 
 <p>
-    Orasul: @Model.City.CityName
-</p>*@
+    Orasul: @if (@Model.City != null)
+    {
+        @Model.City.CityName
+    }
+</p>

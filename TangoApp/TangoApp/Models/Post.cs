@@ -15,7 +15,7 @@ namespace TangoApp.Models
         public string Text { get; set; }
         public DateTime Date {get; set;}
         public DateTime? LastEditDate { get; set; }
-        //adaugam UserId-ul
+        //adding UserId
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
 

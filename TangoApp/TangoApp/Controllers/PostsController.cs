@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -15,12 +16,49 @@ namespace TangoApp.Controllers
         [Authorize(Roles ="User,Editor,Admin")]
         public ActionResult Index()
         {
-            var posts = db.Posts.Include("User");
-            ViewBag.Posts = posts;
-            if (TempData.ContainsKey("message"))
+            IOrderedQueryable<Post> posts = db.Posts.Include("User");
+            var search = "";
+
+            if(Request.Params.Get("search")!=null)
             {
-                ViewBag.Message = TempData["message"];
+                //trim whitespace from search string
+                search = Request.Params.Get("search").Trim();
+                //search in posts (content, name of the creator)
+                List<int> postIds = db.Posts.Where(
+                    at => at.Text.Contains(search)
+                    || at.User.UserName.Contains(search)
+                    ).Select(a => a.PostId).ToList();
+
+                //search in comments
+                List<int> commentIds = db.Comments.Where(c => c.Text.Contains(search)).Select(com => com.PostId).ToList();
+
+                //unique list of articles
+                List<int> mergedIds = postIds.Union(commentIds).ToList();
+                posts = db.Posts.Where(post => mergedIds.Contains(post.PostId)).Include("User").OrderBy(a => a.Date).OrderBy(a => a.Date);
+                
             }
+
+            var totalItems = posts.Count();
+            var currentPage = Convert.ToInt32(Request.Params.Get("page"));
+
+            var offset = 0;
+
+            if(!currentPage.Equals(0))
+            {
+                offset = (currentPage - 1) * 10;
+            }
+            var paginatedPosts = posts.OrderBy(a => a.Date).Skip(offset).Take(10);
+
+            if(TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
+            ViewBag.total = totalItems;
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)10);
+            ViewBag.Posts = paginatedPosts;
+            ViewBag.SearchString = search;
+
             return View();
         }
         [Authorize(Roles = "User,Editor,Admin")]
