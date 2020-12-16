@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,6 +8,7 @@ using TangoApp.Models;
 
 namespace TangoApp.Controllers
 {
+    [Authorize(Roles = "User,Editor,Admin")]
     public class CommentsController : Controller
     {
         // GET: Comments
@@ -59,9 +61,31 @@ namespace TangoApp.Controllers
             }
 
         }
+        [HttpDelete]
         public ActionResult Delete(int id)
         {
             Comment com = db.Comments.Find(id);
+            
+            //daca avem o notificare care sa o referentieze
+            var notificationList = db.Notifications.Where(u => u.CommentId == com.CommentId).ToList();
+            if(notificationList.Any())
+            {
+                var notification = notificationList.First();
+                notification.CommentId = null;
+            }
+            if (User.IsInRole("Admin"))
+            {
+                Notification notification = new Notification
+                {
+                    UserSendId = User.Identity.GetUserId(),
+                    UserReceiveId = com.UserId,
+                    PostId = com.PostId,
+                    Time = DateTime.Now,
+                    Seen = false,
+                    Type = NotificationFlag.DeletedComment
+                };
+                db.Notifications.Add(notification);
+            }
             db.Comments.Remove(com);
             db.SaveChanges();
             TempData["message"] = "Comentariul a fost sters!";

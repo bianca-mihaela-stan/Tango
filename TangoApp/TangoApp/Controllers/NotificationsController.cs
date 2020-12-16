@@ -30,13 +30,19 @@ namespace TangoApp.Controllers
             
         }
         [NonAction]
+        public ActionResult Collapse(int id)
+        {
+            return View();
+
+        }
+        /*[NonAction]
         public void New(Notification notification)
         {
             notification.Time = DateTime.Now;
             notification.Seen = false;
             db.Notifications.Add(notification);
             db.SaveChanges();
-        }
+        }*/
         [NonAction]
         public void Delete(int id)
         {

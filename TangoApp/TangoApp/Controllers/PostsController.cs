@@ -93,6 +93,7 @@ namespace TangoApp.Controllers
                         notification.CommentId = com.CommentId;
                         notification.Time = DateTime.Now;
                         notification.Seen = false;
+                        notification.Type = NotificationFlag.NewComment;
                         db.Notifications.Add(notification);
                         db.SaveChanges();
                     }
@@ -193,8 +194,28 @@ namespace TangoApp.Controllers
             if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
                 db.Posts.Remove(post);
-                db.SaveChanges();
+                var notificationList = db.Notifications.Where(u => u.PostId == post.PostId).ToList();
+                if (notificationList.Any())
+                {
+                    var notification = notificationList.First();
+                    notification.PostId = null;
+                    notification.CommentId = null;
+                }
+               
                 TempData["message"] = "Postarea a fost stearsa!";
+                ///daca continutul a fost gasit necorespunzator si a fost sters de admin, atunci
+                // trebuie sa adaugam o notificare corespunzatoare pentru User-ul care a postat comentariul
+                if(User.IsInRole("Admin"))
+                {
+                    Notification notification = new Notification();
+                    notification.UserSendId = User.Identity.GetUserId();
+                    notification.Time = DateTime.Now;
+                    notification.Seen = false;
+                    notification.Type = NotificationFlag.DeletedPost;
+                    db.Notifications.Add(notification);
+                   
+                }
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             else

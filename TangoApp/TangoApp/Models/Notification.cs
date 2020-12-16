@@ -35,7 +35,7 @@ namespace TangoApp.Models
         // postId = id-ul postarii pe baza careia se creeaza notificarea
         // Daca administratorul a sters o postare sau un comentariu de la o postare, id-ul postarii respective
         // va ocupa acest field
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
         public virtual Post Post { get; set; }
         //Daca administratorul sterge un comentariu de la o postare, nu e indeajuns sa retinem doar id-ul postarii
         // respective => trebuie sa retinem si id-ul comentariului sters, pe care o sa il afisam userului
@@ -48,5 +48,13 @@ namespace TangoApp.Models
         //de tip "postare")
         //daca administratorul sterge un comentariu de la o postare => campurile commentId si postId o sa fie
         // ambele completate (continutul sters a fost de tip "comentariu")
+        public NotificationFlag Type { get; set; }
     }
+    public enum NotificationFlag
+    {
+        DeletedComment,
+        DeletedPost,
+        NewComment,
+        NewPost
+    };
 }
