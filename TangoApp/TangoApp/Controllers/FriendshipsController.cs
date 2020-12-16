@@ -8,6 +8,7 @@ using TangoApp.Models;
 
 namespace TangoApp.Controllers
 {
+    [Authorize(Roles ="User,Editor,Admin")]
     public class FriendshipsController : Controller
     {
         // GET: Friendships
@@ -35,20 +36,37 @@ namespace TangoApp.Controllers
             try
             {
                 var friendship = db.Friendships.Find(id);
-                db.Friendships.Remove(friendship);
+                if(friendship == null)
+                {
+                    TempData["message"] = "Nu aveti nicio cerere de prietenie de la acest user!";
+                    return RedirectToAction("Index");
+                }
+                
                 Friend newfriend = new Friend();
                 newfriend.User1Id = friendship.User1Id;
                 newfriend.User2Id = friendship.User2Id;
                 newfriend.StartDate = DateTime.Now;
                 db.Friends.Add(newfriend);
+                db.Friendships.Remove(friendship);
                 db.SaveChanges();
+                var foundfriends = db.Friends.Find(newfriend.FriendId);
+                if (foundfriends == null)
+                {
+                    TempData["message"] = "Relatia nu a putut fi gasita!";
+                    return RedirectToAction("Index");
+                }
                 var user = db.Users.Find(newfriend.User1Id);
+                if(user == null)
+                {
+                    TempData["message"] = "Userul nu a putut fi gasit!";
+                    return RedirectToAction("Index");
+                }
                 TempData["message"] = "Acum esti prieten cu " + user.Email;
                 return RedirectToAction("Index");
             }
             catch(Exception e)
             {
-                TempData["message"] = "Am intampinat o eroare";
+                TempData["message"] = "Am intampinat o eroare" + e;
                 return RedirectToAction("Index");
             }
         }

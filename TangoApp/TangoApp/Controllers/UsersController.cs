@@ -8,6 +8,7 @@ using TangoApp.Models;
 
 namespace TangoApp.Controllers
 {
+    [Authorize(Roles = "User,Editor,Admin")]
     public class UsersController : Controller
     {
         // GET: Users
@@ -19,15 +20,21 @@ namespace TangoApp.Controllers
             var friendFirst = db.Friends.Include("Users").Where(u => u.User1Id == currentUser).Select(u => u.User2).ToList();
             var friendSecond = db.Friends.Include("Users").Where(u => u.User2Id == currentUser).Select(u => u.User1).ToList();
 
-            ///var blockedUsers = db.Friendships.Where(u => u.User1Id == currentUser && u.Status == 3 && u.ActionUser == 1).Select(u => u.User2).ToList();
+            var blockedUsersFirst = db.Friendships.Where(u => u.User1Id == currentUser && u.Status == 3 && u.ActionUser == 1).Select(u => u.User2).ToList();
+            var blockedUsersSecond = db.Friendships.Where(u => u.User2Id == currentUser && u.Status == 3 && u.ActionUser == 2).Select(u => u.User1).ToList();
+
 
             var allFriends = friendFirst.Union(friendSecond);
+            var allBlockedUsers = blockedUsersFirst.Union(blockedUsersSecond);
+
+            //utilizatorul curent
             var currentUserEntity = new List<ApplicationUser>();
             currentUserEntity.Add(db.Users.Find(currentUser));
 
             ViewBag.Friends = allFriends;
-            ViewBag.Users = users.Except(allFriends).Except(currentUserEntity);
-            if(TempData.ContainsKey("message"))
+            ViewBag.BlockedUsers = allBlockedUsers;
+            ViewBag.Users = users.Except(allFriends).Except(currentUserEntity).Except(allBlockedUsers);
+            if (TempData.ContainsKey("message"))
             {
                 ViewBag.Message = TempData["message"];
             }
@@ -36,24 +43,58 @@ namespace TangoApp.Controllers
         [HttpPost]
         public ActionResult AddFriend(FormCollection formData)
         {
-
-            string currentUserId = User.Identity.GetUserId();
-            string potentialFriendId = formData.Get("UserId");
-            ApplicationUser sendToUser = db.Users.Find(potentialFriendId);
-            if(sendToUser == null)
-            {
-                TempData["message"] = "Utilizatorul nu a fost gasit!";
-                return RedirectToAction("Index");
-            }
-            //vrem sa verificam ca relatia intre useri nu exista deja
-            var ties = db.Friendships.Where(x => (x.User1Id == potentialFriendId && x.User2Id == currentUserId) || (x.User2Id == potentialFriendId && x.User1Id == currentUserId)).ToList();
-            if(ties.Any())
-            {
-                TempData["message"] = "Cererea a fost deja trimisa!";
-                return RedirectToAction("Index");
-            }
             try
             {
+                string currentUserId = User.Identity.GetUserId();
+                string potentialFriendId = formData.Get("UserId");
+                ApplicationUser sendToUser = db.Users.Find(potentialFriendId);
+                if (sendToUser == null)
+                {
+                    TempData["message"] = "Utilizatorul nu a fost gasit!";
+                    return RedirectToAction("Index");
+                }
+                //vrem sa verificam ca relatia intre useri nu exista deja
+                var ties = db.Friendships.Where(x => (x.User1Id == potentialFriendId && x.User2Id == currentUserId) || (x.User2Id == potentialFriendId && x.User1Id == currentUserId)).ToList();
+                //daca deja exista o legatura intre 2 utilizatori avem urmatoarele cazuri
+                if (ties.Any())
+                {
+
+                    var alreadyExists = ties.First();
+                    ///utilizatorul curent este cel care a trimis cererea de prietenie
+                    if (alreadyExists.Status == 0 && alreadyExists.User1Id == currentUserId)
+                    {
+                        TempData["message"] = "Cererea a fost deja trimisa!";
+                        return RedirectToAction("Index");
+                    }
+                    //utilizatorul curent este cel care a primit deja cerere de prietenie de la sendToUser
+                    if (alreadyExists.Status == 0 && alreadyExists.User1Id != currentUserId)
+                    {
+                        TempData["message"] = "Raspunde cererii de prietenie";
+                        return Redirect("/Friendships/Index");
+                    }
+                    ///sendToUser este blocat
+                    if (alreadyExists.Status == 3)
+                    {
+                        TempData["message"] = "Utilizatorul este blocat!";
+                        return RedirectToAction("Index");
+                    }
+                    //cineva a dat decline la cererea de prietenie
+                    if (alreadyExists.Status == 2)
+                    {
+                        ///utilizatorul curent a dat decline la cererea de prietenie
+                        if(alreadyExists.User1Id == currentUserId && alreadyExists.ActionUser == 1 || alreadyExists.User2Id == currentUserId && alreadyExists.ActionUser == 2)
+                        {
+                            db.Friendships.Remove(alreadyExists);
+                        }
+                        ///utilizatorul sendToUser a dat decline la cererea de prietenie
+                        else
+                        {
+                            TempData["message"] = "Cererea a fost deja trimisa!";
+                            return RedirectToAction("Index");
+                        }
+                    }
+                }
+                ///nu exista nicio legatura anterioara
                 Friendship friendship = new Friendship();
                 friendship.User1Id = currentUserId;
                 friendship.User2Id = potentialFriendId;
@@ -63,12 +104,48 @@ namespace TangoApp.Controllers
                 db.SaveChanges();
                 TempData["message"] = "Cererea a fost trimisa!";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                TempData["message"] = "Something went wrong. Please try again later." + e;
+                TempData["message"] = "Something went wrong. Please try again later.";
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
+        }
+        [HttpDelete]
+        public ActionResult Unfriend(FormCollection formData)
+        {
+
+
+            string currentUserId = User.Identity.GetUserId();
+            string formUserId = formData.Get("UserId");
+            try
+            {
+                ApplicationUser unfriendUser = db.Users.Find(formUserId);
+                if (unfriendUser == null)
+                {
+                    TempData["message"] = "Utilizatorul nu a fost gasit!";
+                    return RedirectToAction("Index");
+
+                }
+                var friends = db.Friends.Where(u => (u.User1Id == currentUserId && u.User2Id == formUserId) || (u.User2Id == currentUserId && u.User1Id == formUserId)).ToList();
+                if (!friends.Any())
+                {
+                    TempData["message"] = "Nu sunteti prieteni cu acest utilizator!";
+                    return RedirectToAction("Index");
+                }
+
+                db.Friends.Remove(friends.First());
+                db.SaveChanges();
+                TempData["message"] = "Nu mai sunteti prieteni!";
+                return RedirectToAction("Index");
+
+            }
+            catch (Exception e)
+            {
+                TempData["message"] = "Something went wrong. Please try again later.";
+                return View("Index");
+            }
+
         }
         [HttpPost]
         public ActionResult Block(FormCollection formData)
@@ -78,8 +155,14 @@ namespace TangoApp.Controllers
             {
                 var userToBlockId = formData.Get("UserId");
                 var currentUserId = User.Identity.GetUserId();
+                if (db.Users.Find(userToBlockId) == null)
+                {
+                    TempData["messaege"] = "Utilizatorul nu poate fi gasit!";
+                    return RedirectToAction("Index");
+                }
                 var friendshipList = db.Friendships.Where(u => (u.User1Id == currentUserId && u.User2Id == userToBlockId) || (u.User2Id == currentUserId && u.User1Id == userToBlockId)).ToList();
                 var arefriendsList = db.Friends.Where(u => (u.User1Id == currentUserId && u.User2Id == userToBlockId) || (u.User2Id == currentUserId && u.User1Id == userToBlockId)).ToList();
+
                 if (friendshipList.Any())
                 {
                     var friendship = friendshipList.First();
@@ -94,20 +177,25 @@ namespace TangoApp.Controllers
                     else
                         friendship.ActionUser = 2;
                 }
-                if (arefriendsList.Any())
+                else
                 {
-                    var arefriends = arefriendsList.First();
+
                     Friendship blocked = new Friendship();
                     blocked.User1Id = currentUserId;
                     blocked.User2Id = userToBlockId;
                     blocked.Status = 3;
                     blocked.ActionUser = 1;
-                    db.Friends.Remove(arefriends);
-                    db.SaveChanges();
                     db.Friendships.Add(blocked);
-                    db.SaveChanges();
+
+                    if (arefriendsList.Any())
+                    {
+
+                        var arefriends = arefriendsList.First();
+                        db.Friends.Remove(arefriends);
+                    }
+
                 }
-                
+                db.SaveChanges();
                 TempData["message"] = "Utilizatorul a fost blocat!";
                 return RedirectToAction("Index");
             }
@@ -115,6 +203,43 @@ namespace TangoApp.Controllers
             {
                 TempData["message"] = "Am intampinat o eroare" + e;
                 return RedirectToAction("Index");
+            }
+
+
+        }
+        [HttpDelete]
+        public ActionResult Unblock(FormCollection formData)
+        {
+
+            try
+            {
+
+                var userToUnblockId = formData.Get("UserId");
+                if (db.Users.Find(userToUnblockId) == null)
+                {
+                    TempData["message"] = "Utilizatorul nu a putut fi gasit!";
+                    return RedirectToAction("Index");
+                }
+                var currentUserId = User.Identity.GetUserId();
+                var friendshipList = db.Friendships.Where(u => (u.User1Id == currentUserId && u.User2Id == userToUnblockId) || (u.User2Id == currentUserId && u.User1Id == userToUnblockId)).ToList();
+                if (!friendshipList.Any() || (friendshipList.Any() && friendshipList.First().Status != 3))
+                {
+                    TempData["message"] = "Utilizatorul nu este blocat!";
+                    return RedirectToAction("Index");
+                }
+                var friendship = friendshipList.First();
+                db.Friendships.Remove(friendship);
+                db.SaveChanges();
+                TempData["message"] = "Utilizatorul a fost deblocat!";
+                return RedirectToAction("Index");
+
+            }
+            catch (Exception e)
+            {
+
+                TempData["message"] = "Am intampinat o eroare" + e;
+                return RedirectToAction("Index");
+
             }
 
 
