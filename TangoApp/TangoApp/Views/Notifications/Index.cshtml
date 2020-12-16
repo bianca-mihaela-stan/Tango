@@ -7,11 +7,40 @@
 @foreach (var notification in ViewBag.Notifications)
 {
     <div class="card">
-        <a href="/Posts/Show/@notification.PostId" class="card-body text-decoration-none d-block text-dark">
+        <div class="card-body text-decoration-none d-block text-dark">
             <small class="pull-right">@notification.Time</small>
-            <br/>
-            <p class="text-dark"><span>@notification.UserSend.Email</span> a adaugat un comentariu la postarea ta.</p>
-        </a>
+            <br />
+            @if (notification.Type == TangoApp.Models.NotificationFlag.DeletedPost)
+            {
+                <p class="text-dark">
+                    Continutul uneia dintre postariile dumneavoastra a fost gasiv necorespunzator
+                    si prin urmare postarea a fost stearsa de administratia site-ului!
+                </p>
+            }
+            else if (notification.Type == TangoApp.Models.NotificationFlag.DeletedComment)
+            {
+                <p class="text-dark">
+                    Am sters un comentariu la o postare deoarece incalca regulile comunitatii.
+                    <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
+                </p>
+            }
+            else if (notification.Type == TangoApp.Models.NotificationFlag.NewComment)
+            {
+                <p class="text-dark">
+                    <span>@notification.Comment.User.Email</span> a adaugat un nou comentariu la postarea ta.
+                    <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
+                </p>
+
+            }
+            else
+            {
+
+                <p class="text-dark">
+                    <span>@notification.Comment.User.Email</span> a adaugat o noua postare.
+                    <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
+                </p>
+            }
+        </div>
     </div>
     <hr/>
 
