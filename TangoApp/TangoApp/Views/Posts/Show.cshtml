@@ -9,10 +9,20 @@
 <h2>Vizualizare postare</h2>
 @if (ViewBag.Message != null)
 {
-        <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
 }
 
 @Html.Partial("ShowPost", Model)
+@if (Model.Media != null)
+{  
+    foreach (var image in Model.Media.ToList())
+    {
+   
+        <img src="~/Files/@image.FileName" alt="image" height="400"/>
+       <br/>
+
+    }
+}
 @Html.ActionLink("Editeaza postarea", "Edit", new { id = Model.PostId }, new { @class = "d-inline btn btn-info float-left position-relative" })
 @using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = Model.PostId }))
 {

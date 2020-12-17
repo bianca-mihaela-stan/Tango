@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -81,16 +82,23 @@ namespace TangoApp.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Editor,Admin")]
-        public ActionResult New(Post post)
+        public ActionResult New(Post post, HttpPostedFileBase uploadedMedia)
         {
            
             try
             {
+               
                 if (ModelState.IsValid)
                 {
                     post.Date = DateTime.Now;
                     post.UserId = User.Identity.GetUserId();
                     db.Posts.Add(post);
+                    if (uploadedMedia != null)
+                    {
+                        int mediaId = Upload(uploadedMedia);
+                        var image = db.Media.Find(mediaId);
+                        image.PostId = post.PostId;
+                    }
                     db.SaveChanges();
                     TempData["message"] = "Postarea a fost adaugata!";
                     return RedirectToAction("Index");
@@ -176,9 +184,11 @@ namespace TangoApp.Controllers
         }
         [HttpPut]
         [Authorize(Roles = "Editor,Admin")]
-        public ActionResult Edit(int id, Post requestpost)
+        public ActionResult Edit(int id, Post requestpost, HttpPostedFileBase uploadedMedia)
         {
-
+            if (TempData.ContainsKey("message"))
+                ViewBag.Message = TempData["message"];
+           
             try
             {
 
@@ -187,11 +197,23 @@ namespace TangoApp.Controllers
                     var post = db.Posts.Find(id);
                     if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
                     {
-                        if (TryValidateModel(post))
+                        if (TryUpdateModel(post))
                         {
 
                             post.Text = requestpost.Text;
                             post.LastEditDate = DateTime.Now;
+
+                            //we also change the photo if we've got a new one
+                            if (uploadedMedia != null)
+                                changeMedia(post.PostId, uploadedMedia);
+
+                            ///if we already have an image in db, we have to remove it 
+                            /*if (post.Media!= null && post.Media.ToList().Count() == 1)
+                            {
+
+                                var media = post.Media.ToList().First();
+                                db.Media.Remove(media);
+                            }*/
                             db.SaveChanges();
                             TempData["message"] = "Postarea a fost editata!";
                             return Redirect("/Posts/Show/" + id);
@@ -199,6 +221,7 @@ namespace TangoApp.Controllers
                         }
                         else
                         {
+                            TempData["message"] = "Not right!";
                             return View(requestpost);
 
                         }
@@ -213,6 +236,7 @@ namespace TangoApp.Controllers
                 }
                 else
                 {
+                    TempData["message"] = "Something went wrong!";
                     return View(requestpost);
                 }
 
@@ -220,6 +244,7 @@ namespace TangoApp.Controllers
 
             }catch(Exception e)
             {
+                TempData["message"] = e;
                 ViewBag.Error = e;
                 return View(requestpost);
             }
@@ -263,9 +288,97 @@ namespace TangoApp.Controllers
             }
 
         }
+       [NonAction]
+        public int Upload(HttpPostedFileBase uploadedMedia)
+        {
+            try
+            {
+                
+                string uploadedMediaName = uploadedMedia.FileName;
+                string uploadedMediaExtension = Path.GetExtension(uploadedMediaName);
+                if (uploadedMediaExtension == ".png" || uploadedMediaExtension == ".jpg" || uploadedMediaExtension == ".jpeg")
+                {
+                    
+                        string uploadedFolderPath = Server.MapPath("~//Files//");
+                        uploadedMedia.SaveAs(uploadedFolderPath + uploadedMediaName);
+                   
+                    System.Diagnostics.Debug.WriteLine(uploadedFolderPath);
+                    Media media = new Media
+                    {
+                        Extension = uploadedMediaExtension,
+                        FileName = uploadedMediaName,
+                        FilePath = uploadedFolderPath + uploadedMediaName
+                    };
+                    db.Media.Add(media);
+                   
+                    return media.FileId;
+
+                }
+                else
+                {
+                    throw new Exception("Tipul fisierului nu e valid");
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
+        }
+        [NonAction]
+        public void changeMedia(int postId, HttpPostedFileBase uploadedMedia)
+        {
+            try
+            {
+
+                var post = db.Posts.Find(postId);
+                var mediaToUpdate = post.Media.ToList().First();
+
+                ///either way, we will upload in db a new file
+                /* int mediaId = Upload(uploadedMedia);
+                 var c = 4;
+                 var image = db.Media.Find(mediaId);
+                 image.PostId = postId;*/
+                if (TryUpdateModel(mediaToUpdate))
+                {
+                    mediaToUpdate.FileName = uploadedMedia.FileName;
+                    string uploadedMediaExtension = Path.GetExtension(uploadedMedia.FileName);
+                    if (uploadedMediaExtension == ".png" || uploadedMediaExtension == ".jpg" || uploadedMediaExtension == ".jpeg")
+                    {
+
+                        string uploadedFolderPath = Server.MapPath("~//Files//");
+                        uploadedMedia.SaveAs(uploadedFolderPath + uploadedMedia.FileName);
+
+
+                        mediaToUpdate.Extension = uploadedMediaExtension;
+                        mediaToUpdate.FilePath = uploadedFolderPath + uploadedMedia.FileName;
+
+
+                    }
+                    else
+                    {
+                        throw new Exception("Tipul fisierului nu e valid");
+                    }
+                }
+                else
+                {
+
+                    throw new Exception("Fisierul nu poate fi modificat!");
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
 
 
 
+
+
+        }
 
     }
 }
