@@ -15,19 +15,51 @@ namespace TangoApp.Controllers
         // GET: Profile
         public ActionResult Index()
         {
-            var profiles = db.Profiles.Include("Country").Include("User").Include("City");
-            ViewBag.profiles = profiles;
+            IOrderedQueryable<Profile> profiles = db.Profiles.Include("User").Include("Country").Include("City");
+            var search = "";
+            var number_of_profiles_perpage = 10;
+            if (Request.Params.Get("search") != null)
+            {
+                //trim whitespace from search string
+                search = Request.Params.Get("search").Trim();
+                //search in posts (content, name of the creator)
+                List<int> postIds = db.Posts.Where(
+                    at => at.Text.Contains(search)
+                    || at.User.UserName.Contains(search)
+                    ).Select(a => a.PostId).ToList();
+
+                profiles = db.Profiles.Where(
+                    at => at.User.UserName.Contains(search)).OrderBy(a => a.User.UserName);
+
+                
+
+            }
+
+            var totalItems = profiles.Count();
+            var currentPageProfiles = Convert.ToInt32(Request.Params.Get("page"));
+
+            var offset = 0;
+
+            if (!currentPageProfiles.Equals(0))
+            {
+                offset = (currentPageProfiles - 1) * number_of_profiles_perpage;
+            }
+            var paginatedProfiles = profiles.OrderBy(a => a.User.UserName).Skip(offset).Take(number_of_profiles_perpage);
 
             if (TempData.ContainsKey("message"))
             {
-                ViewBag.Message = TempData["message"];
+                ViewBag.message = TempData["message"].ToString();
             }
+
+            ViewBag.total = totalItems;
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)number_of_profiles_perpage);
+            ViewBag.Profiles = paginatedProfiles;
+            ViewBag.SearchString = search;
 
             return View();
         }
         
 
-        //show logged user's profile
         [Authorize(Roles ="Editor, User, Admin")]
         public ActionResult Show(string id)
         {
