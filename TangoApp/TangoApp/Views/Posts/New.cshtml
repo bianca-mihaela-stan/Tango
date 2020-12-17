@@ -4,17 +4,12 @@
 }
 
 <h2>Adaugare postare</h2>
-<h3>@ViewBag.Error</h3>
 <!--for a succesful upload, we need to add enctype = "multipart/form-data"; otherwise the browser will transmit only
     the name of the file-->
-
-<!--<form enctype="multipart/form-data" action="/Posts/New" method="post">
-
-    <input type="file" name="uploadedFile" />
-    <br />
-    <input type="submit" class="btn btn-success" value="Add" />
-</form>-->
-
+@if (ViewBag.Message != null)
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
 @using (Html.BeginForm("New", "Posts", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.Label("Text", "Continutul textului")

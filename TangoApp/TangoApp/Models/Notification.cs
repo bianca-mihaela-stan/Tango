@@ -55,6 +55,7 @@ namespace TangoApp.Models
         DeletedComment,
         DeletedPost,
         NewComment,
-        NewPost
+        NewPost,
+        DeletedMedia
     };
 }

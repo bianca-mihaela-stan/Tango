@@ -14,13 +14,13 @@ namespace TangoApp.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Posts
-        [Authorize(Roles ="User,Editor,Admin")]
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Index()
         {
             IOrderedQueryable<Post> posts = db.Posts.Include("User");
             var search = "";
 
-            if(Request.Params.Get("search")!=null)
+            if (Request.Params.Get("search") != null)
             {
                 //trim whitespace from search string
                 search = Request.Params.Get("search").Trim();
@@ -36,7 +36,7 @@ namespace TangoApp.Controllers
                 //unique list of articles
                 List<int> mergedIds = postIds.Union(commentIds).ToList();
                 posts = db.Posts.Where(post => mergedIds.Contains(post.PostId)).Include("User").OrderBy(a => a.Date).OrderBy(a => a.Date);
-                
+
             }
 
             var totalItems = posts.Count();
@@ -44,13 +44,13 @@ namespace TangoApp.Controllers
 
             var offset = 0;
 
-            if(!currentPage.Equals(0))
+            if (!currentPage.Equals(0))
             {
                 offset = (currentPage - 1) * 10;
             }
             var paginatedPosts = posts.OrderBy(a => a.Date).Skip(offset).Take(10);
 
-            if(TempData.ContainsKey("message"))
+            if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
             }
@@ -70,6 +70,13 @@ namespace TangoApp.Controllers
             {
                 ViewBag.Message = TempData["message"];
             }
+            ViewBag.afisareButoane = false;
+            if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+            {
+                ViewBag.afisareButoane = true;
+            }
+            ViewBag.esteAdmin = User.IsInRole("Admin");
+            ViewBag.utilizatorCurent = User.Identity.GetUserId();
             return View(post);
         }
         [Authorize(Roles = "Editor,Admin")]
@@ -84,10 +91,10 @@ namespace TangoApp.Controllers
         [Authorize(Roles = "Editor,Admin")]
         public ActionResult New(Post post, HttpPostedFileBase uploadedMedia)
         {
-           
+
             try
             {
-               
+
                 if (ModelState.IsValid)
                 {
                     post.Date = DateTime.Now;
@@ -105,13 +112,14 @@ namespace TangoApp.Controllers
                 }
                 else
                 {
-                    return View();
+                    //ViewBag.Message = "Data invalide";
+                    return View(post);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                ViewBag.Error = e;
-                return View();
+                ViewBag.Mesage = e.Message;
+                return View(post);
             }
         }
         [HttpPost]
@@ -129,21 +137,26 @@ namespace TangoApp.Controllers
                     db.SaveChanges();
                     TempData["message"] = "Comentariul a fost adaugat!";
                     //adaugam notificarea corespunzatoare
+                     
                     try
                     {
-                        Notification notification = new Notification();
-                        notification.UserSendId = User.Identity.GetUserId();
                         var post = db.Posts.Find(id);
-                        notification.UserReceiveId = post.UserId;
-                        notification.PostId = id;
-                        notification.CommentId = com.CommentId;
-                        notification.Time = DateTime.Now;
-                        notification.Seen = false;
-                        notification.Type = NotificationFlag.NewComment;
-                        db.Notifications.Add(notification);
-                        db.SaveChanges();
+                        //if a user comments on his/her own post, we won't send a notification
+                        if(post.UserId != User.Identity.GetUserId())
+                        {
+                            Notification notification = new Notification();
+                            notification.UserSendId = User.Identity.GetUserId();
+                            notification.UserReceiveId = post.UserId;
+                            notification.PostId = id;
+                            notification.CommentId = com.CommentId;
+                            notification.Time = DateTime.Now;
+                            notification.Seen = false;
+                            notification.Type = NotificationFlag.NewComment;
+                            db.Notifications.Add(notification);
+                            db.SaveChanges();
+                        }
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         TempData["message"] = " Eroare la adaugarea notificarii" + e;
 
@@ -174,7 +187,7 @@ namespace TangoApp.Controllers
         public ActionResult Edit(int id)
         {
             var post = db.Posts.Find(id);
-            if(post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
                 return View(post);
             else
             {
@@ -188,11 +201,11 @@ namespace TangoApp.Controllers
         {
             if (TempData.ContainsKey("message"))
                 ViewBag.Message = TempData["message"];
-           
+
             try
             {
 
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     var post = db.Posts.Find(id);
                     if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
@@ -205,15 +218,18 @@ namespace TangoApp.Controllers
 
                             //we also change the photo if we've got a new one
                             if (uploadedMedia != null)
-                                changeMedia(post.PostId, uploadedMedia);
-
-                            ///if we already have an image in db, we have to remove it 
-                            /*if (post.Media!= null && post.Media.ToList().Count() == 1)
                             {
-
-                                var media = post.Media.ToList().First();
-                                db.Media.Remove(media);
-                            }*/
+                                if (post.Media != null && post.Media.ToList().Any())
+                                    changeMedia(post.PostId, uploadedMedia);
+                                else
+                                {
+                                    //if we don't have one, we need to add a new photo
+                                    int mediaId = Upload(uploadedMedia);
+                                    var image = db.Media.Find(mediaId);
+                                    image.PostId = post.PostId;
+                                }
+                            }
+                            
                             db.SaveChanges();
                             TempData["message"] = "Postarea a fost editata!";
                             return Redirect("/Posts/Show/" + id);
@@ -242,10 +258,11 @@ namespace TangoApp.Controllers
 
 
 
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
-                TempData["message"] = e;
-                ViewBag.Error = e;
+               
+                //ViewBag.Error = e;
                 return View(requestpost);
             }
         }
@@ -256,28 +273,42 @@ namespace TangoApp.Controllers
             var post = db.Posts.Find(id);
             if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
-                db.Posts.Remove(post);
+                
+                ///remove any notification that references the deleted post
                 var notificationList = db.Notifications.Where(u => u.PostId == post.PostId).ToList();
                 if (notificationList.Any())
                 {
-                    var notification = notificationList.First();
-                    notification.PostId = null;
-                    notification.CommentId = null;
+                    foreach (var notification in notificationList)
+                    {
+                        db.Notifications.Remove(notification);
+                    }
+                }
+                ///remove any media that references the deleted post
+                var mediaUsed = post.Media;
+                if (mediaUsed != null && mediaUsed.ToList().Any())
+                {
+                    foreach (var med in mediaUsed)
+                    {
+                        db.Media.Remove(med);
+                    }
+
                 }
                
-                TempData["message"] = "Postarea a fost stearsa!";
                 ///daca continutul a fost gasit necorespunzator si a fost sters de admin, atunci
                 // trebuie sa adaugam o notificare corespunzatoare pentru User-ul care a postat comentariul
-                if(User.IsInRole("Admin"))
+                if (User.IsInRole("Admin"))
                 {
                     Notification notification = new Notification();
                     notification.UserSendId = User.Identity.GetUserId();
+                    notification.UserReceiveId = post.UserId;
                     notification.Time = DateTime.Now;
                     notification.Seen = false;
                     notification.Type = NotificationFlag.DeletedPost;
                     db.Notifications.Add(notification);
-                   
+
                 }
+                db.Posts.Remove(post);
+                TempData["message"] = "Postarea a fost stearsa!";
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -288,20 +319,20 @@ namespace TangoApp.Controllers
             }
 
         }
-       [NonAction]
+        [NonAction]
         public int Upload(HttpPostedFileBase uploadedMedia)
         {
             try
             {
-                
+
                 string uploadedMediaName = uploadedMedia.FileName;
                 string uploadedMediaExtension = Path.GetExtension(uploadedMediaName);
                 if (uploadedMediaExtension == ".png" || uploadedMediaExtension == ".jpg" || uploadedMediaExtension == ".jpeg")
                 {
-                    
-                        string uploadedFolderPath = Server.MapPath("~//Files//");
-                        uploadedMedia.SaveAs(uploadedFolderPath + uploadedMediaName);
-                   
+
+                    string uploadedFolderPath = Server.MapPath("~//Files//");
+                    uploadedMedia.SaveAs(uploadedFolderPath + uploadedMediaName);
+
                     System.Diagnostics.Debug.WriteLine(uploadedFolderPath);
                     Media media = new Media
                     {
@@ -310,7 +341,7 @@ namespace TangoApp.Controllers
                         FilePath = uploadedFolderPath + uploadedMediaName
                     };
                     db.Media.Add(media);
-                   
+
                     return media.FileId;
 
                 }
@@ -334,11 +365,7 @@ namespace TangoApp.Controllers
                 var post = db.Posts.Find(postId);
                 var mediaToUpdate = post.Media.ToList().First();
 
-                ///either way, we will upload in db a new file
-                /* int mediaId = Upload(uploadedMedia);
-                 var c = 4;
-                 var image = db.Media.Find(mediaId);
-                 image.PostId = postId;*/
+             
                 if (TryUpdateModel(mediaToUpdate))
                 {
                     mediaToUpdate.FileName = uploadedMedia.FileName;

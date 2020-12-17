@@ -70,8 +70,10 @@ namespace TangoApp.Controllers
             var notificationList = db.Notifications.Where(u => u.CommentId == com.CommentId).ToList();
             if(notificationList.Any())
             {
-                var notification = notificationList.First();
-                notification.CommentId = null;
+               foreach(var comm in notificationList)
+                {
+                    db.Notifications.Remove(comm);
+                }
             }
             if (User.IsInRole("Admin"))
             {
