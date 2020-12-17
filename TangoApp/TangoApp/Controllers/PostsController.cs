@@ -18,8 +18,9 @@ namespace TangoApp.Controllers
         public ActionResult Index()
         {
             IOrderedQueryable<Post> posts = db.Posts.Include("User");
+            IOrderedQueryable<Profile> profiles = db.Profiles.Include("User").Include("Country").Include("City");
             var search = "";
-
+            var number_of_posts_perpage = 10;
             if (Request.Params.Get("search") != null)
             {
                 //trim whitespace from search string
@@ -37,18 +38,21 @@ namespace TangoApp.Controllers
                 List<int> mergedIds = postIds.Union(commentIds).ToList();
                 posts = db.Posts.Where(post => mergedIds.Contains(post.PostId)).Include("User").OrderBy(a => a.Date).OrderBy(a => a.Date);
 
+                profiles = db.Profiles.Where(
+                    at => at.User.UserName.Contains(search)).OrderBy(a => a.User.UserName);
+
             }
 
             var totalItems = posts.Count();
-            var currentPage = Convert.ToInt32(Request.Params.Get("page"));
+            var currentPagePosts = Convert.ToInt32(Request.Params.Get("page"));
 
             var offset = 0;
 
-            if (!currentPage.Equals(0))
+            if (!currentPagePosts.Equals(0))
             {
-                offset = (currentPage - 1) * 10;
+                offset = (currentPagePosts - 1) * number_of_posts_perpage;
             }
-            var paginatedPosts = posts.OrderBy(a => a.Date).Skip(offset).Take(10);
+            var paginatedPosts = posts.OrderBy(a => a.Date).Skip(offset).Take(number_of_posts_perpage);
 
             if (TempData.ContainsKey("message"))
             {
@@ -56,9 +60,10 @@ namespace TangoApp.Controllers
             }
 
             ViewBag.total = totalItems;
-            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)10);
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)number_of_posts_perpage);
             ViewBag.Posts = paginatedPosts;
             ViewBag.SearchString = search;
+
 
             return View();
         }
