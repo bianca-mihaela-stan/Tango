@@ -1,5 +1,5 @@
 ﻿<h2>@Model.User.UserName </h2>
-@if (Model.ProfileVisibility != null)
+@if (Model.ProfileVisibility != false)
 {
     @Html.ActionLink("Vizualizeaza profilul", "Show", new { id = Model.UserId }, new { @class = "d-inline btn btn-info float-left position-relative" })
 }
