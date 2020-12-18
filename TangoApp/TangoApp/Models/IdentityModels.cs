@@ -52,6 +52,7 @@ namespace TangoApp.Models
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<Friend> Friends { get; set; }
+        public DbSet<Media> Media { get; set; }
 
         public static ApplicationDbContext Create()
         {

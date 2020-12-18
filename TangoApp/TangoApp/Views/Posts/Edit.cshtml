@@ -4,15 +4,29 @@
 }
 
 <h2>Editare postare</h2>
-@using (Html.BeginForm(actionName: "Edit", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = Model.PostId }))
+@if (ViewBag.Message != null)
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+<!--the parameters are: string,string,routevalues, method, htmlAttributes -->
+@using (Html.BeginForm("Edit", "Posts", new { id = Model.PostId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.HttpMethodOverride(HttpVerbs.Put)
     @Html.Hidden("PostId")
-    @Html.Label("Text","Continutul postarii")
-    @Html.ValidationMessage("Text","",new { @class = "text-danger" })
-<br/>
+    @Html.Label("Text", "Continutul postarii")
+    @Html.ValidationMessage("Text", "", new { @class = "text-danger" })
+    <br />
     @Html.Editor("Text")
-<br/>
-<br/>
-    <button class="btn btn-succes"type="submit">Editeaza postarea</button>
+    <br />
+    if (Model.Media != null && Model.Media.ToList().Any())
+    {
+        <img src="~/Files/@Model.Media.ToList().First().FileName" alt="image" height="400" />
+        <label>Schimba poza</label>
+    }
+    else
+    { <label>Adauga o poza</label>}
+    <input type="file" name="uploadedMedia" />
+    <br />
+    <input class="btn btn-succes" type="submit" value="Edit" />
+    <br />
 }

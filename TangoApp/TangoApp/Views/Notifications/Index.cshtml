@@ -32,6 +32,14 @@
                 </p>
 
             }
+            else if (notification.Type == TangoApp.Models.NotificationFlag.DeletedMedia)
+            {
+                <p class="text-dark">
+                    Am sters o poza atasata unei postari deoarece incalca regulile comunitatii.
+                    <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
+                </p>
+
+            }
             else
             {
 

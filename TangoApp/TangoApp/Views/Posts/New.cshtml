@@ -4,15 +4,21 @@
 }
 
 <h2>Adaugare postare</h2>
-<h3>@ViewBag.Error</h3>
-@using (Html.BeginForm(actionName: "New", controllerName: "Posts", method: FormMethod.Post))
+<!--for a succesful upload, we need to add enctype = "multipart/form-data"; otherwise the browser will transmit only
+    the name of the file-->
+@if (ViewBag.Message != null)
 {
-    @Html.Label("Text","Continutul textului")
-    <br/>
-    @Html.TextArea("Text",null,new { @class ="form-control"})
-    @Html.ValidationMessage("Text",null,new { @class="text-danger"})
-    <br/>
-    <br/>
-    <button type="submit" class="btn btn-success">Adauga postarea</button>
-    
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+@using (Html.BeginForm("New", "Posts", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.Label("Text", "Continutul textului")
+    <br />
+    @Html.TextArea("Text", null, new { @class = "form-control" })
+    @Html.ValidationMessage("Text", null, new { @class = "text-danger" })
+    <br />
+    <label>Alegeti un fisier</label>
+    <input type="file" name="uploadedMedia" />
+    <br />
+    <input type="submit" value="Upload" />
 }
