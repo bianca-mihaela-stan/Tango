@@ -107,9 +107,11 @@ namespace TangoApp.Controllers
                     db.Posts.Add(post);
                     if (uploadedMedia != null)
                     {
-                        int mediaId = Upload(uploadedMedia);
-                        var image = db.Media.Find(mediaId);
-                        image.PostId = post.PostId;
+                        
+                            int mediaId = Upload(uploadedMedia);
+                            var image = db.Media.Find(mediaId);
+                            image.PostId = post.PostId;
+                        
                     }
                     db.SaveChanges();
                     TempData["message"] = "Postarea a fost adaugata!";
@@ -123,7 +125,7 @@ namespace TangoApp.Controllers
             }
             catch (Exception e)
             {
-                ViewBag.Mesage = e.Message;
+                //ViewBag.Mesage = e.Message;
                 return View(post);
             }
         }
@@ -242,7 +244,7 @@ namespace TangoApp.Controllers
                         }
                         else
                         {
-                            TempData["message"] = "Not right!";
+                            //TempData["message"] = "Not right!";
                             return View(requestpost);
 
                         }
@@ -257,7 +259,7 @@ namespace TangoApp.Controllers
                 }
                 else
                 {
-                    TempData["message"] = "Something went wrong!";
+                    //TempData["message"] = "Something went wrong!";
                     return View(requestpost);
                 }
 
@@ -292,7 +294,7 @@ namespace TangoApp.Controllers
                 var mediaUsed = post.Media;
                 if (mediaUsed != null && mediaUsed.ToList().Any())
                 {
-                    foreach (var med in mediaUsed)
+                    foreach (var med in mediaUsed.ToList())
                     {
                         db.Media.Remove(med);
                     }
@@ -352,12 +354,13 @@ namespace TangoApp.Controllers
                 }
                 else
                 {
+                    ViewBag.Message = "Tipul fisierului nu e valid!";
                     throw new Exception("Tipul fisierului nu e valid");
                 }
             }
             catch (Exception e)
             {
-                throw;
+                throw e;
             }
 
         }
@@ -389,6 +392,7 @@ namespace TangoApp.Controllers
                     }
                     else
                     {
+                        ViewBag.Message = "Tipul fisierului nu e valid!";
                         throw new Exception("Tipul fisierului nu e valid");
                     }
                 }

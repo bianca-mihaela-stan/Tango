@@ -3,7 +3,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Notifications</h2>
 @foreach (var notification in ViewBag.Notifications)
 {
     <div class="card">
@@ -12,10 +12,9 @@
             <br />
             @if (notification.Type == TangoApp.Models.NotificationFlag.DeletedPost)
             {
-                <p class="text-dark">
-                    Continutul uneia dintre postariile dumneavoastra a fost gasiv necorespunzator
-                    si prin urmare postarea a fost stearsa de administratia site-ului!
-                </p>
+            <p class="text-dark">
+                Am sters una din postarile tale deoarece incalca regulile comunitatii!
+            </p>
             }
             else if (notification.Type == TangoApp.Models.NotificationFlag.DeletedComment)
             {
