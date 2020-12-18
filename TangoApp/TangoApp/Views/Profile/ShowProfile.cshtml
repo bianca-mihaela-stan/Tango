@@ -1,0 +1,14 @@
+﻿<h2>@Model.User.UserName </h2>
+@if (Model.ProfileVisibility != false)
+{
+    @Html.ActionLink("Vizualizeaza profilul", "Show", new { id = Model.UserId }, new { @class = "d-inline btn btn-info float-left position-relative" })
+}
+@if (Model.Country != null)
+{
+    <p>@Model.Country.CountryName</p>
+}
+@if (Model.City != null)
+{
+    <p>@Model.City.CityName</p>
+}
+

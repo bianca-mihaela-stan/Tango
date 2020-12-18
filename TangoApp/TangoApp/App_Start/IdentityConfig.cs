@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity;
@@ -14,6 +15,14 @@ using TangoApp.Models;
 
 namespace TangoApp
 {
+    //public static class IdentityExtensions
+    //{
+    //    public static int ProfileId(this IIdentity identity)
+    //    {
+    //        return Convert.ToInt32(((ClaimsIdentity)identity).FindFirst("ProfileId").Value);
+    //    }
+    //}
+
     public class EmailService : IIdentityMessageService
     {
         public Task SendAsync(IdentityMessage message)

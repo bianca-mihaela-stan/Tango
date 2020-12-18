@@ -1,0 +1,26 @@
+﻿@model TangoApp.Models.Post
+
+
+@{
+                /**/
+
+                ViewBag.Title = "Show";
+}
+
+
+@Html.Partial("Search")
+
+<a class="btn btn-info" href="/Posts/Index">Postari</a> 
+
+@foreach (TangoApp.Models.Profile profile in ViewBag.Profiles)
+{
+    @Html.Partial("ShowProfile", profile);
+    <br />
+    <hr />
+    <br />
+}
+
+
+<br />
+
+<a class="btn btn-info" href="/Posts/Index">Inapoi la pagina principala</a>

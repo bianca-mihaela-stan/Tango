@@ -1,5 +1,4 @@
 ﻿
-
 <div class="container">
     <br />
     <div class="row justify-content-center">
@@ -30,13 +29,13 @@
         <ul class="pagination">
             <li>
                 @if (ViewBag.search != "")
-                {<a href="/Posts/Index?page=1&search=@ViewBag.SearchString" aria-label="Previous">
+                {<a href="/Profile/Index?page=1&search=@ViewBag.SearchString" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 }
                 else
                 {
-                    <a href="/Posts/Index?page=1" aria-label="Previous">
+                    <a href="/Profile/Index?page=1" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 }
@@ -45,22 +44,22 @@
             {
                 if (ViewBag.search != "")
                 {
-                    <li><a href="/Posts/Index?page=@i&search=@ViewBag.SearchString">@(i)</a></li>
+                    <li><a href="/Profile/Index?page=@i&search=@ViewBag.SearchString">@(i)</a></li>
                 }
                 else
                 {
-                    <li><a href="/Posts/Index?page=@i">@(i)</a></li>
+                    <li><a href="/Profile/Index?page=@i">@(i)</a></li>
                 }
             }
             <li>
                 @if (ViewBag.search != "")
                 {
-                    <a href="/Posts/Index?page=@(ViewBag.lastPage)&search=@ViewBag.SearchString" aria-label="Next">
+                    <a href="/Profile/Index?page=@(ViewBag.lastPage)&search=@ViewBag.SearchString" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 }
                 else
-                { <a href="/Posts/Index?page=@(ViewBag.lastPage)" aria-label="Next">
+                { <a href="/Profile/Index?page=@(ViewBag.lastPage)" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 }
@@ -68,3 +67,4 @@
         </ul>
     </nav>
 </div>
+
