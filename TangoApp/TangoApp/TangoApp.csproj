@@ -171,6 +171,8 @@
     <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\FriendshipsController.cs" />
+    <Compile Include="Controllers\GroupMembersController.cs" />
+    <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
@@ -191,10 +193,14 @@
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\Friend.cs" />
     <Compile Include="Models\Friendship.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\GroupMember.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Media.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\MessageRecipient.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Like.cs" />
     <Compile Include="Models\Post.cs" />
@@ -275,6 +281,11 @@
     <Content Include="Views\Shared\Search.cshtml" />
     <Content Include="Views\Posts\Search.cshtml" />
     <Content Include="Views\Profile\Search.cshtml" />
+    <Content Include="Views\Groups\Index.cshtml" />
+    <Content Include="Views\Groups\New.cshtml" />
+    <Content Include="Views\Groups\Edit.cshtml" />
+    <Content Include="Views\Groups\Show.cshtml" />
+    <Content Include="Views\GroupMembers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

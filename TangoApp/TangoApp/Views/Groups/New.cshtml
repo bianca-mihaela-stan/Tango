@@ -1,0 +1,20 @@
+﻿@model TangoApp.Models.Group
+@{
+    ViewBag.Title = "New";
+}
+
+<h2>New</h2>
+<form method="post" action="/Groups/New/">
+    <div class="panel-body">
+        <input type="hidden" name="GroupId" value="@Model.GroupId" />
+        @Html.Label("GroupName", "Numele grupului")
+        @Html.TextBox("GroupName",null, new { @class = "form-control" })
+        <br />
+        @Html.Label("Description","Descrierea grupului")
+        @Html.TextArea("Description", null, new { @class = "form-control" })
+        @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
+        <br />
+        <button class="btn btn-success " type="submit">Adauga grup</button>
+    </div>
+</form>
+

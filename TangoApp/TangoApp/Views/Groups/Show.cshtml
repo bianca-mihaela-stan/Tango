@@ -1,0 +1,18 @@
+﻿@model TangoApp.Models.Group
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>Show</h2>
+
+<h3>@Model.GroupName</h3>
+<p>@Model.Description</p>
+<br/>
+@Html.ActionLink("Editeaza grupul", "Edit", new { id = Model.GroupId }, new { @class = "d-inline btn btn-info float-left position-relative" })
+    @using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
+    {
+
+@Html.HttpMethodOverride(HttpVerbs.Delete)
+<button class="d-inline btn btn-danger float-right position-relative" type="submit">Sterge grupul</button>
+
+    }
