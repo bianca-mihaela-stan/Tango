@@ -1,0 +1,19 @@
+﻿@model TangoApp.Models.Group
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Edit", "Groups", new { id = Model.GroupId }, FormMethod.Post))
+{
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+    @Html.Hidden("GroupId")
+    @Html.Label("GroupName", "Titlul grupului");
+    @Html.Editor("GroupName")
+    @Html.Label("Description", "Descrierea");
+    @Html.Editor("Description")
+    <br />
+    <button class="btn btn-success" type="submit">Modifica grup</button>
+
+}

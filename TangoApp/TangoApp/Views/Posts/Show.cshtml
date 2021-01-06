@@ -20,14 +20,17 @@
 
         <img src="~/Files/@image.FileName" alt="image" height="400" />
         <br />
-        using (Html.BeginForm(actionName: "Delete", controllerName: "Media", method: FormMethod.Post, routeValues: new { id = image.FileId }))
+        if (ViewBag.afisareButoane == true && Model.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
         {
+            using (Html.BeginForm(actionName: "Delete", controllerName: "Media", method: FormMethod.Post, routeValues: new { id = image.FileId }))
+            {
 
             @Html.HttpMethodOverride(HttpVerbs.Delete)
             <button class="d-inline btn btn-danger float-right position-relative" type="submit">Sterge poza</button>
 
+            }
+            <br/>
         }
-        <br/>
 
     }
 }

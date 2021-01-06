@@ -3,7 +3,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Notifications</h2>
 @foreach (var notification in ViewBag.Notifications)
 {
     <div class="card">
@@ -13,8 +13,7 @@
             @if (notification.Type == TangoApp.Models.NotificationFlag.DeletedPost)
             {
                 <p class="text-dark">
-                    Continutul uneia dintre postariile dumneavoastra a fost gasiv necorespunzator
-                    si prin urmare postarea a fost stearsa de administratia site-ului!
+                    Am sters una din postarile tale deoarece incalca regulile comunitatii!
                 </p>
             }
             else if (notification.Type == TangoApp.Models.NotificationFlag.DeletedComment)
@@ -40,12 +39,20 @@
                 </p>
 
             }
-            else
+            else if (notification.Type == TangoApp.Models.NotificationFlag.NewPost)
             {
 
                 <p class="text-dark">
                     <span>@notification.Comment.User.Email</span> a adaugat o noua postare.
                     <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
+                </p>
+            }
+            else if (notification.Type == TangoApp.Models.NotificationFlag.JoinRequest)
+            {
+
+                <p class="text-dark">
+                    <span>@notification.UserSend.Email</span> vrea sa se alature grupului tau.
+                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
                 </p>
             }
         </div>
