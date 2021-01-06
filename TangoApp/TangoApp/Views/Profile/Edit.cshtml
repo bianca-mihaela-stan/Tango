@@ -18,7 +18,6 @@
     <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "false") private </p>
 
     @Html.HiddenFor(m => m.UserId)
-    @Html.HiddenFor(m => m.Birthday)
     @Html.Label("Text", "DDescription content")
     <br />
     @Html.EditorFor(m => m.Description)
@@ -43,6 +42,11 @@
         "Select city", new { @class = "form-control" })
     @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
     <br />
+
+    @Html.Label("Date", "Birthday")
+    <br />
+
+    @Html.TextBox("Date", "", new { @class = "form-control datepicker", @placeholder = "Pick a date" })
 
     <button class="btn btn-sm btn-succes" type="submit">Edit profile</button>
 }

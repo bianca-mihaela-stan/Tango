@@ -109,7 +109,7 @@ namespace TangoApp.Controllers
                             pr.CountryId = requestProfile.CountryId;
                             pr.Country = db.Countries.Find(pr.CountryId);
                             pr.City = db.Cities.Find(pr.CityId);
-                            pr.Birthday = DateTime.Now;
+                            pr.Birthday = requestProfile.Birthday;
                             db.SaveChanges();
                             TempData["message"] = "Profilul a fost editat!";
                         }
