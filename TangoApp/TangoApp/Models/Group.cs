@@ -16,6 +16,7 @@ namespace TangoApp.Models
         public string Description { get; set; }
         public DateTime CreationTime { get; set; }
         public GroupStatusFlag Status { get; set; }
+        public virtual ICollection<GroupMember> GroupMembers { get; set; }
     }
     public enum GroupStatusFlag
     {

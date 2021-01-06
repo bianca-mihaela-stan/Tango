@@ -1,0 +1,13 @@
+﻿<!--
+<form method="post" action="/Groups/AddMessage/@Model.GroupId">
+    <div class="panel-body">
+        <input type="hidden" name="GroupId" value="@Model.GroupId" />
+        <label>Continut mesaj</label>
+        <br />
+        <textarea class="form-control" name="Text">@if (ViewBag.Comment != null) {@ViewBag.Comment.Text}</textarea>
+        @Html.ValidationMessage("Text", "", new { @class = "text-danger" })
+        <br />
+        <button class="btn btn-success " type="submit">Adauga comentariu</button>
+    </div>
+</form>
+    -->

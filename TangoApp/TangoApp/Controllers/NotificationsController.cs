@@ -18,6 +18,7 @@ namespace TangoApp.Controllers
             var currentUserId = User.Identity.GetUserId();
             var notifications = db.Notifications.Where(x => x.UserReceiveId == currentUserId).OrderByDescending(x => x.Time).ToList();
             ViewBag.Notifications = notifications;
+            ViewBag.UtilizatorCurent = User.Identity.GetUserId();
             return View();
         }
         public ActionResult ShowPost(int id)

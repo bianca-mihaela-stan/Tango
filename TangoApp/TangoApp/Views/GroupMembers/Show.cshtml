@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<h3>Members</h3>
+@if (ViewBag.Message != null)
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+<h4> Admini</h4>
+@foreach (var groupmember in ViewBag.Admins)
+{
+    <div class="list-group-item">
+        <a href="#">@groupmember.User.Email</a>
+    </div>
+}
+<h4>Membrii</h4>
+@foreach (var groupmember in ViewBag.UsersInGroup)
+{
+    <div class="list-group-item">
+        <a href="#">@groupmember.User.Email</a>
+        @using (Html.BeginForm(actionName: "RemoveMember", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
+        {
+
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            <button type="submit" class="btn btn-primary">Remove member</button>
+        }
+        @using (Html.BeginForm(actionName: "MakeAdmin", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { membergroupid = groupmember.GroupMemberId }))
+        {
+
+            @Html.HttpMethodOverride(HttpVerbs.Put)
+            <button type="submit" class="btn btn-primary">Make Admin</button>
+        }
+    </div>
+}
+<br />
+<hr />
+<br />
+@if (ViewBag.afisare == true)
+{<h3>Pending</h3>
+    foreach (var groupmember in ViewBag.UsersPending)
+    {
+        <div class="list-group-item">
+            <a href="#">@groupmember.User.Email</a>
+            @using (Html.BeginForm(actionName: "AcceptRequest", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
+            {
+                <button class="btn btn-success" type="submit">Accept</button>
+            }
+            @using (Html.BeginForm(actionName: "DeclineRequest", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
+            {
+
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <button type="submit" class="btn btn-primary">Decline</button>
+            }
+        </div>
+    }
+    <hr />
+    <h3>Invites</h3>
+    foreach (var groupmember in ViewBag.UsersInvited)
+    {
+        <div class="list-group-item">
+            <a href="#">@groupmember.User.Email</a>
+
+        </div>
+    }
+}

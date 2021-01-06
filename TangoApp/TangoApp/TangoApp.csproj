@@ -288,7 +288,8 @@
     <Content Include="Views\Groups\New.cshtml" />
     <Content Include="Views\Groups\Edit.cshtml" />
     <Content Include="Views\Groups\Show.cshtml" />
-    <Content Include="Views\GroupMembers\Index.cshtml" />
+    <Content Include="Views\GroupMembers\Show.cshtml" />
+    <Content Include="Views\Groups\ShowMessages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

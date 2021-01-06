@@ -55,6 +55,37 @@
                     <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
                 </p>
             }
+            else if (notification.Type == TangoApp.Models.NotificationFlag.NewMember)
+            {
+
+                <p class="text-dark">
+                    <span>@notification.UserSend.Email</span> s-a alaturat in grupul tau.
+                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
+                </p>
+
+            }
+            else if (notification.Type == TangoApp.Models.NotificationFlag.AddedToGroup)
+            {
+                <p class="text-dark">
+                    Cererea ta de inscriere a fost acceptata.
+                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
+                </p>
+            }
+            else if (notification.Type == TangoApp.Models.NotificationFlag.RemovedFromGroup)
+            {
+                <p class="text-dark">
+                    Ai fost scos dintr-un grup.
+                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
+                </p>
+
+            }
+            else if (notification.Type == TangoApp.Models.NotificationFlag.MadeAdmin)
+            {
+                <p class="text-dark">
+                   Ati fost facut admin.
+                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
+                </p>
+            }
         </div>
     </div>
     <hr/>

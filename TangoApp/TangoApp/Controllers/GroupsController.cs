@@ -26,6 +26,25 @@ namespace TangoApp.Controllers
         public ActionResult Show(int id)
         {
             var grup = db.Groups.Find(id);
+            var currentUser = User.Identity.GetUserId();
+            var invites = db.GroupMembers.Where(u => u.GroupId == id && u.UserId == currentUser && u.Status == MemberStatusFlag.Invited).ToList();
+            if(invites.Any())
+            {
+                ViewBag.Invite = invites.First();
+            }
+            var isMember = db.GroupMembers.Where(u => u.GroupId == id && u.UserId == currentUser && (u.Status == MemberStatusFlag.Admin || u.Status == MemberStatusFlag.Member)).ToList();
+            if (isMember.Any())
+            {
+                ViewBag.InGroup = true;
+            }
+            else
+            {
+                ViewBag.InGroup = false;
+            }
+            if(TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"];
+            }
             return View(grup);
         }
         [Authorize(Roles = "User,Editor,Admin")]
@@ -141,10 +160,25 @@ namespace TangoApp.Controllers
         {
 
             var grup = db.Groups.Find(id);
-            db.Groups.Remove(grup);
-            db.SaveChanges();
-            TempData["message"] = "Grupul a fost sters!";
-            return RedirectToAction("Index");
+            var admins = db.GroupMembers.Where(u => u.GroupId == id && u.Status == MemberStatusFlag.Admin).Select(u => u.UserId).ToList();
+            if (admins.Contains(User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            {
+                var not = db.Notifications.Where(u => u.GroupId == id).ToList();
+                foreach (var notification in not)
+                {
+                    db.Notifications.Remove(notification);
+
+                }
+                db.Groups.Remove(grup);
+                db.SaveChanges();
+                TempData["message"] = "Grupul a fost sters!";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti permisiunea de a sterge acest grup!";
+                return RedirectToAction("Show",new { id = id });
+            }
         }
   
     }

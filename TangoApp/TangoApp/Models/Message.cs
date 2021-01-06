@@ -13,7 +13,7 @@ namespace TangoApp.Models
 
         public DateTime Date { get; set; }
 
-        [Required(ErrorMessage = "Continutul postarii nu poate sa fie gol.")]
+        [Required(ErrorMessage = "Continutul mesajului nu poate sa fie gol.")]
         [DataType(DataType.MultilineText)]
         public string Content { get; set; }
         public DateTime? LastEditDate { get; set; }
