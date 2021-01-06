@@ -49,8 +49,8 @@ namespace TangoApp.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
+        //[Display(Name = "Email")]
+        //[EmailAddress]
         public string Email { get; set; }
 
         [Required]
