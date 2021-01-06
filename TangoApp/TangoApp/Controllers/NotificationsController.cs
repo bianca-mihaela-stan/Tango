@@ -20,7 +20,7 @@ namespace TangoApp.Controllers
             ViewBag.Notifications = notifications;
             return View();
         }
-        public ActionResult Show(int id)
+        public ActionResult ShowPost(int id)
         {
             var notification = db.Notifications.Find(id);
             notification.Seen = true;
@@ -29,20 +29,18 @@ namespace TangoApp.Controllers
             return Redirect("/Posts/Show/" + notification.PostId);
             
         }
+        public ActionResult ShowGroup(int id)
+        {
+            var notification = db.Notifications.Find(id);
+            notification.Seen = true;
+            return Redirect("/Groups/Show/" + notification.GroupId);
+        }
         [NonAction]
         public ActionResult Collapse(int id)
         {
             return View();
 
         }
-        /*[NonAction]
-        public void New(Notification notification)
-        {
-            notification.Time = DateTime.Now;
-            notification.Seen = false;
-            db.Notifications.Add(notification);
-            db.SaveChanges();
-        }*/
         [NonAction]
         public void Delete(int id)
         {

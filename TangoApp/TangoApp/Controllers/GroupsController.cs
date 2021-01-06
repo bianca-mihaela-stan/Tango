@@ -16,10 +16,9 @@ namespace TangoApp.Controllers
         public ActionResult Index()
         {
             var groups = db.Groups.Where(u => u.Status == GroupStatusFlag.MessageGroup).ToList();
-            if(Session["messsage"] != null)
+            if(TempData.ContainsKey("message"))
             {
-                ViewBag.Message = Session["message"];
-                Session["message"] = null;
+                ViewBag.Message = TempData["message"];
             }
             ViewBag.Groups = groups;
             return View();

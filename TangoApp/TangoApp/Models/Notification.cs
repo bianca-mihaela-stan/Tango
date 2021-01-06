@@ -48,6 +48,9 @@ namespace TangoApp.Models
         //de tip "postare")
         //daca administratorul sterge un comentariu de la o postare => campurile commentId si postId o sa fie
         // ambele completate (continutul sters a fost de tip "comentariu")
+        public int? GroupId { get; set; }
+        public virtual Group Group { get; set; }
+
         public NotificationFlag Type { get; set; }
     }
     public enum NotificationFlag
@@ -56,6 +59,9 @@ namespace TangoApp.Models
         DeletedPost,
         NewComment,
         NewPost,
-        DeletedMedia
+        DeletedMedia,
+        JoinRequest,
+        AskToJoinRequest,
+        NewMember
     };
 }
