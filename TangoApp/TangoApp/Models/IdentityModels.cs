@@ -29,6 +29,7 @@ namespace TangoApp.Models
         public virtual ICollection<Friendship> FriendshipSend { get; set; }
         [InverseProperty("User2")]
         public virtual ICollection<Friendship> FriendshipReceive { get; set; }
+        public virtual ICollection<GroupMember> GroupMembers { get; set; }
 
         public bool UserStatus { get; set; }
         public int ProfileId { get; set; }
@@ -56,6 +57,7 @@ namespace TangoApp.Models
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupMember> GroupMembers { get; set; }
         public DbSet<MessageRecipient> MessageRecipients { get; set; }
+
         public DbSet<Message> Messages { get; set; }
 
         public static ApplicationDbContext Create()

@@ -62,6 +62,9 @@ namespace TangoApp.Models
         DeletedMedia,
         JoinRequest,
         AskToJoinRequest,
-        NewMember
+        NewMember,
+        RemovedFromGroup,
+        AddedToGroup,
+        MadeAdmin
     };
 }

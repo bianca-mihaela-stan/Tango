@@ -4,15 +4,40 @@
 }
 
 <h2>Show</h2>
+@if (ViewBag.Message != null)
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+@if (ViewBag.Invitation != null)
+{
+    <p>Ai primit deja o invitatie in acest grup.</p>
+    using (Html.BeginForm(actionName: "AcceptInvitation", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = ViewBag.Invitation.GroupMemberId }))
+    {
+        <button class="d-inline btn btn-info" type="submit">Accepta invitatia</button>
+
+    }
+}
 
 <h3>@Model.GroupName</h3>
 <p>@Model.Description</p>
-<br/>
+<br />
+<a href="/GroupMembers/Show/@Model.GroupId">Membrii grupului</a>
 @Html.ActionLink("Editeaza grupul", "Edit", new { id = Model.GroupId }, new { @class = "d-inline btn btn-info float-left position-relative" })
-    @using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
+@using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
+{
+
+    @Html.HttpMethodOverride(HttpVerbs.Delete)
+    <button class="d-inline btn btn-danger float-right position-relative" type="submit">Sterge grupul</button>
+
+}
+@if (ViewBag.InGroup)
+{
+
+
+    using (Html.BeginForm(actionName: "LeaveGroup", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
     {
 
-@Html.HttpMethodOverride(HttpVerbs.Delete)
-<button class="d-inline btn btn-danger float-right position-relative" type="submit">Sterge grupul</button>
-
+    @Html.HttpMethodOverride(HttpVerbs.Delete)
+    <button type="submit" class="btn btn-primary">Leave the group</button>
     }
+}
