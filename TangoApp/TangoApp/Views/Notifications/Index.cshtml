@@ -82,7 +82,14 @@
             else if (notification.Type == TangoApp.Models.NotificationFlag.MadeAdmin)
             {
                 <p class="text-dark">
-                   Ati fost facut admin.
+                    Ati fost facut admin.
+                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
+                </p>
+            }
+            else if (notification.Type == TangoApp.Models.NotificationFlag.AskToJoinRequest)
+            {
+                <p class="text-dark">
+                    Ati primit o invitatie intr-un grup.
                     <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
                 </p>
             }
