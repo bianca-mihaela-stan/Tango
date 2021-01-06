@@ -1,6 +1,8 @@
 ﻿@model TangoApp.Models.Group
 @{
-    ViewBag.Title = "Show";
+                /**/
+
+                ViewBag.Title = "Show";
 }
 
 <h2>Show</h2>
@@ -32,12 +34,67 @@
 }
 @if (ViewBag.InGroup)
 {
-
-
-    using (Html.BeginForm(actionName: "LeaveGroup", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
+    <!--Scuzeee - fata cu lacrimi- - fata cu lacrimi --->
+    <!--Afisam toata mesajele din grup-->
+    foreach (TangoApp.Models.Message mess in Model.Messages)
     {
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <div>
+                        <p>@mess.Content</p>
+                        <small class="pull-right">@mess.Date</small>
+                        <small class="pull-right">@mess.LastEditDate</small>
+                        <small class="pull-left">@mess.User.Email</small>
+                    </div>
+                    @if (mess.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
+                    {
+                        
+                    <div style="display: inline-block; float : left; margin-right: 15px">
+                        @using (Html.BeginForm(actionName: "Edit", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = mess.MessageId, idgroup = Model.GroupId}))
+                        {
+                            @Html.HttpMethodOverride(HttpVerbs.Put)
+                            <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                        }
+                    </div>
+                        
 
-    @Html.HttpMethodOverride(HttpVerbs.Delete)
-    <button type="submit" class="btn btn-primary">Leave the group</button>
+                        <div style="display: inline-block; float : left">
+                            @using (Html.BeginForm(actionName: "Delete", controllerName: "Messages", method: FormMethod.Post, routeValues: new { id = mess.MessageId }))
+                            {
+                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <hr />
     }
-}
+    <form method="post" action="/Groups/AddMessage/@Model.GroupId">
+        <div class="panel-body">
+            <input type="hidden" name="PostId" value="@Model.GroupId" />
+            <label>Continut mesaj</label>
+            <br />
+            <textarea class="form-control" name="Text">@if (ViewBag.Message != null) {@ViewBag.Message.Text}</textarea>
+           
+            <br />
+            <button class="btn btn-success " type="submit">Adauga comentariu</button>
+        </div>
+    </form>
+
+
+
+    <br/>
+    <!--un membru are dreptul sa iasa din grup!-->
+
+ using (Html.BeginForm(actionName: "LeaveGroup", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
+                    {
+
+                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                        <button type="submit" class="btn btn-primary">Leave the group</button>
+                    }
+                }
