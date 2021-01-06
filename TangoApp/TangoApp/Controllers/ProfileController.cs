@@ -71,18 +71,27 @@ namespace TangoApp.Controllers
         [Authorize(Roles = "Editor, Admin")]
         public ActionResult Edit(int id)
         {
+            Profile Model = new Profile();
             Profile pr = db.Profiles.Find(id);
             if (pr.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
                 pr.Countries = GetAllCountries();
                 pr.Cities = GetAllCities();
-                return View(pr);
+                Model = pr;
+                return View(Model);
             }
             else
             {
                 TempData["message"] = "Nu puteti modifica un profil care nu va apartine!";
                 return RedirectToAction("Index");
             }
+        }
+        
+        [HttpGet]
+        public JsonResult GetCities(int CountryID)
+        {
+            var cities = db.Cities.Where(c => c.CountryId.Equals(CountryID)).OrderBy(c => c.CityName).ToList();
+            return Json(cities, JsonRequestBehavior.AllowGet);
         }
 
         //edit logged user's profile
@@ -92,9 +101,10 @@ namespace TangoApp.Controllers
         {
             requestProfile.Countries = GetAllCountries();
             requestProfile.Cities = GetAllCities();
+            Console.WriteLine(requestProfile.Birthday);
             try
             {
-                if ( ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     //gasesc profilul cu acest id
                     Profile pr = db.Profiles.Find(id);
@@ -113,19 +123,19 @@ namespace TangoApp.Controllers
                             db.SaveChanges();
                             TempData["message"] = "Profilul a fost editat!";
                         }
-                        return RedirectToAction("Show", "Profile",new { id = pr.UserId });
+                        return RedirectToAction("Show", "Profile", new { id = pr.UserId });
                     }
                     else
                     {
                         TempData["message"] = "Nu puteti modifica un profil care nu va apartine!";
                         return RedirectToAction("Index");
                     }
-                  
                 }
                 else
                 {
                     return View(requestProfile);
                 }
+                 
             }
             catch (Exception e)
             {

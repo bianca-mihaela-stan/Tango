@@ -1,5 +1,7 @@
 ﻿@model TangoApp.Models.Profile
 @{
+    /**/
+
     ViewBag.Title = "Show";
 }
 
@@ -13,34 +15,50 @@
 
 <a href="/Profile/Edit/@Model.ProfileId" class="btn btn-success">Editeaza profilul</a>
 <br /><br />
-<p>
-    Vizibilitatea profilului: @Model.ProfileVisibility
-</p>
+@if (Model.ProfileVisibility == true)
+{
+    <p>Profile visibility: public</p>
+}
+else
+{
+    <p>Profile visibility: private</p>
+}
 
 <p>
-    Descriere: @if (@Model.Description != null)
+    Description: @if (@Model.Description != null)
     {
-        @Model.Description
+        @Model.Description;
     }
 </p>
 
 <p>
-    Gender: @if (@Model.Gender != null)
+@if (@Model.Gender != null)
     {
-        @Model.Gender
+        if (Model.ProfileVisibility == true)
+        {
+            <p>Gender: female</p>
+        }
+        else
+        {
+            <p>Gender: male</p>
+        }
     }
 </p>
 
-<p>
-    Tara: @if (@Model.Country != null)
-    {
-        @Model.Country.CountryName
-    }
-</p>
+    <p>
+        Country: @if (@Model.Country != null)
+        {
+            @Model.Country.CountryName
+        }
+    </p>
+
+    <p>
+        City: @if (@Model.City != null)
+        {
+            @Model.City.CityName
+        }
+    </p>
 
 <p>
-    Orasul: @if (@Model.City != null)
-    {
-        @Model.City.CityName
-    }
+    Birthday: @Html.DisplayFor(Model=> Model.Birthday, "MM/dd/yyyy")
 </p>

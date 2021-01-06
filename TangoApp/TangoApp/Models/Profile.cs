@@ -14,6 +14,9 @@ namespace TangoApp.Models
         public bool ProfileVisibility { get; set; }
         public string Description { get; set; }
         public bool? Gender { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? Birthday { get; set; }
 
         public int? CityId { get; set; }

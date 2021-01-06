@@ -18,9 +18,9 @@
     <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "false") private </p>
 
     @Html.HiddenFor(m => m.UserId)
-    @Html.Label("Text", "DDescription content")
+    @Html.Label("Text", "Description:")
     <br />
-    @Html.EditorFor(m => m.Description)
+    @Html.TextBoxFor(m => m.Description)
     <br />
     @Html.ValidationMessageFor(m => m.Description)
     <br />
@@ -29,24 +29,60 @@
     <p>@Html.RadioButtonFor(Model => Model.Gender, "true") female </p>
     <p>@Html.RadioButtonFor(Model => Model.Gender, "false") male </p>
 
-    <label>Selectati Tara</label>
-    @Html.DropDownListFor(m => m.CountryId,
-        new SelectList(Model.Countries, "Value", "Text"),
-        "Select country", new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.CountryId, "Country", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.CountryId, new SelectList(Model.Countries,
+    "Value", "Text"), "Select your country", new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CityId, "City", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities,
+    "Value", "Text"), "Select your city", new { @class = "form-control"})
+        </div>
+    </div>
     <br />
 
-    <label>Selectati Orasul</label>
-    @Html.DropDownListFor(m => m.CityId,
-        new SelectList(Model.Cities, "Value", "Text"),
-        "Select city", new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
+    @Html.Label("Birthday", "Birthday")
     <br />
 
-    @Html.Label("Date", "Birthday")
-    <br />
-
-    @Html.TextBox("Date", "", new { @class = "form-control datepicker", @placeholder = "Pick a date" })
+    @Html.TextBoxFor(model=>model.Birthday, new { @class = "form-control datepicker", @placeholder = "Pick a date" })
 
     <button class="btn btn-sm btn-succes" type="submit">Edit profile</button>
 }
+
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            //Country select change
+            console.log('ready');
+            $("#Birthday").change(() => {
+                console.log($("#Birthday").val());
+            })
+            $("#CountryId").change(() => {
+                console.log('change');
+                $("#CityId").empty();
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("GetCities")',
+                    dataType: 'json',
+                    data: { CountryId: $("#CountryId").val() },
+                    success: function (cities) {
+                        console.log(cities);
+                        var CityID = cities.length > 0 ? cities[0].CityId : 0;
+                        $.each(cities, function (i, city) {
+                            $("#CityId").append('<option value="' + city.CityId + '">' +
+                                city.CityName + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
+            });
+        });
+</script>

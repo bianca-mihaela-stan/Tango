@@ -13,6 +13,5 @@ namespace TangoApp.Models
         public int CoutryId { get; set; }
         public string CountryName { get; set; }
 
-        public ICollection<City> Cities { get; set; }
     }
 }
