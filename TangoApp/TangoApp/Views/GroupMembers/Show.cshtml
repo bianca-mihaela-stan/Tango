@@ -10,30 +10,46 @@
 {
     <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
 }
-<a href="/GroupMembers/Search/@ViewBag.GroupMembersId" class="btn btn-success">Adauga membri</a>
+@if (ViewBag.afisare)
+{
+   <a href="/GroupMembers/Search/@ViewBag.GroupMembersId" class="btn btn-success">Adauga membri</a>
+}
 <h4> Admini</h4>
 @foreach (var groupmember in ViewBag.Admins)
 {
-    <div class="list-group-item">
-        <a href="#">@groupmember.User.Email</a>
-    </div>
-}
-<h4>Membrii</h4>
-@foreach (var groupmember in ViewBag.UsersInGroup)
-{
-    <div class="list-group-item">
-        <a href="#">@groupmember.User.Email</a>
-        @using (Html.BeginForm(actionName: "RemoveMember", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
+<div class="list-group-item">
+    <a href="#">@groupmember.User.Email</a>
+    @if (ViewBag.afisare)
+    {
+      using (Html.BeginForm(actionName: "RemoveMember", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
         {
 
             @Html.HttpMethodOverride(HttpVerbs.Delete)
             <button type="submit" class="btn btn-primary">Remove member</button>
         }
-        @using (Html.BeginForm(actionName: "MakeAdmin", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { membergroupid = groupmember.GroupMemberId }))
-        {
+    }
+</div>
+}
+<h4>Membrii</h4>
+@foreach (var groupmember in ViewBag.UsersInGroup)
+{
+    <div class="list-group-item">
 
-            @Html.HttpMethodOverride(HttpVerbs.Put)
-            <button type="submit" class="btn btn-primary">Make Admin</button>
+        <a href="#">@groupmember.User.Email</a>
+        @if (ViewBag.afisare)
+        {
+            using (Html.BeginForm(actionName: "RemoveMember", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
+            {
+
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <button type="submit" class="btn btn-primary">Remove member</button>
+            }
+            using (Html.BeginForm(actionName: "MakeAdmin", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { membergroupid = groupmember.GroupMemberId }))
+            {
+
+                @Html.HttpMethodOverride(HttpVerbs.Put)
+                <button type="submit" class="btn btn-primary">Make Admin</button>
+            }
         }
     </div>
 }
@@ -59,6 +75,7 @@
         </div>
     }
     <hr />
+    
     <h3>Invites</h3>
     foreach (var groupmember in ViewBag.UsersInvited)
     {
