@@ -64,6 +64,20 @@ namespace TangoApp.Controllers
         public ActionResult Show(string id)
         {
             Profile profile = db.Profiles.First(a => a.UserId == id);
+            var currentUserId = User.Identity.GetUserId();
+            var arefriends = db.Friends.Where(u => (u.User1Id == id && u.User2Id == currentUserId) || (u.User2Id == id && u.User1Id == currentUserId));
+            ViewBag.AfisareButon = true;
+            if (!arefriends.Any())
+            {
+                ViewBag.AfisareButon = false;
+            }
+           
+
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"];
+            }
+
             return View(profile);
         }
 
