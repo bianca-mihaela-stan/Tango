@@ -18,6 +18,7 @@ namespace TangoApp
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Posts", action = "Index", id = UrlParameter.Optional }
             );
+         
 
             routes.MapRoute(
                 name: "Invite",

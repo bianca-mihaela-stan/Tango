@@ -291,6 +291,7 @@
     <Content Include="Views\GroupMembers\Show.cshtml" />
     <Content Include="Views\Groups\ShowPrivateConv.cshtml" />
     <Content Include="Views\Groups\IndexPrivateConv.cshtml" />
+    <Content Include="Views\Posts\Newsfeed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

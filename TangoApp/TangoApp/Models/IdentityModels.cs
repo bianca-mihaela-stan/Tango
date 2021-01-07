@@ -33,7 +33,7 @@ namespace TangoApp.Models
 
         public bool UserStatus { get; set; }
         public int ProfileId { get; set; }
-
+       
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

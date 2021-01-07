@@ -15,19 +15,10 @@
         </a>
         @foreach (var user in ViewBag.Friends)
         {
-        <div class="list-group-item">
-            <a href="#">@user.Email</a>
-            <form method="post" action="/Users/Block">
-                <input type="hidden" name="UserId" value="@user.Id" />
-                <button type="submit">Block</button>
-            </form>
-           @using (Html.BeginForm(actionName: "Unfriend", controllerName: "Users", method: FormMethod.Post))
-           { 
-               @Html.HttpMethodOverride(HttpVerbs.Delete)
-               <input type="hidden" name="UserId" value="@user.Id" />
-                <button type="submit">Unfriend</button>
-           }
-        </div>
+     
+            <div class="list-group-item">
+            <a href="/Profile/Show/@user.ProfileId" class="list-group-item-heading">@user.Email</a>
+             </div>
         }
     </div>
    <br/>
@@ -37,14 +28,11 @@
        </a>
        @foreach (var user in ViewBag.BlockedUsers)
        {
+      
            <div class="list-group-item">
-               <a href="#">@user.Email</a>
-               <form method="post" action="/Users/Unblock">
-                   @Html.HttpMethodOverride(HttpVerbs.Delete)
-                   <input type="hidden" name="UserId" value="@user.Id" />
-                   <button type="submit">Unblock</button>
-               </form>
-           </div>
+                <a href="/Profile/Show/@user.ProfileId" class="list-group-item-heading">@user.Email</a>
+          </div>
+              
        }
    </div>
    <div class="list-group">
@@ -54,16 +42,7 @@
        @foreach (var user in ViewBag.Users)
        {
 
-           <div class="list-group-item-heading">@user.Email</div>
-           <p class="list-group-item-text d-block">
-               <form method="post" action="/Users/AddFriend">
-                   <input type="hidden" name="UserId" value="@user.Id" />
-                   <button type="submit">Add Friend</button>
-               </form>
-               <form method="post" action="/Users/Block">
-                   <input type="hidden" name="UserId" value="@user.Id" />
-                   <button type="submit">Block</button>
-               </form>
-           </p>
+          <a href="/Profile/Show/@user.ProfileId" class="list-group-item-heading">@user.Email</a>
+
        }
    </div>

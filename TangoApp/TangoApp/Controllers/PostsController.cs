@@ -68,6 +68,24 @@ namespace TangoApp.Controllers
             return View();
         }
         [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult NewsFeed()
+        {
+            var currentUser = User.Identity.GetUserId();
+            var friendsFirst = db.Friends.Where(u => u.User1Id == currentUser).ToList().Select(u => u.User2Id);
+            var friendsSecond = db.Friends.Where(u => u.User2Id == currentUser).ToList().Select(u => u.User1Id);
+            var allfriends = friendsFirst.Union(friendsSecond);
+
+           
+            var posts = db.Posts.Where(u => allfriends.Contains(u.UserId)).ToList().OrderByDescending(u => (u.Comments.ToList().Any() == false ? u.Date : (u.Date >  u.Comments.ToList().OrderByDescending(i => i.Date).First().Date ? u.Date : u.Comments.ToList().OrderByDescending(i => i.Date).First().Date)));
+            ViewBag.Posts = posts;
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"];
+            }
+            return View();
+
+        }
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Show(int id)
         {
             Post post = db.Posts.Find(id);

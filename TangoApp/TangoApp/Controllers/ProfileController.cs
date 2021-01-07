@@ -58,21 +58,71 @@ namespace TangoApp.Controllers
 
             return View();
         }
-        
+        [Authorize(Roles = "Editor, User, Admin")]
+        public ActionResult YourProfile()
+        {
+            var currentUserId = User.Identity.GetUserId();
+            var profiles = db.Profiles.Where(u => u.UserId == currentUserId).ToList();
+            if (!profiles.Any())
+            {
+                TempData["message"] = "Profilul nu exista!";
+                return RedirectToAction("Index", "Profile");
+            }
+            var profile = profiles.First();
+            ViewBag.currentUser = currentUserId;
+            ViewBag.NotFriends = false;
+            ViewBag.Blocked = false;
+            ViewBag.Pending = false;
+            ViewBag.ExistsRequest = false;
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"];
+            }
+            return View("Show",profile);
+        }
 
         [Authorize(Roles ="Editor, User, Admin")]
-        public ActionResult Show(string id)
+        public ActionResult Show(int id)
         {
-            Profile profile = db.Profiles.First(a => a.UserId == id);
+            Profile profile = db.Profiles.Find(id);
+            if(profile == null)
+            {
+                TempData["message"] = "Profilul nu exista!";
+                return RedirectToAction("Index", "Profile");
+            }
+            var idUser = profile.UserId;
             var currentUserId = User.Identity.GetUserId();
-            var arefriends = db.Friends.Where(u => (u.User1Id == id && u.User2Id == currentUserId) || (u.User2Id == id && u.User1Id == currentUserId));
-            ViewBag.AfisareButon = true;
+            var arefriends = db.Friends.Where(u => (u.User1Id == idUser && u.User2Id == currentUserId) || (u.User2Id == idUser && u.User1Id == currentUserId));
+          
+            ViewBag.NotFriends = false;
             if (!arefriends.Any())
             {
-                ViewBag.AfisareButon = false;
+                
+                ViewBag.NotFriends = true;
             }
-           
+            //vrem sa vedem daca utilizatorul curent are dreptul de a accesa pagina acesta => nu a fost blocat 
+            var blockedFirst = db.Friendships.Where(u => u.User1Id == currentUserId && u.User2Id == idUser && u.ActionUser == 1 && u.Status == 3).ToList();
+            var blockedSecond = db.Friendships.Where(u => u.User2Id == currentUserId && u.User1Id == idUser && u.ActionUser == 2 && u.Status == 3).ToList();
+            var blocked = blockedFirst.Union(blockedSecond);
+            ViewBag.Blocked = blocked.Any();
 
+            //vrem sa vedem daca a primit decline la cererea de prietenei => nu mai poate trimite alta
+            ViewBag.Pending = false;
+            var pendingFirst = db.Friendships.Where(u => u.User1Id == currentUserId && u.User2Id == idUser && u.ActionUser == 1 && u.Status == 0).ToList();
+            var pendingSecond = db.Friendships.Where(u => u.User2Id == currentUserId && u.User1Id== idUser && u.ActionUser == 2 && u.Status == 0).ToList();
+            var pending = pendingFirst.Union(pendingSecond);
+            ViewBag.Pending = pending.Any();
+
+            //vrem sa vedem daca utilizatorul a carui profil incercam sa il vizualizam a trimis cerere de prietenie utilizatorului curent
+            ViewBag.ExistsRequest = false;
+            var ExistsRequestFirst = db.Friendships.Where(u => u.User1Id == currentUserId && u.User2Id == idUser && u.ActionUser == 2 && u.Status == 0).ToList();
+            var ExistsRequestSecond = db.Friendships.Where(u => u.User2Id == currentUserId && u.User1Id == idUser && u.ActionUser == 1 && u.Status == 0).ToList();
+            var ExistsRequest = ExistsRequestFirst.Union(ExistsRequestSecond);
+            ViewBag.ExistsRequest = ExistsRequest.Any();
+            if(ExistsRequest.Any())
+            {
+                ViewBag.Request = ExistsRequest.First();
+            }
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.Message = TempData["message"];
@@ -137,7 +187,7 @@ namespace TangoApp.Controllers
                             db.SaveChanges();
                             TempData["message"] = "Profilul a fost editat!";
                         }
-                        return RedirectToAction("Show", "Profile", new { id = pr.UserId });
+                        return RedirectToAction("Show", "Profile", new { id = pr.ProfileId });
                     }
                     else
                     {
