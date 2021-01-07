@@ -5,6 +5,11 @@
 
 <h2>Edit</h2>
 
+@if (ViewBag.Message != null)
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+
 @using (Html.BeginForm("Edit", "Groups", new { id = Model.GroupId }, FormMethod.Post))
 {
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
@@ -12,11 +17,11 @@
     @Html.Hidden("GroupId")
     @Html.Label("GroupName", "Titlul grupului");
     @Html.Editor("GroupName")
-    <br/>
+    <br />
     @Html.ValidationMessageFor(u => u.GroupName, null, new { @class = "text-danger" })
     @Html.Label("Description", "Descrierea");
     @Html.Editor("Description")
-    <br/>
+    <br />
     @Html.ValidationMessageFor(u => u.Description, null, new { @class = "text-danger" })
     <br />
     <button class="btn btn-success" type="submit">Modifica grup</button>

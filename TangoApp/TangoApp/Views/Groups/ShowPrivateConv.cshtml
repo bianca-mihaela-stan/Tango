@@ -11,3 +11,50 @@
 <h3>@ViewBag.UserFriend.Email</h3>
 
 <!--aici vin mesajele corespunzatoare modelului Conversation-->
+
+@if (Model.Messages.ToList().Any())
+{
+    foreach (var mess in Model.Messages)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <div>
+                        <p>@mess.Content</p>
+                        <small class="pull-right">@mess.Date</small>
+                        <small class="pull-left">@mess.User.UserName</small>
+                    </div>
+                    @if ( ViewBag.esteAdmin || ViewBag.utilizatorCurent == mess.UserId)
+                    {
+                        <div style="display: inline-block; float : left; margin-right: 15px">
+                                <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@mess.MessageId"></a>
+                            </div>
+                        
+                        <div style="display: inline-block; float : left">
+                                @using (Html.BeginForm(actionName: "Delete", controllerName: "Messages", method: FormMethod.Post, routeValues: new { id = mess.MessageId }))
+                                {
+                                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                    <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                                }
+                            </div>
+                        
+                    }
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <hr />
+    }
+}
+<form method="post" action="/Groups/NewMessage/@Model.GroupId">
+    <div class="panel-body">
+        <input type="hidden" name="GroupId" value="@Model.GroupId" />
+        <label>Continut mesaj</label>
+        <br />
+        <textarea class="form-control" name="Content">@if (ViewBag.Mesaj != null) {@ViewBag.Mesaj.Content}</textarea>
+        @Html.ValidationMessage("Content", "", new { @class = "text-danger" })
+        <br />
+        <button class="btn btn-success " type="submit">Adauga mesaj</button>
+    </div>
+</form>

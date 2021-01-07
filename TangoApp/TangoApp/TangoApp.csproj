@@ -176,6 +176,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MediaController.cs" />
+    <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -291,7 +292,8 @@
     <Content Include="Views\GroupMembers\Show.cshtml" />
     <Content Include="Views\Groups\ShowPrivateConv.cshtml" />
     <Content Include="Views\Groups\IndexPrivateConv.cshtml" />
-    <Content Include="Views\Posts\Newsfeed.cshtml" />
+    <Content Include="Views\Groups\NewMessage.cshtml" />
+    <Content Include="Views\Messages\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
