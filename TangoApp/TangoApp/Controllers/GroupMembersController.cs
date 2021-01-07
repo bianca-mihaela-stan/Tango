@@ -38,6 +38,7 @@ namespace TangoApp.Controllers
             ViewBag.UsersPending = usersPending;
             ViewBag.UsersInvited = usersInvited;
             ViewBag.Admins = admins;
+            ViewBag.GroupMembersId = id;
             return View();
         }
         // un utilizator trimite cerere de inscriere
@@ -122,21 +123,20 @@ namespace TangoApp.Controllers
             var currentUserId = User.Identity.GetUserId();
             var members = db.GroupMembers.Where(u => u.GroupId == GrupId &&( u.Status == MemberStatusFlag.Admin || u.Status == MemberStatusFlag.Member)).ToList().Select(u => u.UserId);
             var pendingorinvited = db.GroupMembers.Where(u => u.GroupId == GrupId && !(u.Status == MemberStatusFlag.Admin || u.Status == MemberStatusFlag.Member)).ToList().Select(u => u.UserId);
-            //lasam si adminul sa trimita invitatii
             if (!members.Contains(currentUserId) && !User.IsInRole("Admin"))
             {
                 TempData["message"] = "Nu ai dreptul de a invita pe cineva!";
-                return RedirectToAction("Show", "Groups", new { id = GrupId });
+                return RedirectToAction("Search", "GroupMembers", new { id = GrupId });
             }
             if(members.Contains(UserId))
             {
                 TempData["message"] = "Utilizatorul face deja parte din grup!";
-                return RedirectToAction("Show", "Groups", new { id = GrupId });
+                return RedirectToAction("Search", "GroupMembers", new { id = GrupId });
             }
             if(pendingorinvited.Contains(UserId))
             {
                 TempData["message"] = "Utilizatorul a fost deja invitat sau a trimis deja cerere!";
-                return RedirectToAction("Show", "Groups", new { id = GrupId });
+                return RedirectToAction("Search", "GroupMembers", new { id = GrupId });
             }
         
             try
@@ -146,9 +146,17 @@ namespace TangoApp.Controllers
                 joinrequest.UserId = UserId;
                 joinrequest.Status = MemberStatusFlag.Invited;
                 db.GroupMembers.Add(joinrequest);
+                Notification notification = new Notification();
+                notification.GroupId = GrupId;
+                notification.UserReceiveId = UserId;
+                notification.UserSendId = currentUserId;
+                notification.Type = NotificationFlag.AskToJoinRequest;
+                notification.Time = DateTime.Now;
+                notification.Seen = false;
+                db.Notifications.Add(notification);
                 db.SaveChanges();
                 TempData["message"] = "Invitatia a fost trimisa!";
-                return RedirectToAction("Index", "Groups");
+                return RedirectToAction("Search", "GroupMembers", new { id = GrupId });
             }
             catch (Exception e)
             {
@@ -439,7 +447,7 @@ namespace TangoApp.Controllers
                 var currentUser = User.Identity.GetUserId();
                 //trebuie verificat ca utilizatorul curent sa fie admin in grupul respectiv
                 var isAdmin = db.GroupMembers.Where(u => u.GroupId == id && u.UserId == currentUser && u.Status == MemberStatusFlag.Admin).ToList();
-                if(!isAdmin.Any() && !User.IsInRole("Admin"))
+                if (!isAdmin.Any() && !User.IsInRole("Admin"))
                 {
                     TempData["messsage"] = "Nu aveti dreptul de a face admini!";
                     return RedirectToAction("Show", "GroupMembers", new { id = id });
@@ -478,5 +486,75 @@ namespace TangoApp.Controllers
             }
 
         }
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult Search(int id)
+        {
+            //nu vreau sa adaug useri care sunt deja in grup
+            List<string> useri_in_grup =(from x in db.GroupMembers
+                                        where x.GroupId == id
+                                        select x.UserId).ToList();
+            //profilurile userilor care nu sunt deja in grup
+            List<Profile> profiles = db.Profiles.Include("User").Include("Country").Include("City").Where(a => !useri_in_grup.Contains(a.UserId)).ToList();
+            var search = "";
+            var number_of_profiles_perpage = 10;
+            if (Request.Params.Get("search") != null)
+            {
+                //trim whitespace from search string
+                search = Request.Params.Get("search").Trim();
+                //search in posts (content, name of the creator)
+                List<int> postIds = db.Posts.Where(
+                    at => at.Text.Contains(search)
+                    || at.User.UserName.Contains(search)
+                    ).Select(a => a.PostId).ToList();
+
+                profiles = db.Profiles.Where(
+                    at => at.User.UserName.Contains(search)).OrderBy(a => a.User.UserName).ToList();
+
+
+
+            }
+
+            var totalItems = profiles.Count();
+            var currentPageProfiles = Convert.ToInt32(Request.Params.Get("page"));
+
+            var offset = 0;
+
+            if (!currentPageProfiles.Equals(0))
+            {
+                offset = (currentPageProfiles - 1) * number_of_profiles_perpage;
+            }
+            var paginatedProfiles = profiles.OrderBy(a => a.User.UserName).Skip(offset).Take(number_of_profiles_perpage);
+
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
+            ViewBag.total = totalItems;
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)number_of_profiles_perpage);
+            ViewBag.Profiles = paginatedProfiles;
+            ViewBag.SearchString = search;
+            ViewBag.GroupMembersId = id;
+
+            return View();
+        }
+        /*[NonAction]
+        public IEnumerable<SelectListItem> GetAllFriends(string id)
+        {
+            
+            var selectList = new List<SelectListItem>();
+            var friendsFirst = db.Friends.Where(u => u.User1Id == id).ToList().Select(u => u.User2);
+            var friendsSecond = db.Friends.Where(u => u.User2Id == id).ToList().Select(u => u.User1);
+            var friends = friendsFirst.Union(friendsSecond);
+            foreach (var friend in friends)
+            {
+                var listItem = new SelectListItem();
+                listItem.Value = friend.Email.ToString();
+                listItem.Text = friend.Email.ToString();
+                selectList.Add(listItem);
+            }
+            return selectList;
+        }*/
+ 
     }
 }

@@ -18,6 +18,17 @@ namespace TangoApp
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Posts", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "Invite",
+                url: "GroupMembers/Invite/{UserId}/{GrupId}",
+                defaults: new
+                {
+                    controller = "GroupMembers",
+                    action = "Invite",
+                    UserId = UrlParameter.Optional,
+                    GrupId = UrlParameter.Optional
+                });
         }
     }
 }

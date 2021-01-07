@@ -83,6 +83,10 @@ namespace TangoApp.Controllers
             var grup = db.Groups.Find(id);
             var currentUser = User.Identity.GetUserId();
             var invites = db.GroupMembers.Where(u => u.GroupId == id && u.UserId == currentUser && u.Status == MemberStatusFlag.Invited).ToList();
+            if (invites.Select(u => u.UserId).Contains(currentUser))
+            {
+                ViewBag.Invitation = db.GroupMembers.First(a => a.GroupId == id && a.UserId == currentUser);
+            }
             if(invites.Any())
             {
                 ViewBag.Invite = invites.First();
@@ -192,6 +196,7 @@ namespace TangoApp.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    grup.Status = GroupStatusFlag.MessageGroup;
                     grup.CreationTime = DateTime.Now;
                     db.Groups.Add(grup);
                     ///adaugam si o intrare in tabela GroupMember cu user-ul care a creat grupul
