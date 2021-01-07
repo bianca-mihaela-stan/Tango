@@ -10,6 +10,8 @@ namespace TangoApp.Models
     {
         [Key]
         public int GroupId { get; set; }
+        [MinLength(4, ErrorMessage = "Numele unui grup trebuie sa fie mai lung de 4 caractere!")]
+        [MaxLength(60, ErrorMessage = "Numele unui grup nu poate sa contina mai mult de 60 de caractere!")]
         public string GroupName { get; set; }
         [StringLength(400, ErrorMessage = "Descriere nu poate sa fie mai lunga de 200 de caractere")]
         [DataType(DataType.MultilineText)]

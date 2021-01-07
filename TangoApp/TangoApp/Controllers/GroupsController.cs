@@ -24,6 +24,8 @@ namespace TangoApp.Controllers
             ViewBag.Groups = groups;
             return View();
         }
+
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult IndexPrivateConv()
         {
             var currentUserId = User.Identity.GetUserId();
@@ -37,6 +39,7 @@ namespace TangoApp.Controllers
         }
         
         [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult ShowPrivateConv(FormCollection formData)
         {
             var currentUserId = User.Identity.GetUserId();
@@ -73,6 +76,8 @@ namespace TangoApp.Controllers
             return View(groupconversation);
 
         }
+       
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Show(int id)
         {
             var grup = db.Groups.Find(id);
@@ -83,7 +88,7 @@ namespace TangoApp.Controllers
                 ViewBag.Invite = invites.First();
             }
             var isMember = db.GroupMembers.Where(u => u.GroupId == id && u.UserId == currentUser && (u.Status == MemberStatusFlag.Admin || u.Status == MemberStatusFlag.Member)).ToList();
-            if (isMember.Any())
+            if (isMember.Any() || User.IsInRole("Admin"))
             {
                 ViewBag.InGroup = true;
             }
@@ -106,21 +111,28 @@ namespace TangoApp.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Edit(int id)
         {
-
             var grup = db.Groups.Find(id);
-            return View(grup);
+            var admins = db.GroupMembers.Where(u => u.GroupId == grup.GroupId && u.Status == MemberStatusFlag.Admin).Select(u => u.UserId).ToList();
+            if (admins.Contains(User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            {
+                return View(grup);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui grup in care nu sunteti admin!";
+                return RedirectToAction("Index");
+            }
+           
         }
         [HttpPut]
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Edit(int id, Group editedgrup)
         {
 
-            if (TempData.ContainsKey("message"))
-                ViewBag.Message = TempData["message"];
+            
 
             try
             {
-
                 if (ModelState.IsValid)
                 {
                     var grup = db.Groups.Find(id);
@@ -154,7 +166,7 @@ namespace TangoApp.Controllers
                 }
                 else
                 {
-                  
+                    
                     return View(editedgrup);
                 }
 
@@ -164,7 +176,7 @@ namespace TangoApp.Controllers
             catch (Exception e)
             {
 
-            
+                TempData["message"] = "Something went terribly wrong!";
                 return View(editedgrup);
             }
         }
@@ -200,7 +212,7 @@ namespace TangoApp.Controllers
             }
             catch (Exception e)
             {
-                
+                TempData["message"] = "Something went terribly wrong!";
                 return View(grup);
             }
         }
@@ -208,28 +220,36 @@ namespace TangoApp.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Delete(int id)
         {
-
-            var grup = db.Groups.Find(id);
-            var admins = db.GroupMembers.Where(u => u.GroupId == id && u.Status == MemberStatusFlag.Admin).Select(u => u.UserId).ToList();
-            if (admins.Contains(User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            try
             {
-                var not = db.Notifications.Where(u => u.GroupId == id).ToList();
-                foreach (var notification in not)
+                var grup = db.Groups.Find(id);
+                var admins = db.GroupMembers.Where(u => u.GroupId == id && u.Status == MemberStatusFlag.Admin).Select(u => u.UserId).ToList();
+                if (admins.Contains(User.Identity.GetUserId()) || User.IsInRole("Admin"))
                 {
-                    db.Notifications.Remove(notification);
+                    var not = db.Notifications.Where(u => u.GroupId == id).ToList();
+                    foreach (var notification in not)
+                    {
+                        db.Notifications.Remove(notification);
 
+                    }
+                    db.Groups.Remove(grup);
+                    db.SaveChanges();
+                    TempData["message"] = "Grupul a fost sters!";
+                    return RedirectToAction("Index");
                 }
-                db.Groups.Remove(grup);
-                db.SaveChanges();
-                TempData["message"] = "Grupul a fost sters!";
-                return RedirectToAction("Index");
+                else
+                {
+                    TempData["message"] = "Nu aveti permisiunea de a sterge acest grup!";
+                    return RedirectToAction("Show", new { id = id });
+                }
             }
-            else
+            catch(Exception e)
             {
-                TempData["message"] = "Nu aveti permisiunea de a sterge acest grup!";
-                return RedirectToAction("Show",new { id = id });
+                TempData["message"] = "Something went terribly wrong!";
+                return RedirectToAction("Show", new { id = id });
             }
         }
+
   
     }
 }

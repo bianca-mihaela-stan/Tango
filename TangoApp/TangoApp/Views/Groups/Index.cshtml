@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     /**/
 
     ViewBag.Title = "Grupuri";
@@ -16,8 +15,6 @@
     <p>@grup.Description</p>
     <small>@grup.CreationTime</small>
     <a href="/Groups/Show/@grup.GroupId" class="btn btn-success">Vizualizare grup</a>
-     <form method="post" action="/GroupMembers/JoinRequest/@grup.GroupId">
-         <button type="submit" class="btn btn-success">Inscrie-te!</button>
-     </form>
+
 }
 <a href="/Groups/New/" class="btn btn-success">Adauga grup</a>
