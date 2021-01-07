@@ -189,6 +189,15 @@ namespace TangoApp.Controllers
                     }
                     else
                     {
+                        Profile profile = new Profile();
+                        profile.ProfileVisibility = true;
+                        profile.UserId = user.Id;
+                        db.Profiles.Add(profile);
+                        db.SaveChanges();
+
+                        //fac legatura profil-user
+                        user.ProfileId = profile.ProfileId;
+                        db.SaveChanges();
                         UserManager.AddToRole(user.Id, "User");
                     }
 
