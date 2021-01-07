@@ -100,7 +100,17 @@
             </div>
         </form>*@
 
-
+    <form method="post" action="/Groups/NewMessage/@Model.GroupId">
+        <div class="panel-body">
+            <input type="hidden" name="GroupId" value="@Model.GroupId" />
+            <label>Continut mesaj</label>
+            <br />
+            <textarea class="form-control" name="Content">@if (ViewBag.Mesaj != null) {@ViewBag.Mesaj.Content}</textarea>
+            @Html.ValidationMessage("Content", "", new { @class = "text-danger" })
+            <br />
+            <button class="btn btn-success " type="submit">Adauga mesaj</button>
+        </div>
+    </form>
 
     <br />
     <!--un membru are dreptul sa iasa din grup!-->
@@ -109,8 +119,8 @@
         using (Html.BeginForm(actionName: "LeaveGroup", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
         {
 
-        @Html.HttpMethodOverride(HttpVerbs.Delete)
-        <button type="submit" class="btn btn-primary">Leave the group</button>
-            }
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            <button type="submit" class="btn btn-primary">Leave the group</button>
         }
     }
+}

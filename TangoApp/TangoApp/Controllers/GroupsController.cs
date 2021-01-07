@@ -37,43 +37,35 @@ namespace TangoApp.Controllers
             return View();
 
         }
-        
-        [HttpPost]
+
+
         [Authorize(Roles = "User,Editor,Admin")]
-        public ActionResult ShowPrivateConv(FormCollection formData)
+        public ActionResult ShowPrivateConv(int id)
         {
             var currentUserId = User.Identity.GetUserId();
             var currentUser = db.Users.Find(currentUserId);
-            var friendId = formData.Get("Userid");
+            var friendId = db.GroupMembers.Find(id).UserId;
+            var Group= db.GroupMembers.Find(id).Group;
             var friend = db.Users.Find(friendId);
             if(friend == null)
             {
                 TempData["message"] = "Utilizatorul nu exista!";
                 return RedirectToAction("Index", "Users");
             }
-            //trebuie sa verificam ca cei 2 useri sa fie prieteni
-            var arefriends = db.Friends.Where(u => (u.User1Id == friendId && u.User2Id == currentUserId) || (u.User2Id == friendId && u.User1Id == currentUserId));
-            if(!arefriends.Any())
+            if(Group == null)
             {
-                TempData["message"] = "Nu esti prieten cu acest utilizator. Nu poti sa ii scrii mesaj privat!";
-                return RedirectToAction("Show", "Profile", new { id = friendId });
+                TempData["message"] = "Nu esti prieten cu acest utilizator";
+                return RedirectToAction("Show", "Profile", new {id = friendId });
             }
-            var conversationFriend = db.GroupMembers.Where(u => u.UserId == friendId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
-            var conversationUserCurrent = db.GroupMembers.Where(u => u.UserId == currentUserId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
-            var conversation = conversationFriend.Intersect(conversationUserCurrent);
-            if (!conversation.Any() || conversation.Count() != 1)
-            {
-                TempData["message"] =  "Something went terribly wrong!";
-                return RedirectToAction("Show", "Profile", new { id = friendId });
-            }
-            var groupconversation = conversation.First();
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.Message = TempData["message"];
             }
-            ViewBag.UserCurrent = currentUser;
+
+            ViewBag.utilizatorCurent = User.Identity.GetUserId();
             ViewBag.UserFriend = friend;
-            return View(groupconversation);
+            ViewBag.esteAdmin = User.IsInRole("Admin");
+            return View(Group);
 
         }
        
@@ -256,6 +248,55 @@ namespace TangoApp.Controllers
             }
         }
 
-  
+        [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult NewMessage(int GroupId, Message mess)
+        {
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Console.Write("option 1");
+                    mess.Date = DateTime.Now;
+                    mess.UserId = User.Identity.GetUserId();
+                    mess.GroupId = GroupId;
+                    db.Messages.Add(mess);
+                    db.SaveChanges();
+                    TempData["message"] = "Mesajul a fost adaugat!";
+                    var currentUser = User.Identity.GetUserId();
+                    var friendId = db.GroupMembers.First(a => a.GroupId == mess.GroupId && a.UserId != mess.UserId).UserId;
+                    var conversationId = db.GroupMembers.First(a => a.GroupId == GroupId && a.UserId == currentUser).GroupMemberId;
+                    Console.WriteLine(conversationId);
+                    if(db.Groups.Find(GroupId).Status==GroupStatusFlag.PrivateConversation)
+                        return RedirectToAction("ShowPrivateConv", "Groups", new {id= conversationId });
+                    else
+                        return RedirectToAction("Show", "Groups", new { id = GroupId });
+                    //return View("Home", "Index");
+                }
+                else
+                {
+                    Console.Write("option 2");
+                    Group grup = db.Groups.Find(mess.GroupId);
+                    ViewBag.Message = mess; var friendId = db.GroupMembers.First(a => a.GroupId == mess.GroupId && a.UserId != mess.UserId).UserId;
+                    var conversationId = db.GroupMembers.First(a => a.GroupId == GroupId && a.UserId == User.Identity.GetUserId());
+                    if (db.Groups.Find(GroupId).Status == GroupStatusFlag.PrivateConversation)
+                        return RedirectToAction("ShowPrivateConv", "Groups", new { id = conversationId });
+                    else
+                        return RedirectToAction("Show", "Groups", new { id = GroupId });
+                    //return View("Home", "Index");
+                }
+
+            }
+            catch (Exception e)
+            {
+                Group grup = db.Groups.Find(mess.GroupId);
+                return View("Show", grup);
+            }
+
+
+        }
+
+
     }
 }

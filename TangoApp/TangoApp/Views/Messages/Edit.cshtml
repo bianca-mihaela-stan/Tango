@@ -1,0 +1,24 @@
+﻿@model TangoApp.Models.Message
+@{
+    ViewBag.Title = "Edit";
+}
+
+@if (ViewBag.Message != null)
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+
+<h2>Editeaza mesajul</h2>
+@using (Html.BeginForm(actionName: "Edit", controllerName: "Messages", method: FormMethod.Post, routeValues: new { id = Model.MessageId }))
+{
+
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+    @Html.Hidden("MessageId")
+    @Html.Label("Content", "Continutul mesajului")
+    <br />
+    @Html.Editor("Content")
+    <br />
+    @Html.ValidationMessageFor(m => m.Content)
+    <br />
+    <button type="submit" class="btn btn-success">Modifica mesajul</button>
+}
