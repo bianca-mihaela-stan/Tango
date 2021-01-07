@@ -67,7 +67,8 @@ namespace TangoApp.Controllers
                 Group privateconv = new Group
                 {
                     Status = GroupStatusFlag.PrivateConversation,
-                    CreationTime = DateTime.Now
+                    CreationTime = DateTime.Now,
+                    GroupName = "Private"
                 };
                 db.Groups.Add(privateconv);
                 GroupMember privateConvUsersFirst = new GroupMember();

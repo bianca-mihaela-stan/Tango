@@ -14,6 +14,8 @@ namespace TangoApp.Controllers
         // GET: GroupMembers
         private ApplicationDbContext db = new ApplicationDbContext();
         //un utilizator vrea sa vada membrii grupului
+
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Show(int id)
         {
             var usersInGroup = db.GroupMembers.Include("User").Where(u => u.GroupId == id &&  u.Status == MemberStatusFlag.Member).ToList();
@@ -108,6 +110,7 @@ namespace TangoApp.Controllers
         }
         ///un membru vrea sa invite pe cineva in grup
         [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Invite(string UserId, int GrupId)
         {
 
@@ -120,7 +123,7 @@ namespace TangoApp.Controllers
             var currentUserId = User.Identity.GetUserId();
             var members = db.GroupMembers.Where(u => u.GroupId == GrupId &&( u.Status == MemberStatusFlag.Admin || u.Status == MemberStatusFlag.Member)).ToList().Select(u => u.UserId);
             var pendingorinvited = db.GroupMembers.Where(u => u.GroupId == GrupId && !(u.Status == MemberStatusFlag.Admin || u.Status == MemberStatusFlag.Member)).ToList().Select(u => u.UserId);
-            if (!members.Contains(currentUserId))
+            if (!members.Contains(currentUserId) && !User.IsInRole("Admin"))
             {
                 TempData["message"] = "Nu ai dreptul de a invita pe cineva!";
                 return RedirectToAction("Search", "GroupMembers", new { id = GrupId });
@@ -165,6 +168,7 @@ namespace TangoApp.Controllers
         
         // un admin vrea sa accepte cuiva cererea de inscriere
         [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult AcceptRequest(int id)
         {
             ///primesti o intrare din GroupMembers
@@ -177,7 +181,7 @@ namespace TangoApp.Controllers
             var admins = db.GroupMembers.Where(u => u.GroupId == request.GroupId && u.Status == MemberStatusFlag.Admin).ToList().Select(u => u.UserId);
             var currentUserId = User.Identity.GetUserId();
 
-            if(admins.Contains(currentUserId))
+            if(admins.Contains(currentUserId) || User.IsInRole("Admin"))
             {
                 request.Status = MemberStatusFlag.Member;
                 var notifications = db.Notifications.Where(u => u.GroupId == request.GroupId && u.UserSendId == request.UserId).ToList();
@@ -207,6 +211,7 @@ namespace TangoApp.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult AcceptInvitation(int id)
         {
 
@@ -253,6 +258,7 @@ namespace TangoApp.Controllers
             }
         }
         [HttpDelete]
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult DeclineRequest(int id)
         {
 
@@ -290,6 +296,7 @@ namespace TangoApp.Controllers
 
         }
         [HttpDelete]
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult DeclineInvitation(int id)
         {
             ///primesti o intrare din GroupMembers
@@ -315,6 +322,7 @@ namespace TangoApp.Controllers
 
         }
         [HttpDelete]
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult LeaveGroup(int id)
         {
             var currentUserId = User.Identity.GetUserId();
@@ -376,6 +384,7 @@ namespace TangoApp.Controllers
             return RedirectToAction("Index", "Groups");
         }
         [HttpDelete]
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult RemoveMember(int id)
         {
 
@@ -420,6 +429,7 @@ namespace TangoApp.Controllers
 
         }
         [HttpPut]
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult MakeAdmin(int membergroupid)
         {
             var relation = db.GroupMembers.Find(membergroupid);
@@ -435,6 +445,14 @@ namespace TangoApp.Controllers
 
                 
                 var currentUser = User.Identity.GetUserId();
+                //trebuie verificat ca utilizatorul curent sa fie admin in grupul respectiv
+                var isAdmin = db.GroupMembers.Where(u => u.GroupId == id && u.UserId == currentUser && u.Status == MemberStatusFlag.Admin).ToList();
+                if (!isAdmin.Any() && !User.IsInRole("Admin"))
+                {
+                    TempData["messsage"] = "Nu aveti dreptul de a face admini!";
+                    return RedirectToAction("Show", "GroupMembers", new { id = id });
+
+                }
                 if (relation.Status == MemberStatusFlag.Pending || relation.Status == MemberStatusFlag.Invited)
                 {
                     TempData["messsage"] = "Utilizatorul nu face parte din grup";
@@ -468,7 +486,7 @@ namespace TangoApp.Controllers
             }
 
         }
-
+        [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Search(int id)
         {
             //nu vreau sa adaug useri care sunt deja in grup
