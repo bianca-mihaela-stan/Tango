@@ -2,15 +2,18 @@
 
 
 @{
-                /**/
+    /**/
 
-                ViewBag.Title = "Show";
+    ViewBag.Title = "Show";
 }
 
 
 @Html.Partial("Search")
-
-<a class="btn btn-info" href="/Posts/Index">Postari</a> 
+@if (ViewBag.Message != null)
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+<a class="btn btn-info" href="/Posts/Index">Postari</a>
 
 @foreach (TangoApp.Models.Profile profile in ViewBag.Profiles)
 {

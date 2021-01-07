@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Newsfeed";
+}
+
+<h2>Newsfeed</h2>
+
+@foreach (TangoApp.Models.Post post in ViewBag.Posts)
+{
+    
+    <div class="post-container">
+        <a href="/Posts/Show/@post.PostId" style=" color: inherit; text-decoration: inherit ">
+            <div class="card" style="height: auto; width: 70vw">
+                <div class="card-body">
+                    @Html.Partial("ShowPost", post)
+                    @if (post.Media != null)
+                    {
+                        foreach (var image in post.Media.ToList())
+                        {
+
+                            <img src="~/Files/@image.FileName" alt="image" height="400" />
+                            <br />
+                        }
+                    }
+                    @foreach (var com in post.Comments.ToList().OrderBy(i => i.Date).Take(3))
+                    {
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-8">
+                                    <div>
+                                        <p>@com.Text</p>
+                                        <small class="pull-right">@com.Date</small>
+                                        <small class="pull-left">@com.User.Email</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </a>
+    </div>
+}

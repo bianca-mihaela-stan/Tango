@@ -86,7 +86,7 @@ namespace TangoApp.Controllers
                 db.GroupMembers.Add(privateConvUsersSecond);
                 db.SaveChanges();
                 TempData["message"] = "Acum esti prieten cu " + user.Email;
-                return RedirectToAction("Index");
+                return RedirectToAction("Show","Profile",new { id = newfriend.User1.ProfileId });
             }
             catch(Exception e)
             {
@@ -106,6 +106,27 @@ namespace TangoApp.Controllers
                 db.SaveChanges();
                 TempData["message"] = "Cererea a fost respinsa";
                 return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                TempData["message"] = "Am intampinat o eroare";
+                return RedirectToAction("Index");
+            }
+
+
+        }
+        [HttpPut]
+        public ActionResult DeclineFromProfile(int id)
+        {
+
+            try
+            {
+                var friendship = db.Friendships.Find(id);
+                friendship.Status = 2;
+                friendship.ActionUser = 2;
+                db.SaveChanges();
+                TempData["message"] = "Cererea a fost respinsa";
+                return RedirectToAction("Show","Profile",new { id = friendship.User1.ProfileId });
             }
             catch (Exception e)
             {
