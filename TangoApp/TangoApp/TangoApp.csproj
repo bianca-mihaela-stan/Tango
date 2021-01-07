@@ -289,10 +289,8 @@
     <Content Include="Views\Groups\Edit.cshtml" />
     <Content Include="Views\Groups\Show.cshtml" />
     <Content Include="Views\GroupMembers\Show.cshtml" />
-    <Content Include="Views\GroupMembers\Search.cshtml" />
-    <Content Include="Views\GroupMembers\SearchHolder.cshtml" />
-    <Content Include="Views\GroupMembers\ShowProfile.cshtml" />
-    <Content Include="Views\GroupMembers\Invite.cshtml" />
+    <Content Include="Views\Groups\ShowPrivateConv.cshtml" />
+    <Content Include="Views\Groups\IndexPrivateConv.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

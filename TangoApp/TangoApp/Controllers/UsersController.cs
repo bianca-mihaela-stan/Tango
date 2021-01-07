@@ -133,8 +133,13 @@ namespace TangoApp.Controllers
                     TempData["message"] = "Nu sunteti prieteni cu acest utilizator!";
                     return RedirectToAction("Index");
                 }
-
-                db.Friends.Remove(friends.First());
+                ///trebuie sa stergem si chat-ul dintre fostii prieteni
+                var friend = friends.First();
+                var conversationFriend = db.GroupMembers.Where(u =>  u.UserId == formUserId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
+                var conversationUserCurrent = db.GroupMembers.Where(u => u.UserId == currentUserId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
+                var groupconversation = conversationFriend.Intersect(conversationUserCurrent).First();
+                db.Groups.Remove(groupconversation);
+                db.Friends.Remove(friend);
                 db.SaveChanges();
                 TempData["message"] = "Nu mai sunteti prieteni!";
                 return RedirectToAction("Index");

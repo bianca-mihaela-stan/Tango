@@ -1,0 +1,13 @@
+﻿@model TangoApp.Models.Group
+@{
+    ViewBag.Title = "ShowDMs";
+}
+
+@if (ViewBag.Message != null)
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+
+<h3>@ViewBag.UserFriend.Email</h3>
+
+<!--aici vin mesajele corespunzatoare modelului Conversation-->
