@@ -64,6 +64,7 @@ namespace TangoApp.Controllers
         public ActionResult Show(string id)
         {
             Profile profile = db.Profiles.First(a => a.UserId == id);
+            ViewBag.currentUser = User.Identity.GetUserId();
             return View(profile);
         }
 
@@ -164,15 +165,7 @@ namespace TangoApp.Controllers
                     Text = country.CountryName.ToString()
                 });
             }
-            /*
-            foreach (var category in categories)
-            {
-                var listItem = new SelectListItem();
-                listItem.Value = category.CategoryId.ToString();
-                listItem.Text = category.CategoryName.ToString();
-
-                selectList.Add(listItem);
-            }*/
+            
 
             // returnam lista de categorii
             return selectList;
@@ -198,15 +191,7 @@ namespace TangoApp.Controllers
                     Text = city.CityName.ToString()
                 });
             }
-            /*
-            foreach (var category in categories)
-            {
-                var listItem = new SelectListItem();
-                listItem.Value = category.CategoryId.ToString();
-                listItem.Text = category.CategoryName.ToString();
-
-                selectList.Add(listItem);
-            }*/
+           
 
             // returnam lista de categorii
             return selectList;
