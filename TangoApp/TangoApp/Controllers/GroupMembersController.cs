@@ -32,7 +32,8 @@ namespace TangoApp.Controllers
             {
                 ViewBag.afisare = true;
             }
-            ViewBag.esteAdmin = User.IsInRole("Admin");
+            var currentUser = User.Identity.GetUserId();
+            ViewBag.esteMembru = usersInGroup.Select(u => u.UserId).Contains(currentUser);
             ViewBag.utilizatorCurent = User.Identity.GetUserId();
             ViewBag.UsersInGroup = usersInGroup;
             ViewBag.UsersPending = usersPending;
@@ -309,6 +310,8 @@ namespace TangoApp.Controllers
             var currentUser = User.Identity.GetUserId();
             if (currentUser == request.UserId)
             {
+                var notification = db.Notifications.Where(u => u.GroupId == request.GroupId && u.UserReceiveId == currentUser && u.Type == NotificationFlag.AskToJoinRequest).ToList().First();
+                db.Notifications.Remove(notification);
                 db.GroupMembers.Remove(request);
                 db.SaveChanges();
                 TempData["message"] = "Ai sters invitatia!";
