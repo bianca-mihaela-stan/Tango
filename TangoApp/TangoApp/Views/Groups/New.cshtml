@@ -7,11 +7,15 @@
 <form method="post" action="/Groups/New/">
     <div class="panel-body">
         <input type="hidden" name="GroupId" value="@Model.GroupId" />
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
         @Html.Label("GroupName", "Numele grupului")
-        @Html.TextBox("GroupName",null, new { @class = "form-control" })
+        @Html.TextBox("GroupName", null, new { @class = "form-control" })
+        <br/>
+        @Html.ValidationMessageFor(u => u.GroupName, null, new { @class = "text-danger" })
         <br />
-        @Html.Label("Description","Descrierea grupului")
+        @Html.Label("Description", "Descrierea grupului")
         @Html.TextArea("Description", null, new { @class = "form-control" })
+        <br/>
         @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
         <br />
         <button class="btn btn-success " type="submit">Adauga grup</button>

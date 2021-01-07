@@ -7,12 +7,17 @@
 
 @using (Html.BeginForm("Edit", "Groups", new { id = Model.GroupId }, FormMethod.Post))
 {
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
     @Html.HttpMethodOverride(HttpVerbs.Put)
     @Html.Hidden("GroupId")
     @Html.Label("GroupName", "Titlul grupului");
     @Html.Editor("GroupName")
+    <br/>
+    @Html.ValidationMessageFor(u => u.GroupName, null, new { @class = "text-danger" })
     @Html.Label("Description", "Descrierea");
     @Html.Editor("Description")
+    <br/>
+    @Html.ValidationMessageFor(u => u.Description, null, new { @class = "text-danger" })
     <br />
     <button class="btn btn-success" type="submit">Modifica grup</button>
 
