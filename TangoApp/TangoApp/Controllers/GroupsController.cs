@@ -254,6 +254,14 @@ namespace TangoApp.Controllers
                         db.Notifications.Remove(notification);
 
                     }
+                    var mess = db.Messages.Where(u => u.GroupId == grup.GroupId).ToList();
+                    if(mess.Any())
+                    {
+                        foreach(var message in mess)
+                        {
+                            db.Messages.Remove(message);
+                        }
+                    }
                     db.Groups.Remove(grup);
                     db.SaveChanges();
                     TempData["message"] = "Grupul a fost sters!";
@@ -287,7 +295,15 @@ namespace TangoApp.Controllers
             {
                 ViewBag.InGroup = false;
             }
+         
             ViewBag.esteAdmin = User.IsInRole("Admin");
+            if (ViewBag.InGroup == false && ViewBag.esteAdmin == false)
+            {
+
+                Group grup = db.Groups.Find(GroupId);
+                TempData["message"] = "Nu aveti dreptul de a lasa mesaje!";
+                return View("Show", grup);
+            }
             try
             {
                 if (ModelState.IsValid)

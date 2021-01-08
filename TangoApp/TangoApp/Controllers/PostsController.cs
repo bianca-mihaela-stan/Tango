@@ -257,7 +257,20 @@ namespace TangoApp.Controllers
                                     image.PostId = post.PostId;
                                 }
                             }
-                            
+                            //we notify the user if the admin was the one that edited the post
+                            if (User.IsInRole("Admin") &&  post.UserId != User.Identity.GetUserId())
+                            {
+                                Notification notification = new Notification();
+                                notification.UserSendId = User.Identity.GetUserId();
+                                notification.UserReceiveId = post.UserId;
+                                notification.PostId = post.PostId;
+                                notification.Time = DateTime.Now;
+                                notification.Seen = false;
+                                notification.Type = NotificationFlag.EditedPost;
+                                db.Notifications.Add(notification);
+
+                            }
+
                             db.SaveChanges();
                             TempData["message"] = "Postarea a fost editata!";
                             return Redirect("/Posts/Show/" + id);
@@ -324,7 +337,7 @@ namespace TangoApp.Controllers
                
                 ///daca continutul a fost gasit necorespunzator si a fost sters de admin, atunci
                 // trebuie sa adaugam o notificare corespunzatoare pentru User-ul care a postat comentariul
-                if (User.IsInRole("Admin"))
+                if (User.IsInRole("Admin") && post.UserId != User.Identity.GetUserId())
                 {
                     Notification notification = new Notification();
                     notification.UserSendId = User.Identity.GetUserId();

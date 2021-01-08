@@ -65,7 +65,13 @@
                         <p>@mess.Content</p>
                         <small class="pull-right">@mess.Date</small>
                         <small class="pull-right">@mess.LastEditDate</small>
-                        <small class="pull-left">@mess.User.Email</small>
+                    @if (mess.User != null)
+                    {<small class="pull-left">@mess.User.Email</small>
+                    }
+                    else
+                    {
+                        <small class="pull-left">admin@gmail.com</small>
+                    }
                     </div>
                     @if (mess.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
                     {

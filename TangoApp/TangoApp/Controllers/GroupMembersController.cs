@@ -346,6 +346,12 @@ namespace TangoApp.Controllers
             //avand in vedere ca nu poti sa ajungi in remove member cu propriul tau id,
             //cand ajungi sa fii singur in grup, poti sa il stergi sau poti sa il parasesti
             //daca il parasesti grupul trebuie sters
+            var notifications = db.Notifications.Where(u => u.GroupId == relation.GroupId && u.UserSendId == relation.UserId).ToList();
+            foreach (var not in notifications)
+            {
+                db.Notifications.Remove(not);
+            }
+
             db.GroupMembers.Remove(relation);
             db.SaveChanges();
           
