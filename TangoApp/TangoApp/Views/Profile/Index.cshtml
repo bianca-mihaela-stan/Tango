@@ -13,17 +13,15 @@
 {
     <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
 }
-<a class="btn btn-info" href="/Posts/Index">Postari</a>
+<a class="btn btn-orange" href="/Posts/Index">Postari</a>
 
 @foreach (TangoApp.Models.Profile profile in ViewBag.Profiles)
 {
     @Html.Partial("ShowProfile", profile);
-    <br />
-    <hr />
-    <br />
+    
 }
 
 
 <br />
 
-<a class="btn btn-info" href="/Posts/Index">Inapoi la pagina principala</a>
+<a class="btn btn-orange" href="/Posts/Index">Inapoi la pagina principala</a>

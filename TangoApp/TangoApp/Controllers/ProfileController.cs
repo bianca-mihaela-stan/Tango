@@ -163,7 +163,7 @@ namespace TangoApp.Controllers
 
         //edit logged user's profile
         [HttpPut]
-        [Authorize(Roles = "Editor, Admin")]
+        [Authorize(Roles = "Editor, Admin, User")]
         public ActionResult Edit(int id, Profile requestProfile)
         {
             requestProfile.Countries = GetAllCountries();
@@ -190,7 +190,7 @@ namespace TangoApp.Controllers
                             db.SaveChanges();
                             TempData["message"] = "Profilul a fost editat!";
                         }
-                        return RedirectToAction("Show", "Profile", new { id = pr.ProfileId });
+                        return RedirectToAction("YourProfile", "Profile", new { id = pr.ProfileId });
                     }
                     else
                     {
