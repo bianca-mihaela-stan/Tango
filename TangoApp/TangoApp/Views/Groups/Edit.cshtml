@@ -16,14 +16,16 @@
     @Html.HttpMethodOverride(HttpVerbs.Put)
     @Html.Hidden("GroupId")
     @Html.Label("GroupName", "Titlul grupului");
-    @Html.Editor("GroupName")
+    <br />
+    @Html.TextArea("GroupName", new { @class = "form-field" })
     <br />
     @Html.ValidationMessageFor(u => u.GroupName, null, new { @class = "text-danger" })
     @Html.Label("Description", "Descrierea");
-    @Html.Editor("Description")
+    <br />
+    @Html.TextArea("Description", new { @class = "form-field" })
     <br />
     @Html.ValidationMessageFor(u => u.Description, null, new { @class = "text-danger" })
     <br />
-    <button class="btn btn-success" type="submit">Modifica grup</button>
+    <button class="btn btn-orange" type="submit">Modifica grup</button>
 
 }

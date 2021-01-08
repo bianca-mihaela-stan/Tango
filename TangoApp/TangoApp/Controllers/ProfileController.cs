@@ -135,7 +135,7 @@ namespace TangoApp.Controllers
         }
 
         //show logged user's profile in edit mode
-        [Authorize(Roles = "Editor, Admin")]
+        [Authorize(Roles = "Editor, Admin, User")]
         public ActionResult Edit(int id)
         {
             Profile Model = new Profile();

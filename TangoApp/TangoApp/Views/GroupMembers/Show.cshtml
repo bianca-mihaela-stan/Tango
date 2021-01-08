@@ -81,7 +81,7 @@
     foreach (var groupmember in ViewBag.UsersInvited)
     {
         <div class="list-group-item">
-            <a href="#">@groupmember.User.Email</a>
+            <a href="/Profile/Show/@groupmember.User.ProfileId">@groupmember.User.Email</a>
 
         </div>
     }

@@ -86,7 +86,7 @@
                             {
                                 <div class="card w-75">
                                     <div class="card-body">
-                                        <a href="/Friendships/Accept/@ViewBag.Request.FriendshipId" class="btn btn-primary">Accept</a>
+                                        <a href="/Friendships/Accept/@ViewBag.Request.FriendshipId" class="btn btn-orange">Accept</a>
                                         @using (Html.BeginForm(actionName: "DeclineFromProfile", controllerName: "Friendships", method: FormMethod.Post, routeValues: new { id = ViewBag.Request.FriendshipId }))
                                         {
                                             @Html.HttpMethodOverride(HttpVerbs.Put)
