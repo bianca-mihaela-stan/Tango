@@ -19,9 +19,9 @@
 {
 <div class="list-group-item">
     <a href="/Profile/Show/@groupmember.User.ProfileId">@groupmember.User.Email</a>
-    @if (ViewBag.afisare)
+    @if (ViewBag.afisare && ViewBag.utilizatorCurent != groupmember.UserId)
     {
-      using (Html.BeginForm(actionName: "RemoveMember", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
+        using (Html.BeginForm(actionName: "RemoveMember", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
         {
 
             @Html.HttpMethodOverride(HttpVerbs.Delete)
@@ -36,7 +36,7 @@
     <div class="list-group-item">
 
         <a href="/Profile/Show/@groupmember.User.ProfileId">@groupmember.User.Email</a>
-        @if (ViewBag.afisare)
+        @if (ViewBag.afisare && ViewBag.utilizatorCurent != groupmember.UserId)
         {
             using (Html.BeginForm(actionName: "RemoveMember", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
             {

@@ -97,6 +97,7 @@ namespace TangoApp.Controllers
                 ViewBag.Invite = invites.First();
             }
             var isMember = db.GroupMembers.Where(u => u.GroupId == id && u.UserId == currentUser && (u.Status == MemberStatusFlag.Admin || u.Status == MemberStatusFlag.Member)).ToList();
+            var isAdmin = db.GroupMembers.Where(u => u.GroupId == id && u.UserId == currentUser && u.Status == MemberStatusFlag.Admin).ToList();
             if (isMember.Any())
             {
                 ViewBag.InGroup = true;
@@ -109,6 +110,15 @@ namespace TangoApp.Controllers
             {
                 ViewBag.Message = TempData["message"];
             }
+            ViewBag.esteAdminDeGrup = isAdmin.Any();
+
+            var countMembers = db.GroupMembers.Where(u => u.GroupId == id).ToList();
+            ViewBag.LeaveGroupButton = true;
+            if (countMembers.Count() == 1)
+            {
+                ViewBag.LeaveGroupButton = false;
+            }
+
             ViewBag.esteAdmin = User.IsInRole("Admin");
             ViewBag.utilizatorCurent = User.Identity.GetUserId();
             return View(grup);
