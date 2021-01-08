@@ -18,7 +18,7 @@
 @foreach (var groupmember in ViewBag.Admins)
 {
 <div class="list-group-item">
-    <a href="#">@groupmember.User.Email</a>
+    <a href="/Profile/Show/@groupmember.User.ProfileId">@groupmember.User.Email</a>
     @if (ViewBag.afisare)
     {
       using (Html.BeginForm(actionName: "RemoveMember", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
@@ -35,7 +35,7 @@
 {
     <div class="list-group-item">
 
-        <a href="#">@groupmember.User.Email</a>
+        <a href="/Profile/Show/@groupmember.User.ProfileId">@groupmember.User.Email</a>
         @if (ViewBag.afisare)
         {
             using (Html.BeginForm(actionName: "RemoveMember", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
