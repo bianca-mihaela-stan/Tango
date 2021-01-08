@@ -17,8 +17,9 @@ namespace TangoApp.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Index()
         {
-            var user = db.Profiles.Where(a => a.ProfileVisibility == true).ToList().Select(a =>a.User);
-            IOrderedQueryable<Post> posts = db.Posts.Include("User");
+            var user = db.Profiles.Where(a => a.ProfileVisibility == true).ToList().Select(a =>a.UserId);
+            List<Post> posts = db.Posts.Include("User").Where(a => user.Contains(a.UserId)).ToList();
+            //IOrderedQueryable<Post> posts = db.Posts.Include("User");
             IOrderedQueryable<Profile> profiles = db.Profiles.Include("User").Include("Country").Include("City");
             var search = "";
             var number_of_posts_perpage = 10;
@@ -37,7 +38,7 @@ namespace TangoApp.Controllers
 
                 //unique list of articles
                 List<int> mergedIds = postIds.Union(commentIds).ToList();
-                posts = db.Posts.Where(post => mergedIds.Contains(post.PostId)).Include("User").OrderBy(a => a.Date).OrderBy(a => a.Date);
+                posts = db.Posts.Where(post => mergedIds.Contains(post.PostId) && user.Contains(post.UserId)).Include("User").OrderBy(a => a.Date).OrderBy(a => a.Date).ToList();
 
                 profiles = db.Profiles.Where(
                     at => at.User.UserName.Contains(search)).OrderBy(a => a.User.UserName);
