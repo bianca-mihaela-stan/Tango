@@ -140,6 +140,12 @@ namespace TangoApp.Controllers
                 var conversationFriend = db.GroupMembers.Where(u =>  u.UserId == formUserId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
                 var conversationUserCurrent = db.GroupMembers.Where(u => u.UserId == currentUserId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
                 var groupconversation = conversationFriend.Intersect(conversationUserCurrent).First();
+
+                var groupmemb = db.GroupMembers.Where(u => u.GroupId == groupconversation.GroupId).ToList();
+                foreach(var line in groupmemb)
+                {
+                    db.GroupMembers.Remove(line);
+                }
                 var messages = db.Messages.Where(u => u.GroupId == groupconversation.GroupId).ToList();
                 if(messages.Any())
                 {
@@ -150,6 +156,7 @@ namespace TangoApp.Controllers
                        
                     }
                 }
+ 
                 db.Groups.Remove(groupconversation);
                 db.Friends.Remove(friend);
                 db.SaveChanges();
@@ -211,6 +218,11 @@ namespace TangoApp.Controllers
                         var conversationFriend = db.GroupMembers.Where(u => u.UserId == userToBlockId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
                         var conversationUserCurrent = db.GroupMembers.Where(u => u.UserId == currentUserId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
                         var groupconversation = conversationFriend.Intersect(conversationUserCurrent).First();
+                        var groupmemb = db.GroupMembers.Where(u => u.GroupId == groupconversation.GroupId).ToList();
+                        foreach (var line in groupmemb)
+                        {
+                            db.GroupMembers.Remove(line);
+                        }
                         //sterg prietenia
                         var arefriends = arefriendsList.First();
                         db.Friends.Remove(arefriends);
