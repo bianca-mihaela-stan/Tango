@@ -79,7 +79,7 @@ namespace TangoApp.Controllers
             var friendsSecond = db.Friends.Where(u => u.User2Id == currentUser).ToList().Select(u => u.User1Id);
             var allfriends = friendsFirst.Union(friendsSecond);
 
-           
+            ViewBag.Creator = User.IsInRole("Editor");
             var posts = db.Posts.Where(u => allfriends.Contains(u.UserId) || u.UserId==currentUser).ToList().OrderByDescending(u => (u.Comments.ToList().Any() == false ? u.Date : (u.Date >  u.Comments.ToList().OrderByDescending(i => i.Date).First().Date ? u.Date : u.Comments.ToList().OrderByDescending(i => i.Date).First().Date)));
             ViewBag.Posts = posts;
             if (TempData.ContainsKey("message"))
