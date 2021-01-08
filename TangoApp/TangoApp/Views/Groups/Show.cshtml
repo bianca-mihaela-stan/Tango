@@ -40,15 +40,18 @@
 }
 @if (ViewBag.InGroup || ViewBag.esteAdmin)
 {
-    @Html.ActionLink("Editeaza grupul", "Edit", new { id = Model.GroupId }, new { @class = "d-inline btn btn-info float-left position-relative" })
-    using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
+    if (ViewBag.esteAdminDeGrup != null && ViewBag.esteAdminDeGrup == true || ViewBag.esteAdmin)
     {
+        @Html.ActionLink("Editeaza grupul", "Edit", new { id = Model.GroupId }, new { @class = "d-inline btn btn-info float-left position-relative" })
+        using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
+        {
 
         @Html.HttpMethodOverride(HttpVerbs.Delete)
         <button class="d-inline btn btn-danger float-right position-relative" type="submit">Delete group</button>
 
+        }
     }
-    <!--Scuzeee - fata cu lacrimi- - fata cu lacrimi --->
+
     <!--Afisam toata mesajele din grup-->
     foreach (TangoApp.Models.Message mess in Model.Messages)
     {
@@ -114,7 +117,7 @@
 
     <br />
     <!--un membru are dreptul sa iasa din grup!-->
-    if (ViewBag.InGroup)
+    if (ViewBag.InGroup && (ViewBag.LeaveGroupButton != null && ViewBag.LeaveGroupButton == true))
     {
         using (Html.BeginForm(actionName: "LeaveGroup", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
         {

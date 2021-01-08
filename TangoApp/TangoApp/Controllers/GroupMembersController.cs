@@ -335,14 +335,20 @@ namespace TangoApp.Controllers
                 TempData["message"] = "Nu faceti parte din acest grup!";
                 return RedirectToAction("Show", "Groups", new { id = id});
             }
+            var countMembers = db.GroupMembers.Where(u => u.GroupId == id).ToList();
+            var countAdmins = db.GroupMembers.Where(u => u.GroupId == id && u.Status == MemberStatusFlag.Admin).ToList();
+            if(countMembers.Count() == 1)
+            {
+                TempData["message"] = "Trebuie sa stergetii grupul!";
+                return RedirectToAction("Show", "Groups", new { id = id });
+            }
             var relation = inGroup.First();
             //avand in vedere ca nu poti sa ajungi in remove member cu propriul tau id,
             //cand ajungi sa fii singur in grup, poti sa il stergi sau poti sa il parasesti
             //daca il parasesti grupul trebuie sters
             db.GroupMembers.Remove(relation);
             db.SaveChanges();
-            var countMembers = db.GroupMembers.Where(u => u.GroupId == id).ToList();
-            var countAdmins = db.GroupMembers.Where(u => u.GroupId == id && u.Status == MemberStatusFlag.Admin).ToList();
+          
             if (!countMembers.Any())
             {
                 var grup = db.Groups.Find(id);
