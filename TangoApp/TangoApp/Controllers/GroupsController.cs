@@ -254,6 +254,14 @@ namespace TangoApp.Controllers
                         db.Notifications.Remove(notification);
 
                     }
+                    var mess = db.Messages.Where(u => u.GroupId == grup.GroupId).ToList();
+                    if(mess.Any())
+                    {
+                        foreach(var message in mess)
+                        {
+                            db.Messages.Remove(message);
+                        }
+                    }
                     db.Groups.Remove(grup);
                     db.SaveChanges();
                     TempData["message"] = "Grupul a fost sters!";
