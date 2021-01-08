@@ -78,7 +78,7 @@ namespace TangoApp.Controllers
             var allfriends = friendsFirst.Union(friendsSecond);
 
            
-            var posts = db.Posts.Where(u => allfriends.Contains(u.UserId)).ToList().OrderByDescending(u => (u.Comments.ToList().Any() == false ? u.Date : (u.Date >  u.Comments.ToList().OrderByDescending(i => i.Date).First().Date ? u.Date : u.Comments.ToList().OrderByDescending(i => i.Date).First().Date)));
+            var posts = db.Posts.Where(u => allfriends.Contains(u.UserId) || u.UserId==currentUser).ToList().OrderByDescending(u => (u.Comments.ToList().Any() == false ? u.Date : (u.Date >  u.Comments.ToList().OrderByDescending(i => i.Date).First().Date ? u.Date : u.Comments.ToList().OrderByDescending(i => i.Date).First().Date)));
             ViewBag.Posts = posts;
             if (TempData.ContainsKey("message"))
             {
@@ -135,7 +135,7 @@ namespace TangoApp.Controllers
                     }
                     db.SaveChanges();
                     TempData["message"] = "Postarea a fost adaugata!";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Newsfeed");
                 }
                 else
                 {

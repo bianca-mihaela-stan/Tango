@@ -87,7 +87,7 @@ namespace TangoApp.Controllers
                 {
                     var res = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
                     if(res==SignInStatus.Success)
-                        return RedirectToLocal(returnUrl);
+                        return Redirect("/Posts/Newsfeed");
                 }
             }
             // This doesn't count login failures towards account lockout
@@ -209,7 +209,7 @@ namespace TangoApp.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return Redirect("/Home/Index/");
+                    return Redirect("/Posts/Newsfeed/");
                 }
 
                 AddErrors(result);
