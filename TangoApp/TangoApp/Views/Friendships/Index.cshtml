@@ -9,17 +9,18 @@
 }
 @foreach (var req in ViewBag.Friendrequests)
 {
-    <div class="card w-75">
-        <div class="card-body">
+    <div class="card w-75 tangoo-card">
+        <div class="card-body tangoo-card-body">
             <h5 class="card-title"> @req.User1.Email</h5>
-            <p class="card-text">Looks like someone wants to be your friend...</p>
-            <a href="/Friendships/Accept/@req.FriendshipId" class="btn btn-primary">Accept</a>
-            @using (Html.BeginForm(actionName: "Decline", controllerName: "Friendships", method: FormMethod.Post, routeValues: new { id = req.FriendshipId }))
-            {
+            <div class="friend-req-item">
+                <a href="/Friendships/Accept/@req.FriendshipId" class="btn btn-primary" style="margin-right: 10px; ">Accept</a>
+                @using (Html.BeginForm(actionName: "Decline", controllerName: "Friendships", method: FormMethod.Post, routeValues: new { id = req.FriendshipId }))
+                {
 
-                @Html.HttpMethodOverride(HttpVerbs.Put)
-                <button type="submit" class="btn btn-primary">Decline</button>
-            }
+                    @Html.HttpMethodOverride(HttpVerbs.Put)
+                    <button type="submit" class="btn btn-primary">Decline</button>
+                }
+            </div>
         </div>
     </div>
     <br />
