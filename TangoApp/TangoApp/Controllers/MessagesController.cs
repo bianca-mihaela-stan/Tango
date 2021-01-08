@@ -69,11 +69,20 @@ namespace TangoApp.Controllers
         {
             Message com = db.Messages.Find(id);
             var currentUser = User.Identity.GetUserId();
-            var conversationId = db.GroupMembers.First(a => a.GroupId == com.GroupId && a.UserId == currentUser).GroupMemberId;
+            var group = db.Groups.First(a => a.GroupId == com.GroupId);
+            var conversationId=  group.GroupId; ;
+            if (group.Status == GroupStatusFlag.PrivateConversation)
+            {
+                conversationId = db.GroupMembers.First(a => a.GroupId == com.GroupId && a.UserId == currentUser).GroupMemberId;
+            }
+            else
+            {
+                conversationId = group.GroupId;
+            }
             db.Messages.Remove(com);
             db.SaveChanges();
             TempData["message"] = "Comentariul a fost sters!";
-            if (db.Groups.Find(com.GroupId).Status == GroupStatusFlag.PrivateConversation)
+            if (group.Status == GroupStatusFlag.PrivateConversation)
                 return RedirectToAction("ShowPrivateConv", "Groups", new { id = conversationId });
             else
                 return RedirectToAction("Show", "Groups", new { id = com.GroupId });

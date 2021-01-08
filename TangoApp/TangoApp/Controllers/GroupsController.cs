@@ -110,6 +110,7 @@ namespace TangoApp.Controllers
                 ViewBag.Message = TempData["message"];
             }
             ViewBag.esteAdmin = User.IsInRole("Admin");
+            ViewBag.utilizatorCurent = User.Identity.GetUserId();
             return View(grup);
         }
         [Authorize(Roles = "User,Editor,Admin")]
@@ -265,7 +266,18 @@ namespace TangoApp.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult NewMessage(int GroupId, Message mess)
         {
-
+            var currentUser = User.Identity.GetUserId();
+            ViewBag.utilizatorCurent = currentUser;
+            var find= db.GroupMembers.Where(a => a.UserId == currentUser && a.GroupId == GroupId).ToList();
+            if(find.Any())
+            {
+                ViewBag.InGroup = true;
+            }
+            else
+            {
+                ViewBag.InGroup = false;
+            }
+            ViewBag.esteAdmin = User.IsInRole("Admin");
             try
             {
                 if (ModelState.IsValid)
@@ -277,10 +289,8 @@ namespace TangoApp.Controllers
                     db.Messages.Add(mess);
                     db.SaveChanges();
                     TempData["message"] = "Mesajul a fost adaugat!";
-                    var currentUser = User.Identity.GetUserId();
                     var friendId = db.GroupMembers.First(a => a.GroupId == mess.GroupId && a.UserId != mess.UserId).UserId;
                     var conversationId = db.GroupMembers.First(a => a.GroupId == GroupId && a.UserId == currentUser).GroupMemberId;
-                    Console.WriteLine(conversationId);
                     if(db.Groups.Find(GroupId).Status==GroupStatusFlag.PrivateConversation)
                         return RedirectToAction("ShowPrivateConv", "Groups", new {id= conversationId });
                     else

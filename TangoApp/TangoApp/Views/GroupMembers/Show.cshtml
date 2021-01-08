@@ -12,7 +12,7 @@
 }
 @if (ViewBag.afisare)
 {
-   <a href="/GroupMembers/Search/@ViewBag.GroupMembersId" class="btn btn-success">Adauga membri</a>
+   <a href="/GroupMembers/Search/@ViewBag.GroupMembersId" class="btn btn-orange">Adauga membri</a>
 }
 <h4> Admini</h4>
 @foreach (var groupmember in ViewBag.Admins)
@@ -25,7 +25,7 @@
         {
 
             @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <button type="submit" class="btn btn-primary">Remove member</button>
+            <button type="submit" class="btn btn-orange">Remove member</button>
         }
     }
 </div>
@@ -42,13 +42,14 @@
             {
 
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button type="submit" class="btn btn-primary">Remove member</button>
+                <button type="submit" class="btn btn-orange">Remove member</button>
             }
+            <br />
             using (Html.BeginForm(actionName: "MakeAdmin", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { membergroupid = groupmember.GroupMemberId }))
             {
 
                 @Html.HttpMethodOverride(HttpVerbs.Put)
-                <button type="submit" class="btn btn-primary">Make Admin</button>
+                <button type="submit" class="btn btn-orange">Make Admin</button>
             }
         }
     </div>
@@ -64,13 +65,13 @@
             <a href="#">@groupmember.User.Email</a>
             @using (Html.BeginForm(actionName: "AcceptRequest", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
             {
-                <button class="btn btn-success" type="submit">Accept</button>
+                <button class="btn btn-orange" type="submit">Accept</button>
             }
             @using (Html.BeginForm(actionName: "DeclineRequest", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = groupmember.GroupMemberId }))
             {
 
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button type="submit" class="btn btn-primary">Decline</button>
+                <button type="submit" class="btn btn-orange">Decline</button>
             }
         </div>
     }

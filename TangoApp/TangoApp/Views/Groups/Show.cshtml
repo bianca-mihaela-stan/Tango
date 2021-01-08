@@ -21,7 +21,7 @@
     using (Html.BeginForm(actionName: "DeclineInvitation", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = ViewBag.Invitation.GroupMemberId }))
     {
         @Html.HttpMethodOverride(HttpVerbs.Delete)
-        <button class="d-inline btn btn-danger" type="submit">Decline invitation</button>
+        <button class="d-inline btn btn-orange" type="submit">Decline invitation</button>
 
     }
 }
@@ -40,16 +40,18 @@
 }
 @if (ViewBag.InGroup || ViewBag.esteAdmin)
 {
-    @Html.ActionLink("Editeaza grupul", "Edit", new { id = Model.GroupId }, new { @class = "d-inline btn btn-info float-left position-relative" })
+    @Html.ActionLink("Editeaza grupul", "Edit", new { id = Model.GroupId }, new { @class = "d-inline btn btn-orange float-left position-relative" })
     using (Html.BeginForm(actionName: "Delete", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = Model.GroupId }))
     {
 
         @Html.HttpMethodOverride(HttpVerbs.Delete)
-        <button class="d-inline btn btn-danger float-right position-relative" type="submit">Delete group</button>
+        <button class="d-inline btn btn-orange float-right position-relative pull-right" type="submit">Delete group</button>
 
     }
     <!--Scuzeee - fata cu lacrimi- - fata cu lacrimi --->
     <!--Afisam toata mesajele din grup-->
+    <br />
+    <hr />
     foreach (TangoApp.Models.Message mess in Model.Messages)
     {
         <div class="container">
@@ -66,13 +68,8 @@
                     {
 
                         <div style="display: inline-block; float : left; margin-right: 15px">
-                            @using (Html.BeginForm(actionName: "Edit", controllerName: "Groups", method: FormMethod.Post, routeValues: new { id = mess.MessageId, idgroup = Model.GroupId }))
-                            {
-                                @Html.HttpMethodOverride(HttpVerbs.Put)
-                                <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
-                            }
+                            <a class="glyphicon glyphicon-edit" href="/Messages/Edit/@mess.MessageId"></a>
                         </div>
-
 
                         <div style="display: inline-block; float : left">
                             @using (Html.BeginForm(actionName: "Delete", controllerName: "Messages", method: FormMethod.Post, routeValues: new { id = mess.MessageId }))
@@ -81,6 +78,9 @@
                                 <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
                             }
                         </div>
+
+
+
                     }
                 </div>
             </div>
@@ -108,7 +108,7 @@
             <textarea class="form-control" name="Content">@if (ViewBag.Mesaj != null) {@ViewBag.Mesaj.Content}</textarea>
             @Html.ValidationMessage("Content", "", new { @class = "text-danger" })
             <br />
-            <button class="btn btn-success " type="submit">Adauga mesaj</button>
+            <button class="btn btn-orange " type="submit">Adauga mesaj</button>
         </div>
     </form>
 
@@ -120,7 +120,7 @@
         {
 
             @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <button type="submit" class="btn btn-primary">Leave the group</button>
+            <button type="submit" class="btn btn-orange">Leave the group</button>
         }
     }
 }
