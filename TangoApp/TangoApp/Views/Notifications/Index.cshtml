@@ -120,7 +120,7 @@
             <p class="text-dark">
                 We removed your message from the following group.
                 <br />
-                <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">See the group</a>
+                <a class="btn btn-orange" href="/Groups/Show/@notification.GroupId">See the group</a>
             </p>
         }
         else if (notification.Type == TangoApp.Models.NotificationFlag.EditedMessage)
@@ -128,7 +128,7 @@
             <p class="text-dark">
                 We edited one of your messages.
                 <br />
-                <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">See the group</a>
+                <a class="btn btn-orange" href="/Groups/Show/@notification.GroupId">See the group</a>
             </p>
         }
         else if (notification.Type == TangoApp.Models.NotificationFlag.EditedComment)
@@ -136,7 +136,7 @@
             <p class="text-dark">
                 We edited one of your comments.
                 <br />
-                <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">See the post</a>
+                <a class="btn btn-orange" href="/Posts/Show/@notification.PostId">See the post</a>
             </p>
         }
         else if (notification.Type == TangoApp.Models.NotificationFlag.EditedPost)
@@ -145,7 +145,7 @@
             <p class="text-dark">
                 We edited one of your posts.
                 <br />
-                <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">See the post</a>
+                <a class="btn btn-orange" href="/Posts/Show/@notification.PostId">See the post</a>
             </p>
         }
     </div>

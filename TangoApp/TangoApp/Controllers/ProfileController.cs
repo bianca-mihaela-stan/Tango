@@ -16,6 +16,7 @@ namespace TangoApp.Controllers
         public ActionResult Index()
         {
             IOrderedQueryable<Profile> profiles = db.Profiles.Include("User").Include("Country").Include("City");
+            ViewBag.esteAdmin = User.IsInRole("Admin");
             var search = "";
             var number_of_profiles_perpage = 10;
             if (Request.Params.Get("search") != null)
@@ -86,6 +87,7 @@ namespace TangoApp.Controllers
         [Authorize(Roles ="Editor, User, Admin")]
         public ActionResult Show(int id)
         {
+            ViewBag.esteAdmin = User.IsInRole("Admin");
             Profile profile = db.Profiles.Find(id);
             if(profile == null)
             {
