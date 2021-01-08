@@ -135,7 +135,7 @@ namespace TangoApp.Controllers
                     }
                     db.SaveChanges();
                     TempData["message"] = "Postarea a fost adaugata!";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Newsfeed");
                 }
                 else
                 {
