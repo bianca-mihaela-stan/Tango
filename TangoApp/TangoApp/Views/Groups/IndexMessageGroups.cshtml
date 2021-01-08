@@ -6,13 +6,15 @@
 <h2>Your groups</h2>
 <br />
 <a method="get" href="Index/" class="btn-orange">Find groups</a>
+<br />
+<br>
 
 @foreach (var group in ViewBag.Groups)
 {
 
     <div class="list-group-item">
         <h4>@group.GroupName</h4>
-        @Html.ActionLink("Sens message", "Show", new { id = group.GroupId })
+        @Html.ActionLink("Send message", "Show", new { id = group.GroupId }, new { @class = "btn btn-orange"})
         @*<form method="post" action="/Groups/ShowPrivateConv">
                 <input type="hidden" name="UserId" value="@groupmember.UserId" />
                 <input type="hidden" name="GroupId" value="@groupmember.GroupId" />

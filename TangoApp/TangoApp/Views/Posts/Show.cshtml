@@ -12,7 +12,120 @@
     <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
 }
 
-@Html.Partial("ShowPost", Model)
+<div class="container bootdey">
+    <div class="col-md-12 bootstrap snippets">
+        <div class="panel">
+            <div class="panel-body">
+                @*<div class="post-container">*@
+                <a href="/Posts/Show/@Model.PostId" style=" color: inherit; text-decoration: inherit ">
+                    @*<div class="card" style="height: auto; width: 70vw">*@
+                    <div class="card-body">
+                        <a href="/Profile/Show/@Model.User.ProfileId" class="h3 text-semibold media-heading box-inline">@Model.User.UserName</a>
+                        <p class="text-muted text-sm pull-right"><i class="fa fa-mobile fa-lg"></i>@Model.Date</p>
+                        <br />
+                        <br />
+                        <a href="/Posts/Show/@Model.PostId" class="h4">@Model.Text</a>
+
+                        @*@Html.ActionLink("Editeaza postarea", "Edit", new { id = Model.PostId }, new { @class = "d-inline btn btn-info float-left position-relative" })*@
+                        <br />
+                        <br />
+                        @if (Model.Media != null)
+                        {
+                            foreach (var image in Model.Media.ToList())
+                            {
+
+                                <img src="~/Files/@image.FileName" alt="image" height="400" />
+                                <br />
+                                using (Html.BeginForm(actionName: "Delete", controllerName: "Media", method: FormMethod.Post, routeValues: new { id = image.FileId }))
+                                {
+
+                                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                    <button class="d-inline btn btn-orange float-right position-relative" type="submit">Sterge poza</button>
+
+                                }
+                            }
+                        }
+                        <a href="/Posts/Edit/@Model.PostId" class="btn-orange pull-right">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                            </svg>
+                        </a>
+                        <a href="/Posts/Delete/@Model.PostId" class="btn-orange pull-right">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                            </svg>
+                        </a>
+                    </div>
+                    @*</div>*@
+                </a>
+                @*</div>*@
+            </div>
+        </div>
+    </div>
+</div>
+@foreach (TangoApp.Models.Comment com in Model.Comments.ToList().OrderBy(i => i.Date))
+{
+    <div class="container bootdey">
+        <div class="col-md-12 bootstrap snippets">
+            <div class="panel">
+                <div class="panel-body">
+                    <!-- Newsfeed Content -->
+                    <!--===================================================-->
+                    <div class="media-block">
+                        <div class="media-body">
+                            <div class="mar-btm">
+                                <a href="Profiles/Show/@com.User.ProfileId" class="btn text-semibold media-heading box-inline">@com.User.UserName</a>
+                                <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i>@com.Date</p>
+                            </div>
+                            <p>@com.Text</p>
+
+                            @if (Model.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin || ViewBag.utilizatorCurent == com.UserId)
+                            {
+                                if (ViewBag.utilizatorCurent == com.UserId || ViewBag.esteAdmin)
+                                {<a href="/Comments/Edit/@com.CommentId" class="btn-orange pull-right">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                    </svg>
+                                </a>
+                                }
+                                <div style="display: inline-block; float : right">
+                                    @using (Html.BeginForm(actionName: "Delete", controllerName: "Comments", method: FormMethod.Post, routeValues: new { id = com.CommentId }))
+                                    {
+                                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                    <button class="btn-orange pull-right" style="border: none;" type="submit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                        </svg>
+                                    </button>
+                                    }
+                                </div>
+
+                            }
+
+                            <!-- Comments -->
+
+                        </div>
+                    </div>
+                    <!--===================================================-->
+                    <!-- End Newsfeed Content -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+    <form method="post" action="/Posts/NewComment/@Model.PostId">
+        <input type="hidden" name="PostId" value="@Model.PostId" />
+        <input type="text" class="form-control" name="Text" placeholder="Post a comment">
+        @Html.ValidationMessage("Text", null, new { @class = "text-danger" })
+        <button class="btn btn-sm btn-orange" type="submit"><i class="fa fa-pencil fa-fw"></i>Add</button>
+    </form>
+
+@*@Html.Partial("ShowPost", Model)
 @if (Model.Media != null)
 {
     foreach (var image in Model.Media.ToList())
@@ -22,14 +135,7 @@
         <br />
         if (ViewBag.afisareButoane == true && Model.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
         {
-            using (Html.BeginForm(actionName: "Delete", controllerName: "Media", method: FormMethod.Post, routeValues: new { id = image.FileId }))
-            {
-
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <button class="d-inline btn btn-danger float-right position-relative" type="submit">Sterge poza</button>
-
-            }
-            <br/>
+            <br />
         }
 
     }
@@ -92,4 +198,4 @@
     </div>
 </form>
 <hr />
-<a class="btn btn-info" href="/Posts/Index">Inapoi la pagina principala</a>
+<a class="btn btn-info" href="/Posts/Index">Inapoi la pagina principala</a>*@

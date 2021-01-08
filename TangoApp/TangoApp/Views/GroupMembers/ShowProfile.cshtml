@@ -1,20 +1,35 @@
 ﻿
 @if (Model.User != null && Model.User.UserName != null)
 {
-    <h2>@Model.User.UserName </h2>
-    if (Model.ProfileVisibility != false)
-    {
-        @Html.ActionLink("Vizualizeaza profilul", "Show", new { id = Model.UserId }, new { @class = "d-inline btn btn-info float-left position-relative" })
-    }
-    if (Model.Country != null)
-    {
-        <p>@Model.Country.CountryName</p>
-    }
-    if (Model.City != null)
-    {
-        <p>@Model.City.CityName</p>
-    }
-    <form method="post" action="/GroupMembers/Invite/@Model.UserId/@ViewBag.GroupMembersId">
-            <button class="btn btn-success " type="submit">Invita in grup</button>
-    </form>
+    <div class="card panel">
+        <div class="card-body">
+            <div class="d-flex flex-column align-items-center text-center">
+                <div class="mt-3">
+                    <h4>@Model.User.UserName</h4>
+                    <p class="text-secondary mb-1">@Model.Description</p>
+                    @if (Model.City != null && Model.Country != null)
+                    {
+                        <p class="text-muted font-size-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                            </svg>
+                            @Model.City.CityName, @Model.Country.CountryName
+
+                        </p>
+                    }
+                    @if (Model.ProfileVisibility != false)
+                    {
+                        @Html.ActionLink("View profile", "Show", "Profile", new { id = Model.ProfileId }, new { @class = "d-inline btn btn-orange float-left position-relative" })
+                    }
+                    <br />
+                    <br/>
+                    <form method="post" action="/GroupMembers/Invite/@Model.UserId/@ViewBag.GroupMembersId">
+                        <button class="btn btn-orange " type="submit">Request to join group</button>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
 }

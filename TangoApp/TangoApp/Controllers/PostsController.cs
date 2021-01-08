@@ -152,7 +152,8 @@ namespace TangoApp.Controllers
         [HttpPost]
         public ActionResult NewComment(int id, Comment com)
         {
-
+            ViewBag.esteAdmin = User.IsInRole("Admin");
+            ViewBag.utilizatorCurent = User.Identity.GetUserId();
 
             try
             {

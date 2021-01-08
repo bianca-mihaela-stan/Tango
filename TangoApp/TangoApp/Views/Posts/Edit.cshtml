@@ -1,5 +1,7 @@
 ﻿@model TangoApp.Models.Post
 @{
+    /**/
+
     ViewBag.Title = "Edit";
 }
 
@@ -17,18 +19,27 @@
     @Html.ValidationMessage("Text", "", new { @class = "text-danger" })
     <br />
     <div>
-        @Html.Editor("Text", new { @class = "form-control form-field" })
+        @Html.TextArea("Text", new { @class = "form-control form-field" })
     </div>
     <br />
     if (Model.Media != null && Model.Media.ToList().Any())
     {
-        <img src="~/Files/@Model.Media.ToList().First().FileName" alt="image" height="400" />
-        <label>Schimba poza</label>
+        foreach (var image in Model.Media.ToList())
+        {
+
+            <img src="~/Files/@Model.Media.ToList().First().FileName" alt="image" height="400" />
+            <br />
+            <label>Change picture</label>
+            <input type="file" name="uploadedMedia" />
+
+        }
     }
     else
-    { <label>Adauga o poza</label>}
-    <input type="file" name="uploadedMedia" />
-    <br />
-    <input class="btn btn-succes" type="submit" value="Edit" />
+    { <label> Add an image</label>
+        <input type="file" name="uploadedMedia" />
+
+        <br />
+    }
+    <input class="btn btn-orange" type="submit" value="Edit" />
     <br />
 }

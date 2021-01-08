@@ -18,7 +18,7 @@
     <br />
     @Html.Editor("Content")
     <br />
-    @Html.ValidationMessageFor(m => m.Content)
+    @Html.ValidationMessage("Content", "", new { @class = "text-danger" })
     <br />
-    <button type="submit" class="btn btn-success">Modifica mesajul</button>
+    <button type="submit" class="btn btn-orange">Modifica mesajul</button>
 }

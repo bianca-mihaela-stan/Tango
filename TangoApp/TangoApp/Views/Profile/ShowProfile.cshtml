@@ -17,9 +17,10 @@
 
                         </p>
                     }
+                    <br />
                     @if (Model.ProfileVisibility != false)
                     {
-                    @Html.ActionLink("Vizualizeaza profilul", "Show", new { id = Model.ProfileId }, new { @class = "d-inline btn btn-orange float-left position-relative" })
+                        @Html.ActionLink("View profile", "Show", new { id = Model.ProfileId }, new { @class = "d-inline btn btn-orange float-left position-relative" })
                     }
 
 

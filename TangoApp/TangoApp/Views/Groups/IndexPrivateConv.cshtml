@@ -10,7 +10,8 @@
 
     <div class="tangoo-card">
         <div class="tangoo-card-body">
-            <h5 class="tangoo-card-title">@groupmember.User.Email</h5>
+            <a href="/Profile/Show/@groupmember.User.ProfileId" class="btn-link">@groupmember.User.UserName</a>
+            <br />
             <br />
             @Html.ActionLink("Trimite-i mesaj", "ShowPrivateConv", new { id = groupmember.GroupMemberId }, new { @class = "btn-orange" })
         </div>
