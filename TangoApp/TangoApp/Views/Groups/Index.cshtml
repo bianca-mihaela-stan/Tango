@@ -4,17 +4,18 @@
     ViewBag.Title = "Grupuri";
 }
 
-<h2>Grupuri</h2>
+<h2>Groups</h2>
 @if (ViewBag.Message != null)
 {
     <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
 }
 @foreach (var grup in ViewBag.Groups)
 {
-    <h3>@grup.GroupName</h3>
+    <a href="/Groups/Show/@grup.GroupId"><h3>@grup.GroupName</h3></a>
     <p>@grup.Description</p>
     <small>@grup.CreationTime</small>
-    <a href="/Groups/Show/@grup.GroupId" class="btn btn-success">Vizualizare grup</a>
 
 }
-<a href="/Groups/New/" class="btn btn-success">Adauga grup</a>
+<br />
+<hr />
+<a href="/Groups/New/" class="btn btn-orange">Create a group</a>

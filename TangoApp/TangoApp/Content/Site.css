@@ -1,4 +1,6 @@
-﻿body {
+﻿@import url("https://fonts.googleapis.com/css?family=Roboto:500");
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -21,4 +23,97 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+body {
+    margin-top: 20px;
+    background-color: #F5F5F5 !important;
+}
+
+.card {
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1rem;
+}
+
+.gutters-sm {
+    margin-right: -8px;
+    margin-left: -8px;
+}
+
+    .gutters-sm > .col, .gutters-sm > [class*=col-] {
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+
+.mb-3, .my-3 {
+    margin-bottom: 1rem !important;
+}
+
+.bg-gray-300 {
+    background-color: #F5F5F5;
+}
+
+.h-100 {
+    height: 100% !important;
+}
+
+.shadow-none {
+    box-shadow: none !important;
+}
+.btn-orange {
+    position: relative;
+    padding: 10px 25px;
+    font-family: Roboto, sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1;
+    color: white;
+    background: #FC9F5B;
+    border: none;
+    outline: none;
+    overflow: hidden;
+    cursor: pointer;
+    filter: drop-shadow(0 2px 8px rgba(#275efe, 0.32));
+    transition: 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+    border-radius: 24px;
+    &::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background: var(--btn-color);
+    border-radius: 24px;
+    transition: 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+}
+
+.btn-transparent
+{
+    background: none;
+    color: white;
+    border: none;
+
+}
+.form-navbar
+{
+    padding:15px 20px;
 }

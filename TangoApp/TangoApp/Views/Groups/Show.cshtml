@@ -12,16 +12,16 @@
 }
 @if (ViewBag.Invitation != null)
 {
-    <p>Ai primit deja o invitatie in acest grup.</p>
+    <p>You already have an invitation from this group.</p>
     using (Html.BeginForm(actionName: "AcceptInvitation", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = ViewBag.Invitation.GroupMemberId }))
     {
-        <button class="d-inline btn btn-info" type="submit">Accepta invitatia</button>
+        <button class="d-inline btn btn-orange" type="submit">Accept invitation</button>
 
     }
     using (Html.BeginForm(actionName: "DeclineInvitation", controllerName: "GroupMembers", method: FormMethod.Post, routeValues: new { id = ViewBag.Invitation.GroupMemberId }))
     {
         @Html.HttpMethodOverride(HttpVerbs.Delete)
-        <button class="d-inline btn btn-danger" type="submit">Refuza invitatia</button>
+        <button class="d-inline btn btn-danger" type="submit">Decline invitation</button>
 
     }
 }
@@ -29,12 +29,12 @@
 <h3>@Model.GroupName</h3>
 <p>@Model.Description</p>
 <br />
-<a href="/GroupMembers/Show/@Model.GroupId" class="btn btn-info">Membrii grupului</a>
+<a href="/GroupMembers/Show/@Model.GroupId" class="btn btn-orange">Group members</a>
 
 @if (ViewBag.InGroup == false && ViewBag.esteAdmin == false)
 {
     <form method="post" action="/GroupMembers/JoinRequest/@Model.GroupId">
-        <button type="submit" class="btn btn-success">Inscrie-te!</button>
+        <button type="submit" class="btn btn-orange">Join</button>
     </form>
 
 }
@@ -45,7 +45,7 @@
     {
 
         @Html.HttpMethodOverride(HttpVerbs.Delete)
-        <button class="d-inline btn btn-danger float-right position-relative" type="submit">Sterge grupul</button>
+        <button class="d-inline btn btn-danger float-right position-relative" type="submit">Delete group</button>
 
     }
     <!--Scuzeee - fata cu lacrimi- - fata cu lacrimi --->

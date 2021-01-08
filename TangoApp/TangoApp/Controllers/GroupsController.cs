@@ -38,6 +38,19 @@ namespace TangoApp.Controllers
 
         }
 
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult IndexMessageGroups()
+        {
+            var currentUserId = User.Identity.GetUserId();
+            //vreau sa iau id-urile tuturor conversatiilor private
+            var conversations = db.GroupMembers.Where(u => u.UserId == currentUserId && u.Group.Status == GroupStatusFlag.MessageGroup).ToList().Select(u => u.Group).Distinct();
+            //vreau acum sa iau toate intrarile groupmember care contin prietenii utilizatorului curent
+            ViewBag.Groups = conversations;
+            ViewBag.UtilizatorCurent = currentUserId;
+            return View();
+
+        }
+
 
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult ShowPrivateConv(int id)

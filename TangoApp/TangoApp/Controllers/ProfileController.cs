@@ -78,6 +78,8 @@ namespace TangoApp.Controllers
             {
                 ViewBag.Message = TempData["message"];
             }
+            var postari = db.Posts.Where(a => a.UserId == currentUserId);
+            ViewBag.Posts = postari;
             return View("Show",profile);
         }
 
@@ -127,7 +129,8 @@ namespace TangoApp.Controllers
             {
                 ViewBag.Message = TempData["message"];
             }
-
+            var postari = db.Posts.Where(a => a.UserId == idUser);
+            ViewBag.Posts = postari;
             return View(profile);
         }
 

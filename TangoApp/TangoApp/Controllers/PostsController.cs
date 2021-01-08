@@ -63,6 +63,8 @@ namespace TangoApp.Controllers
             ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)number_of_posts_perpage);
             ViewBag.Posts = paginatedPosts;
             ViewBag.SearchString = search;
+            ViewBag.esteAdmin = User.IsInRole("Admin");
+            ViewBag.utilizatorCurent = User.Identity.GetUserId();
 
 
             return View();

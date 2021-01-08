@@ -4,132 +4,198 @@
 
     ViewBag.Title = "Show";
 }
-
-<h2>@Model.User.Email</h2>
-<br />
 @if (ViewBag.Message != null)
 {
     <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
 }
-@if (Model.UserId != ViewBag.currentUser)
-{
-    if (!ViewBag.NotFriends)
-    {
-        <form method="post" action="/Groups/ShowPrivateConv">
-            <input type="hidden" name="UserId" value="@Model.UserId" />
-            <button type="submit" class="btn btn-default">Trimite-i mesaj</button>
-        </form>
-    }
-    if (ViewBag.Blocked)
-    {
-        <div class="list-group-item">
-            <form method="post" action="/Users/Unblock">
-                @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <input type="hidden" name="UserId" value="@Model.UserId" />
-                <button type="submit">Unblock</button>
-            </form>
-        </div>
-    }
-    else
-    {
 
-        <p class="list-group-item-text d-block">
-            <form method="post" action="/Users/Block">
-                <input type="hidden" name="UserId" value="@Model.UserId" />
-                <button type="submit">Block</button>
-            </form>
-        </p>
-    }
-    if (ViewBag.NotFriends && !ViewBag.Blocked)
-    {
-        if (ViewBag.Pending)
-        {
-            <button class="btn btn-info">Cerere trimisa</button>
-        }
-        else if (ViewBag.ExistsRequest)
-        {
-            <div class="card w-75">
-                <div class="card-body">
-                    <a href="/Friendships/Accept/@ViewBag.Request.FriendshipId" class="btn btn-primary">Accept</a>
-                    @using (Html.BeginForm(actionName: "DeclineFromProfile", controllerName: "Friendships", method: FormMethod.Post, routeValues: new { id = ViewBag.Request.FriendshipId }))
+<div class="card panel">
+    <div class="card-body">
+        <div class="d-flex flex-column align-items-center text-center">
+            @if (Model.Gender == false)
+            {
+                <img src="../Files/male_avatar.png" alt="Admin" class="rounded-circle" width="150">
+            }
+            else if (Model.Gender == true)
+            {
+                <img src="../Files/female_avatar.png" alt="Admin" class="rounded-circle" width="150">
+            }
+            else if (Model.Gender == null)
+            {
+                <img src="../Files/neutral_avatar.png" alt="Neutral" class="rounded-circle" width="150">
+            }
+                <div class="mt-3">
+                    <h4>@Model.User.UserName</h4>
+                    <p class="text-secondary mb-1">@Model.Description</p>
+                    @if (Model.City != null && Model.Country != null)
                     {
-                        @Html.HttpMethodOverride(HttpVerbs.Put)
-                        <button type="submit" class="btn btn-primary">Decline</button>
+                        <p class="text-muted font-size-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                            </svg>
+                            @Model.City.CityName, @Model.Country.CountryName
+
+                        </p>
                     }
+                    @if (Model.Birthday != null)
+                    {
+                        <p class="text-muted font-size-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week-fill" viewBox="0 0 16 16">
+                                <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zM9.5 7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm3 0h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zM2 10.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z" />
+                            </svg>
+                            @Html.DisplayFor(Model => Model.Birthday, "MM/dd/yyyy")
+
+                        </p>
+                    }
+                        @if (Model.UserId != ViewBag.currentUser)
+                        {
+                            if (!ViewBag.NotFriends)
+                            {
+                                <form method="post" action="/Groups/ShowPrivateConv">
+                                    <input type="hidden" name="UserId" value="@Model.UserId" />
+                                    <button type="submit" class="btn btn-orange">Send message</button>
+                                </form>
+                            }
+                            if (ViewBag.Blocked)
+                            {
+                                <div class="list-group-item">
+                                    <form method="post" action="/Users/Unblock">
+                                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                        <input type="hidden" name="UserId" value="@Model.UserId" />
+                                        <button type="submit" class="btn-orange">Unblock</button>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+
+                            <p class="list-group-item-text d-block">
+                                <form method="post" action="/Users/Block">
+                                    <input type="hidden" name="UserId" value="@Model.UserId" />
+                                    <button type="submit" class="btn-orange">Block</button>
+                                </form>
+                            </p>
+                        }
+                        if (ViewBag.NotFriends && !ViewBag.Blocked)
+                        {
+                            if (ViewBag.Pending)
+                            {
+                                <button class="btn btn-orange">Request sent</button>
+                            }
+                            else if (ViewBag.ExistsRequest)
+                            {
+                                <div class="card w-75">
+                                    <div class="card-body">
+                                        <a href="/Friendships/Accept/@ViewBag.Request.FriendshipId" class="btn btn-primary">Accept</a>
+                                        @using (Html.BeginForm(actionName: "DeclineFromProfile", controllerName: "Friendships", method: FormMethod.Post, routeValues: new { id = ViewBag.Request.FriendshipId }))
+                                        {
+                                            @Html.HttpMethodOverride(HttpVerbs.Put)
+                                            <button type="submit" class="btn btn-orange">Decline</button>
+                                        }
+                                    </div>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <p class="list-group-item-text d-block">
+                                    <form method="post" action="/Users/AddFriend">
+                                        <input type="hidden" name="UserId" value="@Model.UserId" />
+                                        <button type="submit" class="btn-orange">Add Friend</button>
+                                    </form>
+                                </p>
+                            }
+
+                        }
+                        else if (!ViewBag.Blocked)
+                        {
+                            using (Html.BeginForm(actionName: "Unfriend", controllerName: "Users", method: FormMethod.Post))
+                            {
+                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                <input type="hidden" name="UserId" value="@Model.UserId" />
+                                <button type="submit" class="btn-orange">Unfriend</button>
+                            }
+                        }
+                    }
+                        @if (Model.UserId == ViewBag.currentUser)
+                        {
+                            <a href="/Profile/Edit/@Model.ProfileId" class="btn btn-orange">Edit profile</a>
+                        }
+
+                    </div>
+        </div>
+    </div>
+</div>
+
+@foreach (TangoApp.Models.Post post in ViewBag.Posts)
+{
+    <div class="container bootdey">
+        <div class="col-md-12 bootstrap snippets">
+            <div class="panel">
+                <div class="panel-body">
+
+                    <a href="/Posts/Show/@post.PostId" style=" color: inherit; text-decoration: inherit ">
+
+                        <div class="card-body">
+                            <a href="Profiles/Show/@post.User.ProfileId" class="h3 text-semibold media-heading box-inline">@post.User.UserName</a>
+                            <p class="text-muted text-sm pull-right"><i class="fa fa-mobile fa-lg"></i>@post.Date</p>
+                            <br />
+                            <br />
+                            <a href="/Posts/Show/@post.PostId" class="h4">@post.Text</a>
+                            <br />
+                            <br />
+                            @if (post.Media != null)
+                            {
+                                foreach (var image in post.Media.ToList())
+                                {
+
+                                    <img src="~/Files/@image.FileName" alt="image" height="400" />
+                                    <br />
+                                }
+                            }
+                        </div>
+
+                    </a>
+
                 </div>
             </div>
-
-        }
-        else
-        {
-            <p class="list-group-item-text d-block">
-                <form method="post" action="/Users/AddFriend">
-                    <input type="hidden" name="UserId" value="@Model.UserId" />
-                    <button type="submit">Add Friend</button>
-                </form>
-            </p>
-        }
-
-    }
-    else if (!ViewBag.Blocked)
+        </div>
+    </div>
+    foreach (TangoApp.Models.Comment com in post.Comments.ToList().OrderBy(i => i.Date).Take(3))
     {
-        using (Html.BeginForm(actionName: "Unfriend", controllerName: "Users", method: FormMethod.Post))
-        {
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <input type="hidden" name="UserId" value="@Model.UserId" />
-            <button type="submit">Unfriend</button>
-        }
+        <div class="container bootdey">
+            <div class="col-md-12 bootstrap snippets">
+                <div class="panel">
+                    <div class="panel-body">
+                        <!-- Newsfeed Content -->
+                        <!--===================================================-->
+                        <div class="media-block">
+                            <div class="media-body">
+                                <div class="mar-btm">
+                                    <a href="Profiles/Show/@com.User.ProfileId" class="btn-link text-semibold media-heading box-inline">@com.User.UserName</a>
+                                    <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i>@com.Date</p>
+                                </div>
+                                <p>@com.Text</p>
+
+                                <!-- Comments -->
+
+                            </div>
+                        </div>
+                        <!--===================================================-->
+                        <!-- End Newsfeed Content -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
     }
-}
-@if (Model.UserId == ViewBag.currentUser)
-{
-    <a href="/Profile/Edit/@Model.ProfileId" class="btn btn-success">Editeaza profilul</a>
-}
-<br /><br />
-@if (Model.ProfileVisibility == true)
-{
-    <p>Profile visibility: public</p>
-}
-else
-{
-    <p>Profile visibility: private</p>
+
+    <form method="post" action="/Posts/NewComment/@post.PostId">
+        <input type="hidden" name="PostId" value="@post.PostId" />
+        <input type="text" class="form-control" name="Text" placeholder="Post a comment">
+        <button class="btn btn-sm btn-orange" type="submit"><i class="fa fa-pencil fa-fw"></i>Add</button>
+    </form>
+    <hr />
+
 }
 
-<p>
-    Description: @if (@Model.Description != null)
-    {
-        @Model.Description;
-    }
-</p>
-
-<p>
-    @if (@Model.Gender != null)
-    {
-        if (Model.ProfileVisibility == true)
-        {
-        <p>Gender: female</p>
-    }
-    else
-    {
-        <p>Gender: male</p>
-    }
-}
-    </p>
-
-    <p>
-        Country: @if (@Model.Country != null)
-        {
-            @Model.Country.CountryName
-        }
-    </p>
-
-    <p>
-        City: @if (@Model.City != null)
-        {
-            @Model.City.CityName
-        }
-    </p>
-
-    <p>
-        Birthday: @Html.DisplayFor(Model => Model.Birthday, "MM/dd/yyyy")
-    </p>

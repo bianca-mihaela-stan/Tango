@@ -1,5 +1,7 @@
-﻿
+﻿<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 @{
+    /**/
+
     /**/
 
     /**/
@@ -17,17 +19,84 @@
 }
 <br />
 <br />
+<div class="profile-timeline">
+    <ul class="list-unstyled">
+        @foreach (TangoApp.Models.Post post in ViewBag.Posts)
+        {
+        <div class="container bootdey">
+            <div class="col-md-12 bootstrap snippets">
+                <div class="panel">
+                    <div class="panel-body">
+                        @{
+                            <a href="Profiles/Show/@post.User.ProfileId" class="h3 text-semibold media-heading box-inline">@post.User.UserName</a>
+                            <p class="text-muted text-sm pull-right"><i class="fa fa-mobile fa-lg"></i>@post.Date</p>
+                            <br />
+                            <br />
+                            <a href="/Posts/Show/@post.PostId" class="h4">@post.Text</a>
+                            <br />
+                            <br />
+                            if (post.Media != null)
+                            {
+                                foreach (var image in post.Media.ToList())
+                                {
 
-@foreach (TangoApp.Models.Post post in ViewBag.Posts)
-{
-    @Html.Partial("ShowPost", post);
+                                    <img src="~/Files/@image.FileName" alt="image" height="400" />
+                                    <br />
+                                    if (ViewBag.afisareButoane == true && post.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
+                                    {
+                                        using (Html.BeginForm(actionName: "Delete", controllerName: "Media", method: FormMethod.Post, routeValues: new { id = image.FileId }))
+                                        {
 
-    <a href="/Posts/Show/@post.PostId" class="btn btn-success">Vizualizare postare</a>
-    <br />
-    <hr />
-    <br />
-}
+                                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                            <button class="d-inline btn btn-danger float-right position-relative" type="submit">Sterge poza</button>
 
+                                        }
+                                        <br />
+                                    }
 
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+         </div>
+                  
+                    foreach (TangoApp.Models.Comment com in post.Comments)
+                    {
+                    <div class="container bootdey">
+                        <div class="col-md-12 bootstrap snippets">
+                            <div class="panel">
+                                <div class="panel-body">
+                                    <!-- Newsfeed Content -->
+                                    <!--===================================================-->
+                                    <div class="media-block">
+                                        <div class="media-body">
+                                            <div class="mar-btm">
+                                                <a href="Profiles/Show/@com.User.ProfileId" class="btn-link text-semibold media-heading box-inline">@com.User.UserName</a>
+                                                <p class="text-muted text-sm"><i class="fa fa-mobile fa-lg"></i>@com.Date</p>
+                                            </div>
+                                            <p>@com.Text</p>
 
-<a href="/Posts/New" class="btn btn-success">Adauga postare</a>
+                                            <!-- Comments -->
+
+                                        </div>
+                                    </div>
+                                    <!--===================================================-->
+                                    <!-- End Newsfeed Content -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    <form method="post" action="/Posts/NewComment/@post.PostId">
+                        <input type="hidden" name="PostId" value="@post.PostId" />
+                        <input type="text" class="form-control" name="Text" placeholder="Post a comment">
+                        <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-pencil fa-fw"></i>Add</button>
+                    </form>
+                    <hr />
+                    }
+</ul>
+</div>
+
