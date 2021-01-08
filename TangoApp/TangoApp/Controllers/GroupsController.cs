@@ -308,7 +308,6 @@ namespace TangoApp.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Console.Write("option 1");
                     mess.Date = DateTime.Now;
                     mess.UserId = User.Identity.GetUserId();
                     mess.GroupId = GroupId;
@@ -325,9 +324,8 @@ namespace TangoApp.Controllers
                 }
                 else
                 {
-                    Console.Write("option 2");
                     Group grup = db.Groups.Find(mess.GroupId);
-                    ViewBag.Message = mess; var friendId = db.GroupMembers.First(a => a.GroupId == mess.GroupId && a.UserId != mess.UserId).UserId;
+                    var friendId = db.GroupMembers.First(a => a.GroupId == mess.GroupId && a.UserId != mess.UserId).UserId;
                     var conversationId = db.GroupMembers.First(a => a.GroupId == GroupId && a.UserId == User.Identity.GetUserId());
                     if (db.Groups.Find(GroupId).Status == GroupStatusFlag.PrivateConversation)
                         return RedirectToAction("ShowPrivateConv", "Groups", new { id = conversationId });

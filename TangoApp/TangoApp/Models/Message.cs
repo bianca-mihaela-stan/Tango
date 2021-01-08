@@ -14,6 +14,7 @@ namespace TangoApp.Models
         public DateTime Date { get; set; }
 
         [Required(ErrorMessage = "Continutul mesajului nu poate sa fie gol.")]
+        [StringLength(10000, ErrorMessage = "Comentariul nu poate sa fie mai lung de 10000 de caractere")]
         [DataType(DataType.MultilineText)]
         public string Content { get; set; }
         public DateTime? LastEditDate { get; set; }
