@@ -10,15 +10,16 @@
 {
     <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
 }
-@using (Html.BeginForm("New", "Posts", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.Label("Text", "Continutul textului")
-    <br />
-    @Html.TextArea("Text", null, new { @class = "form-control" })
-    @Html.ValidationMessage("Text", null, new { @class = "text-danger" })
-    <br />
-    <label>Alegeti un fisier</label>
-    <input type="file" name="uploadedMedia" />
-    <br />
-    <input type="submit" value="Upload" />
-}
+        @using (Html.BeginForm("New", "Posts", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.Label("Text", "Continutul textului")
+            <br />
+            @Html.TextArea("Text", null, new { @class = "form-control form-field" })
+            @Html.ValidationMessage("Text", null, new { @class = "text-danger" })
+            <br />
+            <label>Alegeti un fisier</label>
+            <input type="file" name="uploadedMedia" />
+            <br />
+            <input class="btn btn-default" type="submit" value="Upload" />
+        }
+    

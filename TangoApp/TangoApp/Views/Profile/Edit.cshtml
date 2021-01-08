@@ -6,53 +6,65 @@
 <h2>Edit profile</h2>
 
 <p>@ViewBag.Err</p>
+<div class="form-container ">
+    @using (Html.BeginForm(actionName: "Edit", controllerName: "Profile"))
+    {
+    <div class="container" >
+        <div class="col-sm-4">
+            @Html.HttpMethodOverride(HttpVerbs.Put)
 
-@using (Html.BeginForm(actionName: "Edit", controllerName: "Profile"))
-{
-    @Html.HttpMethodOverride(HttpVerbs.Put)
+            @Html.HiddenFor(m => m.ProfileId)
 
-    @Html.HiddenFor(m => m.ProfileId)
+            <p>Profile vizibility:</p>
+            <div class="line" style="margin-bottom:10px;"></div>
+            <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "true") public </p>
+            <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "false") private </p>
 
-    <p>Profile vizibility:</p>
-    <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "true") public </p>
-    <p>@Html.RadioButtonFor(Model => Model.ProfileVisibility, "false") private </p>
+            <br />
+            @Html.HiddenFor(m => m.UserId)
+            @Html.Label("Text", "Description:")
+            <br />
+            @Html.TextBoxFor(m => m.Description, new { @class = "form-field" })
+            <br />
+            @Html.ValidationMessageFor(m => m.Description)
+            <br />
 
-    @Html.HiddenFor(m => m.UserId)
-    @Html.Label("Text", "Description:")
-    <br />
-    @Html.TextBoxFor(m => m.Description)
-    <br />
-    @Html.ValidationMessageFor(m => m.Description)
-    <br />
+            <p>Gender:</p>
+            <div class="line" style="margin-bottom:10px;"></div>
+            <p>@Html.RadioButtonFor(Model => Model.Gender, "true") female </p>
+            <p>@Html.RadioButtonFor(Model => Model.Gender, "false") male </p>
+        </div>
+        <div class="col-sm-4" >
+            <label>Location</label><br />
+            <div class="line" style="margin-bottom:30px;"></div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CountryId, "Country", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.CountryId, new SelectList(Model.Countries,
+            "Value", "Text"), "Select your country", new { @class = "form-control form-dropdown" })
+                </div>
+            </div>
 
-    <p>Gender:</p>
-    <p>@Html.RadioButtonFor(Model => Model.Gender, "true") female </p>
-    <p>@Html.RadioButtonFor(Model => Model.Gender, "false") male </p>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CityId, "City", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities,
+            "Value", "Text"), "Select your city", new { @class = "form-control form-dropdown"})
+                </div>
+            </div>
+            <br />
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.CountryId, "Country", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.CountryId, new SelectList(Model.Countries,
-    "Value", "Text"), "Select your country", new { @class = "form-control" })
+            @Html.Label("Birthday", "Birthday")
+            <br />
+
+            @Html.TextBoxFor(model => model.Birthday, new { @class = "form-control datepicker", @placeholder = "Pick a date" })
         </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.CityId, "City", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities,
-    "Value", "Text"), "Select your city", new { @class = "form-control"})
-        </div>
+    <div style="display:flex;justify-content:center">
+        <button class="btn btn-sm btn-succes" style="margin-top:20px;align-" type="submit">Edit profile</button>
     </div>
-    <br />
-
-    @Html.Label("Birthday", "Birthday")
-    <br />
-
-    @Html.TextBoxFor(model=>model.Birthday, new { @class = "form-control datepicker", @placeholder = "Pick a date" })
-
-    <button class="btn btn-sm btn-succes" type="submit">Edit profile</button>
-}
+    }
+</div>
 
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>

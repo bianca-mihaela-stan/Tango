@@ -6,95 +6,108 @@
 <h2>Notifications</h2>
 @foreach (var notification in ViewBag.Notifications)
 {
-    <div class="card">
-        <div class="card-body text-decoration-none d-block text-dark">
-            <small class="pull-right">@notification.Time</small>
-            <br />
-            @if (notification.Type == TangoApp.Models.NotificationFlag.DeletedPost)
-            {
-                <p class="text-dark">
-                    Am sters una din postarile tale deoarece incalca regulile comunitatii!
-                </p>
-            }
-            else if (notification.Type == TangoApp.Models.NotificationFlag.DeletedComment)
-            {
-                <p class="text-dark">
-                    Am sters un comentariu la o postare deoarece incalca regulile comunitatii.
-                    <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
-                </p>
-            }
-            else if (notification.Type == TangoApp.Models.NotificationFlag.NewComment)
-            {
-                <p class="text-dark">
-                    <span>@notification.Comment.User.Email</span> a adaugat un nou comentariu la postarea ta.
-                    <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
-                </p>
+<div class="card tangoo-card " style="margin-top: 10px;margin-bottom: 10px;">
+    <small class="pull-right" style="padding: 10px;position:relative;padding-bottom: 20px;">@notification.Time</small>
+    <div class="card-body tangoo-card-body text-decoration-none d-block text-dark">
 
-            }
-            else if (notification.Type == TangoApp.Models.NotificationFlag.DeletedMedia)
-            {
-                <p class="text-dark">
-                    Am sters o poza atasata unei postari deoarece incalca regulile comunitatii.
-                    <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
-                </p>
+        <br />
+        @if (notification.Type == TangoApp.Models.NotificationFlag.DeletedPost)
+        {
+            <p class="text-dark">
+                Am sters una din postarile tale deoarece incalca regulile comunitatii!
+            </p>
+        }
+        else if (notification.Type == TangoApp.Models.NotificationFlag.DeletedComment)
+        {
+            <p class="text-dark">
+                Am sters un comentariu la o postare deoarece incalca regulile comunitatii.
+                <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
+            </p>
+        }
+        else if (notification.Type == TangoApp.Models.NotificationFlag.NewComment)
+        {
+            <p class="text-dark">
+                <span>@notification.Comment.User.Email</span> a adaugat un nou comentariu la postarea ta.
+                <br />
+                <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
+            </p>
 
-            }
-            else if (notification.Type == TangoApp.Models.NotificationFlag.NewPost)
-            {
+        }
+        else if (notification.Type == TangoApp.Models.NotificationFlag.DeletedMedia)
+        {
+            <p class="text-dark">
+                Am sters o poza atasata unei postari deoarece incalca regulile comunitatii.
+                <br />
+                <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
+            </p>
 
-                <p class="text-dark">
-                    <span>@notification.Comment.User.Email</span> a adaugat o noua postare.
-                    <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
-                </p>
-            }
-            else if (notification.Type == TangoApp.Models.NotificationFlag.JoinRequest)
-            {
+        }
+        else if (notification.Type == TangoApp.Models.NotificationFlag.NewPost)
+        {
 
-                <p class="text-dark">
-                    <span>@notification.UserSend.Email</span> vrea sa se alature grupului tau.
-                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
-                </p>
-            }
-            else if (notification.Type == TangoApp.Models.NotificationFlag.NewMember)
-            {
+            <p class="text-dark">
+                <span>@notification.Comment.User.Email</span> a adaugat o noua postare.
+                <br />
+                <a class="btn bg-primary" href="/Posts/Show/@notification.PostId">Vezi postarea</a>
+            </p>
+        }
+        else if (notification.Type == TangoApp.Models.NotificationFlag.JoinRequest)
+        {
 
-                <p class="text-dark">
-                    <span>@notification.UserSend.Email</span> s-a alaturat in grupul tau.
-                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
-                </p>
+            <p class="text-dark">
+                <span>@notification.UserSend.Email</span> vrea sa se alature grupului tau.
+                <br />
+                <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
+            </p>
+        }
+        else if (notification.Type == TangoApp.Models.NotificationFlag.NewMember)
+        {
 
-            }
-            else if (notification.Type == TangoApp.Models.NotificationFlag.AddedToGroup)
-            {
-                <p class="text-dark">
-                    Cererea ta de inscriere a fost acceptata.
-                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
-                </p>
-            }
-            else if (notification.Type == TangoApp.Models.NotificationFlag.RemovedFromGroup)
-            {
-                <p class="text-dark">
-                    Ai fost scos dintr-un grup.
-                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
-                </p>
+            <p class="text-dark">
+                <span>@notification.UserSend.Email</span> s-a alaturat in grupul tau.
+                <br />
 
-            }
-            else if (notification.Type == TangoApp.Models.NotificationFlag.MadeAdmin)
-            {
-                <p class="text-dark">
-                    Ati fost facut admin.
-                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
-                </p>
-            }
-            else if (notification.Type == TangoApp.Models.NotificationFlag.AskToJoinRequest)
-            {
-                <p class="text-dark">
-                    Ati primit o invitatie intr-un grup.
-                    <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
-                </p>
-            }
-        </div>
+                <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
+            </p>
+
+        }
+        else if (notification.Type == TangoApp.Models.NotificationFlag.AddedToGroup)
+        {
+            <p class="text-dark">
+                Cererea ta de inscriere a fost acceptata.
+                <br />
+                <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
+
+            </p>
+        }
+        else if (notification.Type == TangoApp.Models.NotificationFlag.RemovedFromGroup)
+        {
+            <p class="text-dark">
+                Ai fost scos dintr-un grup.
+                <br />
+                <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
+
+            </p>
+
+        }
+        else if (notification.Type == TangoApp.Models.NotificationFlag.MadeAdmin)
+        {
+            <p class="text-dark">
+                Ati fost facut admin.
+                <br />
+                <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
+            </p>
+        }
+        else if (notification.Type == TangoApp.Models.NotificationFlag.AskToJoinRequest)
+        {
+            <p class="text-dark">
+                Ati primit o invitatie intr-un grup.
+                <br />
+                <a class="btn bg-primary" href="/Groups/Show/@notification.GroupId">Vezi grupul</a>
+            </p>
+        }
     </div>
-    <hr/>
+</div>
+    
 
 }

@@ -16,7 +16,9 @@
     @Html.Label("Text", "Continutul postarii")
     @Html.ValidationMessage("Text", "", new { @class = "text-danger" })
     <br />
-    @Html.Editor("Text")
+    <div>
+        @Html.Editor("Text", new { @class = "form-control form-field" })
+    </div>
     <br />
     if (Model.Media != null && Model.Media.ToList().Any())
     {

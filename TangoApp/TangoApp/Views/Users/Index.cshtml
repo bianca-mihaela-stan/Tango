@@ -10,39 +10,53 @@
 }
 
     <div class="list-group">
-        <a href="#" class="list-group-item disabled">
-            Your friends
-        </a>
-        @foreach (var user in ViewBag.Friends)
+        <h4>Your Friends</h4>
+        @if (ViewBag.Friends == null)
         {
-     
-            <div class="list-group-item">
-            <a href="/Profile/Show/@user.ProfileId" class="list-group-item-heading">@user.Email</a>
-             </div>
+            <p >Niciun utilizator pe lista.</p>
+        }
+        else
+        {
+            foreach (var user in ViewBag.Friends)
+            {
+
+                <li class="user-list-tangoo">
+                    <span>@user.Email</span>
+                    <a class="btn btn-primary" href="/Profile/Show/@user.ProfileId">Vezi profilul</a>
+                </li>
+            }
         }
     </div>
-   <br/>
+   
    <div class="list-group">
-       <a href="#" class="list-group-item disabled">
-           Blocked users
-       </a>
-       @foreach (var user in ViewBag.BlockedUsers)
-       {
-      
-           <div class="list-group-item">
-                <a href="/Profile/Show/@user.ProfileId" class="list-group-item-heading">@user.Email</a>
-          </div>
-              
-       }
+       <h4>  Blocked users</h4>
+          
+     @if (ViewBag.BlockedUsers == null)
+     {
+         <p >Niciun utilizator pe lista.</p>
+     }
+     else
+     {
+         foreach (var user in ViewBag.BlockedUsers)
+         {
+
+       <li class="user-list-tangoo">
+           <span>@user.Email</span>
+           <a class="btn btn-primary" href="/Profile/Show/@user.ProfileId">Vezi profilul</a>
+
+       </li>
+
+         }
+     }
    </div>
-   <div class="list-group">
-       <a href="#" class="list-group-item disabled">
-           Tango with other users
-       </a>
+   <div class="list-group ">
+      <h4>Tango with other users</h4>
        @foreach (var user in ViewBag.Users)
        {
+       <li class="user-list-tangoo">
+           <span>@user.Email</span>
+           <a  class="btn btn-primary" href="/Profile/Show/@user.ProfileId">Vezi profilul</a>
 
-          <a href="/Profile/Show/@user.ProfileId" class="list-group-item-heading">@user.Email</a>
-
+       </li>
        }
-   </div>
+ </div>

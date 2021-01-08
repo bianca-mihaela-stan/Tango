@@ -22,3 +22,89 @@ select,
 textarea {
     max-width: 280px;
 }
+.tangoo-card {
+    width: 40vw;
+    height: 120px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+}
+.tangoo-card-body
+{
+    padding: 10px;
+
+}
+.friend-req-item
+{
+    display: flex;
+    float: left;
+}
+.user-list-tangoo {
+    text-decoration: none;
+    list-style: none;
+    padding: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+    margin: 5px 0;
+    border-radius: 12px;
+}
+.list-group
+{
+    margin-bottom: 5vh !important;
+}
+.forms-type-1 {
+    border-radius: 10px;
+    border: 1px solid #eee;
+    transition: .3s border-color;
+}
+.forms-type-1:hover
+{
+    border: 1px solid #aaa;
+}
+.form-field {
+    border: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px 20px;
+    background: white;
+    border-radius: 3px;
+    box-shadow: 0px 3px 12px rgba(75, 72, 72, 0.3);
+    transition: all 0.4s ease;
+    border-radius: 10px;
+}
+    .form-field :hover {
+        outline: none;
+        box-shadow: 0px 9px 11px rgba(75, 72, 72, 0.3);
+    }
+input[type='radio'] {
+    border-radius: 50%;
+}
+.form-container {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    border-radius: 10px;
+    
+}
+.line {
+    background: rgba(75, 72, 72, 0.3);
+    height: 2px;
+    width: 20vw;
+
+}
+.form-group
+{
+    margin: 20px 0;
+}
+.form-dropdown
+{
+    margin-bottom: 20px;
+}
