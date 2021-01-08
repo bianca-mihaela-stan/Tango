@@ -287,7 +287,15 @@ namespace TangoApp.Controllers
             {
                 ViewBag.InGroup = false;
             }
+         
             ViewBag.esteAdmin = User.IsInRole("Admin");
+            if (ViewBag.InGroup == false && ViewBag.esteAdmin == false)
+            {
+
+                Group grup = db.Groups.Find(GroupId);
+                TempData["message"] = "Nu aveti dreptul de a lasa mesaje!";
+                return View("Show", grup);
+            }
             try
             {
                 if (ModelState.IsValid)

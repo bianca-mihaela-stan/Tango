@@ -140,6 +140,16 @@ namespace TangoApp.Controllers
                 var conversationFriend = db.GroupMembers.Where(u =>  u.UserId == formUserId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
                 var conversationUserCurrent = db.GroupMembers.Where(u => u.UserId == currentUserId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
                 var groupconversation = conversationFriend.Intersect(conversationUserCurrent).First();
+                var messages = db.Messages.Where(u => u.GroupId == groupconversation.GroupId).ToList();
+                if(messages.Any())
+                {
+                    foreach (var mess in messages)
+                    {
+
+                        db.Messages.Remove(mess);
+                       
+                    }
+                }
                 db.Groups.Remove(groupconversation);
                 db.Friends.Remove(friend);
                 db.SaveChanges();
@@ -198,8 +208,25 @@ namespace TangoApp.Controllers
                     if (arefriendsList.Any())
                     {
 
+                        var conversationFriend = db.GroupMembers.Where(u => u.UserId == userToBlockId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
+                        var conversationUserCurrent = db.GroupMembers.Where(u => u.UserId == currentUserId && u.Group.Status == GroupStatusFlag.PrivateConversation).ToList().Select(u => u.Group);
+                        var groupconversation = conversationFriend.Intersect(conversationUserCurrent).First();
+                        //sterg prietenia
                         var arefriends = arefriendsList.First();
                         db.Friends.Remove(arefriends);
+                        ///sterg conversatia
+                        var messages = db.Messages.Where(u => u.GroupId == groupconversation.GroupId).ToList();
+                        if (messages.Any())
+                        {
+                            foreach (var mess in messages)
+                            {
+
+                                db.Messages.Remove(mess);
+
+                            }
+                        }
+                        db.Groups.Remove(groupconversation);
+                        db.SaveChanges();
                     }
 
                 }
