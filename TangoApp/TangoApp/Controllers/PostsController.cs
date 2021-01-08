@@ -17,6 +17,7 @@ namespace TangoApp.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Index()
         {
+            var user = db.Profiles.Where(a => a.ProfileVisibility == true).ToList().Select(a =>a.User);
             IOrderedQueryable<Post> posts = db.Posts.Include("User");
             IOrderedQueryable<Profile> profiles = db.Profiles.Include("User").Include("Country").Include("City");
             var search = "";
