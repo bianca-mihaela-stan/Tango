@@ -1,5 +1,5 @@
 # Tango
 
 <p>
-<img src="Media/presentation.gif" width=75%>
+<img src="Media/presentation1.gif" width=75%>
 </p>
